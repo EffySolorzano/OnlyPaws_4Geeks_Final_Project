@@ -1,26 +1,120 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import header from "../../img/header.jpg";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
-import "../../styles/home.css";
+import DatePicker from "react-datepicker";
+import Select from "./Select.jsx";
+import Home_moreServices from "./home_moreServices.jsx";
+import Findsitter from "./findsitter.jsx";
+import Opapp from "./opapp.jsx";
+import Footer from "./footer.jsx";
+import { Link } from "react-router-dom";
+import Location from "../../img/location.png";
+import Calendar from "../../img/calendar.png";
+import Paw from "../../img/paw.png";
+import "react-datepicker/dist/react-datepicker.css";
+
+const countryOptions = [
+  { value: "AF", label: "Argentina" },
+  { value: "AL", label: "Costa Rica" },
+  { value: "DZ", label: "Venezuela" },
+  { value: "UY", label: "Uruguay" },
+  { value: "US", label: "United States" },
+];
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [numberOfPets, setPets] = useState(0);
+  const [search, setSearch] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
-			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://start.4geeksacademy.com/starters/react-flask">
-					Read documentation
-				</a>
-			</p>
-		</div>
-	);
+  const handleCountryChange = (selectedOption) => {
+    setSelectedCountry(selectedOption);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    actions.search(search);
+  };
+
+  return (
+    <div className="container">
+      <div className="header">
+        <img src={header} alt="header" className="header" />
+      </div>
+      <div className="container">
+        <div className="search-container">
+          <div className="location-container">
+            <img src={Location} alt="location-dot" className="location-dot" />
+            <label htmlFor="location"></label>
+
+            <Select
+              options={countryOptions}
+              value={selectedCountry}
+              onChange={handleCountryChange}
+              placeholder="Select a country "
+            />
+          </div>
+          <div className="checkin">
+            <label htmlFor="checkin"></label>
+            <DatePicker
+              id="checkin"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            />
+          </div>
+          <img src={Calendar} alt="calendar" className="calendar" />
+          <div className="checkout">
+            <label htmlFor="checkout"></label>
+            <DatePicker
+              id="checkout"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+            />
+          </div>
+          <div className="pets-container">
+            <img src={Paw} alt="paw" className="paw" />
+            <label htmlFor="pets"></label>
+
+            <select
+              id="pets"
+              value={numberOfPets}
+              onChange={(e) => setPets(e.target.value)}
+            >
+              {[...Array(11).keys()].map((num) => (
+                <option value={num} key={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Link to="search-btn">
+            <button
+              className="btn btn-transparent"
+              id="search-btn"
+              style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+                height: "50px",
+              }}
+            >
+              Search <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </Link>
+        </div>
+      </div>
+      <div>
+        <Home_moreServices />
+        <Findsitter />
+        <Opapp />
+        <Footer />
+      </div>
+    </div>
+  );
 };
