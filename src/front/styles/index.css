@@ -4,15 +4,187 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+/*------------ANIMATION---------*/
+* {
+  margin: 0px;
+  padding: 0px;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
 
 body {
-  background-color: #ffff;
-  margin: 0;
-  padding-bottom: 100rem;
+  background-color: transparent;
+  scrollbar-width: none;
 }
+
+.animation-container-custom-height {
+  height: 100vh;
+}
+
+.area {
+  background: transparent;
+  width: 100%;
+  height: 200vh;
+  overflow-x: hidden;
+}
+
+.circles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 150vh;
+  width: 100%;
+  height: 290%;
+  overflow: overlay;
+  z-index: -1;
+}
+
+.circles li {
+  position: absolute;
+  display: block;
+  list-style: none;
+  width: 20px;
+  height: 20px;
+  background: rgba(135, 36, 242, 0.785);
+  animation: animate 30s linear infinite;
+  bottom: -50px;
+}
+
+.circles li:nth-child(1) {
+  left: 25%;
+  width: 80px;
+  height: 80px;
+  animation-delay: 0s;
+}
+
+.circles li:nth-child(2) {
+  left: 10%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 2s;
+  animation-duration: 12s;
+}
+
+.circles li:nth-child(3) {
+  left: 70%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 4s;
+}
+
+.circles li:nth-child(4) {
+  left: 40%;
+  width: 60px;
+  height: 60px;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+
+.circles li:nth-child(5) {
+  left: 65%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 0s;
+}
+
+.circles li:nth-child(6) {
+  left: 75%;
+  width: 110px;
+  height: 110px;
+  animation-delay: 3s;
+}
+
+.circles li:nth-child(7) {
+  left: 35%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 7s;
+}
+
+.circles li:nth-child(8) {
+  left: 50%;
+  width: 25px;
+  height: 25px;
+  animation-delay: 15s;
+  animation-duration: 45s;
+}
+
+.circles li:nth-child(9) {
+  left: 20%;
+  width: 15px;
+  height: 15px;
+  animation-delay: 2s;
+  animation-duration: 35s;
+}
+
+.circles li:nth-child(10) {
+  left: 90%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+  animation-duration: 11s;
+}
+.circles li:nth-child(11) {
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+  animation-duration: 15s;
+}
+.circles li:nth-child(12) {
+  left: 80%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+  animation-duration: 11s;
+}
+.circles li:nth-child(13) {
+  left: 15%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+  animation-duration: 10s;
+}
+.circles li:nth-child(14) {
+  left: 25%;
+  width: 150px;
+  height: 150px;
+  animation-delay: 0s;
+  animation-duration: 9s;
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+    border-radius: 0;
+  }
+  60% {
+    transform: translateY(-2000px) rotate(720deg);
+    opacity: 0.5;
+    border-radius: 50%;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0;
+    border-radius: 50%;
+  }
+}
+
 /*----------------------- NAVBAR -------------------------*/
 .navbar {
   display: flex;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
 }
 
 .logo {
@@ -51,12 +223,7 @@ body {
   margin-left: 5px;
   border-radius: 15px;
 }
-.search-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
+
 .search-container {
   position: absolute; /* position search container on top of image */
   top: 40%; /* position search container at vertical center of image */
@@ -70,6 +237,8 @@ body {
   display: flex; /* use flexbox to position search items horizontally */
   align-items: center; /* center search items vertically */
   width: 1000px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .location-dot {
@@ -100,10 +269,10 @@ body {
 /*--------------SERVICES ICONS -----------------------*/
 .services-container {
   position: absolute; /* position search container on top of image */
-  bottom: -15%; /* position search container at vertical center of image */
+  bottom: -5%; /* position search container at vertical center of image */
   left: 50%; /* position search container at horizontal center of image */
   transform: translate(-50%, -50%); /* center search container */
-  background-color: white; /* set white background */ /* set purple border */
+  background-color: white; /* set white background */
   padding: 10px; /* add padding for visual appeal */
   display: flex; /* use flexbox to position search items horizontally */
   align-items: center; /* center search items vertically */
@@ -209,226 +378,6 @@ body {
   width: 50px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
-/*---------------FOOTER-----------------------------*/
-.footer {
-  position: relative;
-  bottom: -120px;
-  width: 100%;
-  font-family: "Noto Serif Hebrew", serif;
-}
-.container-footer {
-  position: relative;
-  bottom: -150px;
-  width: 100%;
-  font-family: "Noto Serif Hebrew", serif;
-  padding: 100px 0; /* add some padding to create spacing */
-  margin-left: 50px;
-}
-#about-footer,
-#how-footer,
-#services-footer,
-#terms-footer,
-#privacy-footer,
-#team-footer,
-#contact-footer {
-  margin-left: 60px;
-  margin-right: 10px;
-  font-family: "Noto Serif Hebrew", serif;
-  font-size: 15px;
-  outline: none;
-}
-.social {
-  margin-top: 20px;
-  margin-left: -30px;
-}
-.instagram {
-  height: 35px;
-  width: 35px;
-  margin-left: 585px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-
-.facebook {
-  height: 50px;
-  width: 50px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-.twitter {
-  height: 30px;
-  width: 35px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-/*----------ABOUT US--------------------*/
-.aboutus {
-  border-top: 1px solid #a659c8;
-  width: 70%;
-  margin-top: 30px;
-  margin-left: 230px;
-  padding-bottom: -500px;
-}
-.container-about {
-  width: 1250px;
-  margin-left: 50px;
-  margin-top: 40px;
-}
-.card-about {
-  width: 1290px;
-  margin-top: 50px;
-  margin-left: 50px;
-}
-.card-title-about {
-  font-family: "Noto Serif Hebrew", serif;
-  font-size: 40px;
-  color: #a659c8;
-  text-align: left;
-  margin-left: 180px;
-}
-.card-text-about {
-  margin-left: 200px;
-  font-family: "Noto Serif Hebrew", serif;
-}
-.about-new {
-  height: 550px;
-  width: 515px;
-  border-radius: 15px;
-  margin-left: 80px;
-}
-.about-start {
-  margin-top: 100px;
-  margin-left: 35rem;
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-}
-.about-signup {
-  margin-top: -130px;
-  margin-left: 25px;
-}
-/*----------------HOW IT WORKS----------------*/
-.container-how {
-  width: 1290px;
-}
-.card-how {
-  border-top: 1px solid #a659c8;
-  margin-top: 40px;
-  margin-left: 200px;
-}
-.card-body-how {
-  margin-top: 50px;
-  margin-left: 400px;
-  width: 700px;
-}
-.howimg {
-  width: 650px;
-  height: 350px;
-  margin-top: 20px;
-  margin-left: 420px;
-  border-radius: 15px;
-}
-.card-title-how {
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-  font-size: 35px;
-  text-align: center;
-}
-.card-text-how {
-  font-family: "Noto Serif Hebrew", serif;
-  text-align: center;
-}
-.how-1st-join {
-  margin-top: -10px;
-  margin-left: 42rem;
-  margin-bottom: -350px;
-}
-.how-start {
-  margin-top: 100px;
-  margin-bottom: 30px;
-  margin-left: 38rem;
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-}
-.step {
-  width: 830px;
-  height: 850px;
-  margin-top: 450px;
-  margin-left: 290px;
-  border-radius: 30px;
-  margin-bottom: -200px;
-}
-.how-start-2nd {
-  margin-top: 290px;
-  margin-bottom: 30px;
-  margin-left: 38rem;
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-}
-.how-2st-join {
-  margin-top: -10px;
-  margin-left: 42rem;
-  margin-bottom: -400px;
-}
-.how-buttons {
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-/*------------------TERMS OF USE---------------------------*/
-.terms-top {
-  margin-top: 30px;
-  margin-left: 200px;
-  border-top: 1px solid #a659c8;
-  width: 70%;
-}
-.container-terms {
-  width: 1290px;
-  margin-top: 50px;
-}
-.title-terms {
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-  text-align: center;
-  padding-left: 80px;
-}
-.paragraph {
-  margin-left: 100px;
-  font-family: "Noto Serif Hebrew", serif;
-}
-.terms-img {
-  width: 1290px;
-  margin-top: -150px;
-  margin-left: 90px;
-  margin-bottom: -700px;
-  border-radius: 20px;
-}
-
-/*------------PRIVACY-------------------------------*/
-.privacy-top {
-  margin-top: 30px;
-  margin-left: 200px;
-  border-top: 1px solid #a659c8;
-  width: 70%;
-}
-.container-privacy {
-  width: 1290px;
-  margin-top: 50px;
-}
-.title-privacy {
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-  text-align: center;
-  margin-left: 100px;
-}
-.paragraph-privacy {
-  margin-left: 220px;
-  font-family: "Noto Serif Hebrew", serif;
-}
-.privacy-img {
-  width: 1290px;
-  margin-top: -150px;
-  margin-left: 90px;
-  margin-bottom: -700px;
-  border-radius: 20px;
-}
 /*------------SCREEN SIZE GUIDE (to further develope the project in the future)---------------------------*/
 /* Mobile devices */
 @media (max-width: 767px) {
@@ -447,10 +396,12 @@ body {
 @media only screen and (max-device-width: 640px) {
   /* styles for Android screens up to 640px wide */
 }
+
 @media only screen and (min-device-width: 640px) and (max-device-width: 1024px) {
   /* styles for Microsoft screens between 640px and 1024px wide */
 }
 /* Styles for screens wider than 1280px (Macintosh desktops) */
+
 @media only screen and (min-device-width: 1280px) {
   /* styles for Macintosh desktops */
 }

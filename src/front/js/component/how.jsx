@@ -4,6 +4,7 @@ import Howcardimg from "../../img/howcardimg.jpg";
 import Footer from "../pages/footer.jsx";
 import Stepbystep from "../../img/stepbystep.jpg";
 import Stephbysteph from "../../img/stephbysteph.jpg";
+import Howitworks from "../../styles/howitworks.css";
 
 function howWorks() {
   const [displaySitterInfo, setDisplaySitterInfo] = useState(true);
@@ -41,7 +42,7 @@ function howWorks() {
           <h5 className="card-title-how">
             Connecting Pet Parents with reviewed and verified Pet Sitters
           </h5>
-          <p className="card-text-how">
+          <p className="card-text-how bg-white">
             OnlyPaws offers a reliable solution for pet owners seeking
             trustworthy sitters to care for their pets when they're away. With
             our annual pet parent plan, you can access a network of reviewed and

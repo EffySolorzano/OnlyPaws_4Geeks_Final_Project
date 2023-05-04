@@ -3,6 +3,7 @@ import Instagram from "../../img/instagram.png";
 import Fb from "../../img/fb.webp";
 import Twitter from "../../img/Twitter.png";
 import { Link } from "react-router-dom";
+import Footer_style from "../../styles/footer_style.css";
 
 function footer() {
   return (

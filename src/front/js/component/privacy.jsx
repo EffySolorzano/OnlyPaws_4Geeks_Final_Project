@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Privacyimg from "../../img/privacyimg.jpg";
+import Privacypolicy from "../../styles/privacypolicy.css";
 
 function Privacy() {
   return (
@@ -11,7 +12,7 @@ function Privacy() {
         <div className="privacy">
           <h4 className="title-privacy">PRIVACY POLICY</h4>
           <div>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 OnlyPaws ("The Company") is committed to protecting the privacy
                 and security of our users' personal information. This Privacy
@@ -31,7 +32,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">COOKIES AND TRACKING TECHNOLOGIES</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company uses cookies and other tracking technologies to
                 collect information about your use of the Service, including
@@ -41,7 +42,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">USE OF INFORMATION</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company uses the information it collects to provide and
                 improve the Service, process payments, communicate with you, and
@@ -50,7 +51,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">DISCLOSURE OF INFORMATION</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company may disclose your information to third-party service
                 providers who assist us in providing and improving the Service,
@@ -59,7 +60,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">DATA RETENTION</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company retains your information for as long as necessary to
                 provide the Service and fulfill our legal obligations. The
@@ -68,7 +69,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">SECURITY</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company take reasonable measures to protect the security of
                 your information, including using encryption and secure storage.
@@ -77,7 +78,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">CHANGES TO PRIVACY POLICY</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 The Company rmay update this Privacy Policy from time to time.
                 If we make material changes, we will provide notice on the Site
@@ -87,7 +88,7 @@ function Privacy() {
               </p>
             </div>
             <h4 className="title-privacy">CONTACT US</h4>
-            <div className="paragraph-privacy">
+            <div className="paragraph-privacy bg-white">
               <p>
                 If you have any questions or concerns about this Privacy Policy
                 or our practices, please contact us at info@onlypaws.com

@@ -1,0 +1,71 @@
+/*----------------HOW IT WORKS----------------*/
+
+.container-how {
+  width: 1290px;
+}
+.card-how {
+  border-top: 1px solid #a659c8;
+  margin-top: 40px;
+  margin-left: 200px;
+}
+.card-body-how {
+  margin-top: 50px;
+  margin-left: 400px;
+  width: 700px;
+}
+.howimg {
+  width: 650px;
+  height: 350px;
+  margin-top: 20px;
+  margin-left: 420px;
+  border-radius: 15px;
+}
+.card-title-how {
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+  font-size: 35px;
+  text-align: center;
+}
+.card-text-how {
+  font-family: "Noto Serif Hebrew", serif;
+  text-align: center;
+  border-radius: 10px;
+}
+.how-1st-join {
+  margin-top: -10px;
+  margin-left: 43rem;
+  margin-bottom: -350px;
+}
+.how-start {
+  margin-top: 100px;
+  margin-bottom: 30px;
+  margin-left: 38.5rem;
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+}
+.step {
+  width: 830px;
+  height: 850px;
+  margin-top: 450px;
+  margin-left: 290px;
+  border-radius: 30px;
+  margin-bottom: -200px;
+}
+.how-start-2nd {
+  margin-top: 290px;
+  margin-bottom: 30px;
+  margin-left: 38.5rem;
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+}
+.how-2st-join {
+  margin-top: -10px;
+  margin-left: 43rem;
+  margin-bottom: -400px;
+}
+.how-buttons {
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+  font-size: 20px;
+  margin-bottom: 20px;
+}

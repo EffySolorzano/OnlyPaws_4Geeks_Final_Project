@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Terms from "../../img/terms.jpg";
+import Termsofuse from "../../styles/termsofuse.css";
 
 function terms() {
   return (
@@ -11,7 +12,7 @@ function terms() {
         <div className="terms">
           <h4 className="title-terms">TERMS OF USE AGREEMENT</h4>
           <div>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 Welcome to Only Paws, operated by Only Paws ("the Company").
                 This agreement ("Agreement") sets forth the terms and conditions
@@ -37,7 +38,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">INTELLECTUAL PROPERTY</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 All content and materials on the Service, including but not
                 limited to text, graphics, logos, images, and software, are the
@@ -48,7 +49,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">PRIVACY</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 The Company collects and uses personal information in accordance
                 with our Privacy Policy, which is incorporated into this
@@ -57,7 +58,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">DISCLAIMERS</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 THE SERVICE IS PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS
                 WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
@@ -70,7 +71,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">LIMITATION OF LIABILITY</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 IN NO EVENT SHALL ONLY PAWS OR OUR AFFILIATES, LICENSORS, OR
                 SERVICE PROVIDERS BE LIABLE FOR ANY INDIRECT, CONSEQUENTIAL,
@@ -82,7 +83,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">INDEMNIFICATION</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 You agree to indemnify, defend, and hold harmless The Company
                 and its affiliates, officers, directors, employees, agents,
@@ -94,7 +95,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">MODIFICATIONS</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 The Company reserves the right to modify this Agreement at any
                 time by posting revised terms on the Service. Your continued use
@@ -103,7 +104,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">GOVERNING LAW</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 This Agreement shall be governed by and construed in accordance
                 with the laws of the State of California, without giving effect
@@ -111,7 +112,7 @@ function terms() {
               </p>
             </div>
             <h4 className="title-terms">DISPUTE RESOLUTION</h4>
-            <div className="paragraph">
+            <div className="paragraph bg-white">
               <p>
                 Any dispute arising out of or relating to this Agreement or the
                 Service shall be resolved through binding arbitration in

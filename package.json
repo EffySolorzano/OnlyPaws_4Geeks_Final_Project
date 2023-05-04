@@ -73,11 +73,18 @@
 		]
 	},
 	"dependencies": {
+		"@react-spring/web": "^9.7.2",
+		"axios": "^1.4.0",
+		"bcrypt": "^5.1.0",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-datepicker": "^4.11.0",
 		"react-dom": "^16.8.4",
+		"react-ios-switch": "^0.1.19",
 		"react-polyfills": "0.0.1",
-		"react-router-dom": "^6.3.0"
+		"react-router-dom": "^6.3.0",
+		"react-swipe-card": "^0.1.4",
+		"react-swipeable-cards": "^1.0.6",
+		"react-tinder-card": "^1.6.2"
 	}
 }

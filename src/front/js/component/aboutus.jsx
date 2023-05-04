@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import About from "../../img/about.jpg";
 import { Link } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
+import Aboutus from "../../styles/aboutus.css";
 
 function about() {
+  const [animationHeight, setAnimationHeight] = useState(0);
+
+  useEffect(() => {
+    function handleResize() {
+      setAnimationHeight(window.innerHeight - 3);
+    }
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
       <div className="aboutus"></div>
@@ -16,7 +32,7 @@ function about() {
             <div className="col-md-8">
               <div className="card-body-about">
                 <h5 className="card-title-about">Who we are</h5>
-                <p className="card-text-about">
+                <p className="card-text-about bg-white">
                   We're OnlyPaws, a small school project turned pet-care
                   business dedicated to providing the best possible care for
                   your furry friends. Our goal is to create a community of pet
@@ -27,7 +43,7 @@ function about() {
                   around the world and enjoy the company of pets. It's a win-win
                   for everyone… especially for the pets!
                 </p>
-                <p className="card-text-about">
+                <p className="card-text-about bg-white">
                   At OnlyPaws, we believe that pets are more than just animals -
                   they're family. That's why we treat each pet under our care
                   with the same love, care, and attention that we would give to
@@ -40,7 +56,7 @@ function about() {
                   trust and safety, where pets and their owners can feel secure
                   and happy.
                 </p>
-                <p className="card-text-about">
+                <p className="card-text-about bg-white">
                   So, whether you're going on vacation or just need a little
                   help taking care of your pets, OnlyPaws has got you covered!
                 </p>
@@ -48,32 +64,29 @@ function about() {
             </div>
           </div>
         </div>
-        <div className="about-start">
-          <h2>Ready to start?</h2>
-        </div>
-        <div className="about-signup">
-          <Link to="/signup">
-            <button
-              className="btn btn-transparent"
-              id="signup"
-              style={{
-                backgroundColor: "#a659c8",
-                color: "#ffffff",
-                borderRadius: "15px",
-                marginLeft: "38rem",
-                marginTop: "50px",
-                marginBottom: "-250px",
-              }}
-            >
-              Sign up
-            </button>
-          </Link>
-        </div>
-        <div>
-          <div>
-            <Footer />
-          </div>
-        </div>
+      </div>
+      <div className="about-start">
+        <h2>Ready to start?</h2>
+      </div>
+      <div className="about-signup">
+        <Link to="/signup">
+          <button
+            className="btn btn-transparent"
+            style={{
+              backgroundColor: "#a659c8",
+              color: "#ffffff",
+              borderRadius: "15px",
+              fontFamily: "Noto Serif Hebrew, serif",
+              marginLeft: "45.5rem",
+              fontSize: "20px",
+            }}
+          >
+            Sign up
+          </button>
+        </Link>
+      </div>
+      <div className="container-footer">
+        <Footer />
       </div>
     </>
   );
