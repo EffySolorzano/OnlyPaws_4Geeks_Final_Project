@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import header from "../../img/header.jpg";
 import { Context } from "../store/appContext";
 import DatePicker from "react-datepicker";
@@ -27,7 +27,7 @@ export const Home = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [numberOfPets, setPets] = useState(0);
   const [search, setSearch] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState({ value: "" });
 
   const handleCountryChange = (selectedOption) => {
     setSelectedCountry(selectedOption);
@@ -39,7 +39,20 @@ export const Home = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    actions.search(search);
+    const searchQuery = search;
+    const location = selectedCountry ? selectedCountry.value : null;
+    const checkin = startDate.toISOString();
+    const checkout = endDate.toISOString();
+    const numberOfPets = parseInt(numberOfPets);
+    const urlSearchParams = new URLSearchParams({
+      searchQuery,
+      location,
+      checkin,
+      checkout,
+      numberOfPets,
+    });
+    const searchResultsUrl = `/search-btn?${urlSearchParams.toString()}`;
+    window.location.href = searchResultsUrl;
   };
 
   return (
@@ -56,7 +69,9 @@ export const Home = () => {
             <Select
               options={countryOptions}
               value={selectedCountry}
-              onChange={handleCountryChange}
+              onChange={(e) => {
+                handleCountryChange(e);
+              }}
               placeholder="Select a country "
             />
           </div>
@@ -93,7 +108,7 @@ export const Home = () => {
               ))}
             </select>
           </div>
-          <Link to="search-btn">
+          <Link to="/search-btn">
             <button
               className="btn btn-transparent"
               id="search-btn"
@@ -103,6 +118,7 @@ export const Home = () => {
                 borderRadius: "15px",
                 height: "50px",
               }}
+              onClick={handleSearchSubmit}
             >
               Search <i className="fa-solid fa-magnifying-glass"></i>
             </button>

@@ -14,6 +14,8 @@ import Aboutus from "./component/aboutus.jsx";
 import How from "./component/how.jsx";
 import Terms from "./component/terms.jsx";
 import Privacy from "./component/privacy.jsx";
+import Services from "./component/services.jsx";
+import Team from "./component/team.jsx";
 
 //create your first component
 const Layout = () => {
@@ -36,6 +38,8 @@ const Layout = () => {
             <Route element={<How />} path="/how-it-works" />
             <Route element={<Terms />} path="/terms-of-use" />
             <Route element={<Privacy />} path="/privacy-policy" />
+            <Route element={<Services />} path="/services" />
+            <Route element={<Team />} path="/team" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
