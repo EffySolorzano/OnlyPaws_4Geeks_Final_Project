@@ -1,0 +1,25 @@
+.onlypaws-logo{
+  height: 200px;
+  width: 250px;
+  margin-left: -10px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: -40px;
+}
+
+.log{
+margin-top: 200px;
+}
+
+.boton{
+background-color: #a659c8;
+}
+
+.principal{
+mix-blend-mode: multiply;
+}
