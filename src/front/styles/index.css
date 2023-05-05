@@ -17,11 +17,12 @@ body {
   background-color: transparent;
   scrollbar-width: none;
 }
-
-.animation-container-custom-height {
-  height: 100vh;
+.animacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* Adjust the height as per your requirement */
 }
-
 .area {
   background: transparent;
   width: 100%;

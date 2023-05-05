@@ -55,6 +55,11 @@ export const Home = () => {
     window.location.href = searchResultsUrl;
   };
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    setEndDate(date); // set the checkout date to the same date as check-in date
+  };
+
   return (
     <div className="container">
       <div className="header">
@@ -90,6 +95,7 @@ export const Home = () => {
               id="checkout"
               selected={endDate}
               onChange={(date) => setEndDate(date)}
+              minDate={startDate} // Add minDate prop to ensure checkout date is never before checkin
             />
           </div>
           <div className="pets-container">

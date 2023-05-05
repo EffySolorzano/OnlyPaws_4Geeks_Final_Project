@@ -16,6 +16,7 @@ import Terms from "./component/terms.jsx";
 import Privacy from "./component/privacy.jsx";
 import Services from "./component/services.jsx";
 import Team from "./component/team.jsx";
+import Search from "./component/search.jsx";
 
 //create your first component
 const Layout = () => {
@@ -40,6 +41,7 @@ const Layout = () => {
             <Route element={<Privacy />} path="/privacy-policy" />
             <Route element={<Services />} path="/services" />
             <Route element={<Team />} path="/team" />
+            <Route element={<Search />} path="/search-btn" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
