@@ -7,7 +7,7 @@ export const Navbar = () => {
     <nav className="navbar navbar-expand-md navbar-white bg-white sticky-top">
       <div className="container-fluid">
         <Link to="/">
-          <img className="logo img-fluid" src={OnlyPaws} alt="OnlyPaws_logo" />
+          <img className="logo img-fluid" src={OnlyPaws} alt="onlyPaws_logo" />
         </Link>
         <div className="ml-auto">
           <Link to="/about">

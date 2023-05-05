@@ -7,7 +7,8 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
-
+import  Login  from "./pages/login.jsx";
+import  Register  from "./pages/register.jsx";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import Aboutus from "./component/aboutus.jsx";
@@ -17,6 +18,7 @@ import Privacy from "./component/privacy.jsx";
 import Services from "./component/services.jsx";
 import Team from "./component/team.jsx";
 import Search from "./component/search.jsx";
+
 
 //create your first component
 const Layout = () => {
@@ -43,6 +45,8 @@ const Layout = () => {
             <Route element={<Team />} path="/team" />
             <Route element={<Search />} path="/search-btn" />
             <Route element={<Single />} path="/single/:theid" />
+            <Route element={<Login />} path="/sign-in" />
+            <Route element={<Register />} path="/register" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
           <Footer />

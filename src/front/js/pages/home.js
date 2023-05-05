@@ -12,6 +12,9 @@ import Location from "../../img/location.png";
 import Calendar from "../../img/calendar.png";
 import Paw from "../../img/paw.png";
 import "react-datepicker/dist/react-datepicker.css";
+import Login from "./login.jsx";
+import Register from "./register.jsx";
+
 
 const countryOptions = [
   { value: "AF", label: "Argentina" },
@@ -136,6 +139,8 @@ export const Home = () => {
         <Findsitter />
         <Opapp />
         <Footer />
+        <Login />
+        <Register />
       </div>
     </div>
   );
