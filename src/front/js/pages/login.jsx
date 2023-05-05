@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import Loginn from "../../styles/Loginn.css";
-import Onlypaws from "../../img/Onlypaws.png";
+import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 
 

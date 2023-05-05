@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
-import Onlypaws from "../../img/Onlypaws.png";
+import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
