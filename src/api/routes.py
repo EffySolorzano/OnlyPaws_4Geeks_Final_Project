@@ -23,6 +23,17 @@ from datetime import date, time, datetime, timezone, timedelta
 
 
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
 api = Blueprint('api', __name__)
 
 EMAIL = os.environ.get('EMAIL')
