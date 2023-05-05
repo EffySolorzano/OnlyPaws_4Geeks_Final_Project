@@ -7,13 +7,22 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
-
+import Login from "./pages/login.jsx";
+import Register from "./pages/register.jsx";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+import Aboutus from "./component/aboutus.jsx";
+import How from "./component/how.jsx";
+import Terms from "./component/terms.jsx";
+import Privacy from "./component/privacy.jsx";
+import Services from "./component/services.jsx";
+import Team from "./component/team.jsx";
+import Search from "./component/search.jsx";
 import BodyPetSitter from "./component/bodyPetSitter.jsx"
 import AddPetSitter from "./pages/addPetSitter.jsx";
 import ContactUs from "./pages/contactUs.jsx";
 import SignInPetSitter from "./pages/signInPetSitter.jsx";
+
 
 //create your first component
 const Layout = () => {
@@ -21,7 +30,8 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "")
+        return <BackendURL />;
 
     return (
         <div>
@@ -31,7 +41,16 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
+                        <Route element={<Aboutus />} path="/about" />
+                        <Route element={<How />} path="/how-it-works" />
+                        <Route element={<Terms />} path="/terms-of-use" />
+                        <Route element={<Privacy />} path="/privacy-policy" />
+                        <Route element={<Services />} path="/services" />
+                        <Route element={<Team />} path="/team" />
+                        <Route element={<Search />} path="/search-btn" />
                         <Route element={<Single />} path="/single/:theid" />
+                        <Route element={<Login />} path="/sign-in" />
+                        <Route element={<Register />} path="/register" />
                         <Route element={<AddPetSitter />} path="/add-petsitter" />
                         <Route element={<ContactUs />} path="/contact-us" />
                         <Route element={<SignInPetSitter />} path="/sign-in-pet-sitter" />

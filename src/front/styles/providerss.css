@@ -1,0 +1,78 @@
+.stack {
+  border-top: #a659c8 1px solid;
+  margin-top: 50px;
+  width: 70%;
+  margin-left: 220px;
+}
+
+.cartica-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-left: -510px;
+  align-items: center;
+  height: 400px; /* set a fixed height for the stack */
+}
+
+.carticas {
+  position: absolute;
+  top: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-right: 400px;
+  padding: 20px;
+  width: 500px;
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+
+  z-index: 1;
+  transition: transform 0.3s ease-out;
+}
+
+.carticas:not(:first-child) {
+  transform: translateY(-50px) scale(0.8);
+  z-index: 0;
+}
+
+.carticas.swipe-left {
+  transform: translateX(-200%) rotate(-30deg);
+  z-index: -1;
+}
+
+.carticas.swipe-right {
+  transform: translateX(200%) rotate(30deg);
+  z-index: -1;
+}
+
+.carticas h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.carticas p {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: "Noto Serif Hebrew", serif;
+}
+
+.carticas.swipe-right img {
+  width: 80%;
+  height: auto;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.title-stack {
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+.texto {
+  font-family: "Noto Serif Hebrew", serif;
+  margin-top: 290px;
+}

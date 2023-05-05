@@ -1,23 +1,77 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import OnlyPaws from "../../img/onlypaws.png";
 
 export const Navbar = () => {
 	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
+		<nav className="navbar navbar-expand-md navbar-white bg-white sticky-top">
+			<div className="container-fluid">
 				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+					<img className="logo img-fluid" src={OnlyPaws} alt="onlyPaws_logo" />
 				</Link>
 				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+					<Link to="/about">
+						<button
+							className="btn btn-transparent"
+							id="about"
+							style={{
+								backgroundColor: "transparent",
+								color: "#a659c8",
+							}}
+						>
+							About us
+						</button>
+					</Link>
+					<Link to="/how-it-works">
+						<button
+							className="btn btn-transparent"
+							id="how"
+							style={{ backgroundColor: "transparent", color: "#a659c8" }}
+						>
+							How it works
+						</button>
+					</Link>
+					<Link to="/services">
+						<button
+							className="btn btn-transparent"
+							id="services"
+							style={{ backgroundColor: "transparent", color: "#a659c8" }}
+						>
+							Services
+						</button>
 					</Link>
 				</div>
-				<Link to="/add-petsitter">
-					<button type="button" className="btn btn-success mt-3">
-						Add Pet Sitter
-					</button>
-				</Link>
+				<div className="login">
+					<Link to="/login">
+						<button
+							className="btn btn-transparent"
+							id="login"
+							style={{ backgroundColor: "transparent", color: "#a659c8" }}
+						>
+							Login
+						</button>
+					</Link>
+				</div>
+				<div className="signup">
+					<Link to="/signup">
+						<button
+							className="btn btn-transparent"
+							id="signup"
+							style={{
+								backgroundColor: "#a659c8",
+								color: "#ffffff",
+								borderRadius: "15px",
+							}}
+						>
+							Sign up
+						</button>
+					</Link>
+					<Link to="/add-petsitter">
+						<button type="button" className="btn btn-success mt-3">
+							Add Pet Sitter
+						</button>
+					</Link>
+				</div>
 			</div>
 		</nav>
 	);

@@ -1,0 +1,22 @@
+/*-----------------TEAM--------------*/
+.border-team {
+  margin-top: 60px;
+  margin-left: 15rem;
+  margin-bottom: 60px;
+  border-top: 1px solid #a659c8;
+  width: 70%;
+}
+
+.team-title {
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+  text-align: center;
+}
+
+.team-img {
+  width: 1290px;
+  margin-top: 70px;
+  margin-left: 90px;
+  margin-bottom: -700px;
+  border-radius: 20px;
+}
