@@ -1,0 +1,16 @@
+* {
+    font-family: "Noto Serif Hebrew", serif;
+}
+
+.title-add {
+    color: #a659c8;
+}
+
+.add-sitter {
+    background-color: #a659c8;
+}
+
+.img {
+    max-height: 10rem;
+    mix-blend-mode: multiply;
+}
