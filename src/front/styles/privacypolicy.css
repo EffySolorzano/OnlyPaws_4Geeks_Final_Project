@@ -1,0 +1,29 @@
+/*------------PRIVACY-------------------------------*/
+.privacy-top {
+  margin-top: 30px;
+  margin-left: 200px;
+  border-top: 1px solid #a659c8;
+  width: 70%;
+}
+.container-privacy {
+  width: 1290px;
+  margin-top: 50px;
+}
+.title-privacy {
+  font-family: "Noto Serif Hebrew", serif;
+  color: #a659c8;
+  text-align: center;
+  margin-left: 100px;
+}
+.paragraph-privacy {
+  margin-left: 220px;
+  font-family: "Noto Serif Hebrew", serif;
+  border-radius: 5px;
+}
+.privacy-img {
+  width: 1290px;
+  margin-top: -150px;
+  margin-left: 90px;
+  margin-bottom: -700px;
+  border-radius: 20px;
+}

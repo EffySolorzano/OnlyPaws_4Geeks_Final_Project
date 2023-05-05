@@ -18,6 +18,11 @@ gunicorn = "*"
 cloudinary = "*"
 flask-admin = "*"
 typing-extensions = "*"
+mysql-connector-python = "*"
+mysqlclient = "*"
+flask-jwt-extended = "4.4.0"
+flask-bcrypt = "*"
+bcrypt = "*"
 
 [requires]
 python_version = "3.10"

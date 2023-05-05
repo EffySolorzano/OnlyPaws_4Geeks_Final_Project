@@ -1,0 +1,50 @@
+/*---------------FOOTER-----------------------------*/
+.footer {
+  position: relative;
+  bottom: -120px;
+  width: 100%;
+  margin-left: 35px;
+  font-family: "Noto Serif Hebrew", serif;
+}
+.container-footer {
+  position: relative;
+  bottom: -150px;
+  width: 100%;
+  font-family: "Noto Serif Hebrew", serif;
+  padding: 100px 0; /* add some padding to create spacing */
+  margin-left: 50px;
+}
+#about-footer,
+#how-footer,
+#services-footer,
+#terms-footer,
+#privacy-footer,
+#team-footer,
+#contact-footer {
+  margin-left: 60px;
+  margin-right: 10px;
+  font-family: "Noto Serif Hebrew", serif;
+  font-size: 15px;
+  outline: none;
+}
+.social {
+  margin-top: 20px;
+  margin-left: 15px;
+}
+.instagram {
+  height: 35px;
+  width: 35px;
+  margin-left: 585px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.facebook {
+  height: 50px;
+  width: 50px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.twitter {
+  height: 30px;
+  width: 35px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}

@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[javascriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     }
+=======
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "liveServer.settings.port": 5501
+>>>>>>> ade8bbdb34374994425270e531a8fca38307fb23
 }
