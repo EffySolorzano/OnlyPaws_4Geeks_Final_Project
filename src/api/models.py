@@ -41,22 +41,16 @@ class Provider(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(32), nullable=False)
     country = db.Column(db.String(32), nullable=False)
-    petSitter = db.Column(db.Boolean, nullable=False)
-    dogWalker = db.Column(db.Boolean, nullable=False)
-    houseSitter = db.Column(db.Boolean, nullable=False)
-    petGroomer = db.Column(db.Boolean, nullable=False)
+    
     is_authenticated = db.Column(db.Boolean, nullable=False)
     users = db.relationship('User', backref='provider', lazy=True)
-    def __init__(self, name, surname, username, email, password, petSitter, dogWalker, houseSitter, petGroomer, is_authenticated):
+    def __init__(self, name, surname, username, email, password, country, is_authenticated):
         self.name = name
         self.surname = surname
         self.username = username
         self.email = email
         self.password = password
-        self.petSitter =petSitter
-        self.dogWalker = dogWalker
-        self.houseSitter = houseSitter
-        self.petGroomer = petGroomer
+        self.country = country
         self.is_authenticated = is_authenticated
     def __repr__(self):
         return f'<Provider {self.email}>'
@@ -68,10 +62,6 @@ class Provider(db.Model):
             "username": self.username,
             "email": self.email,
             "country": self.country,
-            "petSitter": self.petSitter,
-            "dogWalker": self.dogWalker,
-            "houseSitter": self.houseSitter,
-            "petGroomer": self.petGroomer,
             "is_authenticated": self.is_authenticated,
         }
          # do not serialize the password, its a security breach
