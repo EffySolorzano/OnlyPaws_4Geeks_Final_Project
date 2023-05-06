@@ -8,6 +8,9 @@ import Footer from "./footer.jsx";
 const ContactUs = () => {
     const { store, actions } = useContext(Context);
 
+
+
+
     return (
         <>
             <div className="contact container p-3 mt-5 d-flex flex-column justify-content-center bg-light rounded-3 border border-secondary-emphasis w-25">

@@ -10,15 +10,17 @@ class User(db.Model):
     surname = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(32), nullable=False)
-    is_authenticated = db.Column(db.Boolean, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(150), nullable=False)
+    is_authenticated = db.Column(db.Boolean, unique=True, nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'))
-    def __init__(self, name, surname, username, email, password, is_authenticated):
+    def __init__(self, name, surname, username, email, password, country, is_authenticated):
         self.name = name
         self.surname = surname
         self.username = username
         self.email = email
         self.password = password
+        self.country = country
         self.is_authenticated = is_authenticated
     def __repr__(self):
         return f'<User {self.email}>'
@@ -29,6 +31,7 @@ class User(db.Model):
             "surname": self.surname,
             "username": self.username,
             "email": self.email,
+            "country": self.country,
             "is_authenticated": self.is_authenticated,
             # do not serialize the password, its a security breach
         }
@@ -39,8 +42,8 @@ class Provider(db.Model):
     surname = db.Column(db.String(120), nullable=False)
     username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(32), nullable=False)
-    country = db.Column(db.String(32), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(120), nullable=False)
     
     is_authenticated = db.Column(db.Boolean, nullable=False)
     users = db.relationship('User', backref='provider', lazy=True)
