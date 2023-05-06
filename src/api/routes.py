@@ -6,12 +6,11 @@ from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import TokenBlockedList, db, User, Provider
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import generate_password_hash
 from api.ext import jwt, bcrypt
-import bcrypt
 import smtplib
 import ssl
 from email.mime.text import MIMEText
@@ -20,13 +19,6 @@ from email.mime.base import MIMEBase
 from email import encoders
 from datetime import date, time, datetime, timezone, timedelta
 
-
-
-
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
 
 import smtplib, ssl
 from email.mime.text import MIMEText
@@ -115,6 +107,7 @@ def register_handle():
     surname = body["surname"]
     username = body["username"]
     password = body["password"]
+    country = body["country"]
     is_authenticated = body["is_authenticated"]
   #check if username exists on database
     if User.query.filter_by(username=body['username']).first() or User.query.filter_by(email=body['email']).first():
@@ -132,8 +125,14 @@ def register_handle():
         raise APIException("You need to specify the username", status_code=400)
     if "password" not in body:  # add this check for the 'password' key
         raise APIException("You need to specify the password", status_code=400)
+    if "country" not in body:  # add this check for the 'password' key
+        raise APIException("You need to specify the country", status_code=400)
+    
+     #hashing the password
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    
     #creada la clase User en la variable new_user
-    new_user = User(email=email, name=name, surname=surname, username=username, password=password, is_authenticated=is_authenticated)
+    new_user = User(email=email, name=name, surname=surname, username=username, password=hashed_password, country=country, is_authenticated=is_authenticated)
     #comitear la sesión
     db.session.add(new_user) #agregamos el nuevo usuario a la base de datos
     db.session.commit() #guardamos los cambios en la base de datos
@@ -168,7 +167,12 @@ def register_provider():
         raise APIException("You need to specify the password", status_code=400)
     if "country" not in body:  # add this check for the 'password' key
         raise APIException("You need to specify the country", status_code=400)
-    new_Provider = Provider(email=email, name=name, surname=surname, username=username, password=password, country=country, is_authenticated=is_authenticated)
+    
+    #hashing the password
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    
+    
+    new_Provider = Provider(email=email, name=name, surname=surname, username=username, password=hashed_password, country=country, is_authenticated=is_authenticated)
     db.session.add(new_Provider) #agregamos el nuevo usuario a la base de datos
     db.session.commit()
     return jsonify({"mensaje":"Provider successfully created"}), 201
@@ -182,41 +186,38 @@ def verificacionToken(jti):
         return False
     return True
 
+blacklist = set()
 
 @api.route('/login', methods=['POST'])
 def login():
-    body = request.get_json()
-    email= body["email"]
-    password = body["password"]
-    salt = bcrypt.gensalt(rounds=12)
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
 
     user = User.query.filter_by(email=email).first()
-    print(user)
-
+    print(password)
+    # Verificamos el nombre de usuario
     if user is None:
         return jsonify({"message":"Login failed"}), 401
-
-    # Check if the entered password matches the hashed password in the database
-    if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-        access_token = create_access_token(identity=user.id)
-        return jsonify({"token":access_token}), 200
-    else:
-        return jsonify({"message":"haha NOPE"}), 401
+    
+    # Validar clave
+    print(user.password)
+    if not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"message":"NOPE"}), 401
+    
+    #Generar Token
+    access_token = create_access_token(identity=user.id)
+    
+    # Successful login
+    return jsonify({"message": "Logged in successfully", "access_token": access_token}), 200
     
     
 
 @api.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
-    jti = get_jwt_identity()['jti']
-    try:
-        revoked_token = RevokedTokenModel(jti=jti)
-        revoked_token.add()
-        return jsonify({"message": "You have been logged out."}), 200
-    except:
-        return jsonify({"message": "Something went wrong"}), 500
+    jti = get_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"message": "Log out successfully"}), 200
     
     
 @api.route("/protected", methods=["GET"])
