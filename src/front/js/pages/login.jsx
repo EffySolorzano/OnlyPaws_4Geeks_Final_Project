@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Loginn from "../../styles/Loginn.css";
 import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
+import Footer from "./footer.jsx";
 
 
 const Login = () => {
@@ -42,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
+    <><div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
         <h1 className="fs-1 fw-bold mt-5">
           <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
@@ -50,7 +51,7 @@ const Login = () => {
         <form className="d-flex flex-column" onSubmit={handleLogin}>
         </form>
         <form>
-          <div className="form-floating col-md-12 ">
+          <div className="form-floating col-md-12 mb-3 ">
             <input type="email" className="form-control w-100 col-md-12" id="floatingInput" placeholder="name@example.com"></input>
             <label for="floatingInput">Username</label>
           </div>
@@ -62,11 +63,19 @@ const Login = () => {
             <input type="checkbox" className="form-check-input" id="exampleCheck1"></input>
             <label className="form-check-label" for="exampleCheck1">Check me out</label>
           </div>
-          <center><button type="submit" className="boton btn btn-outline-warning">Submit</button></center>
+          <center><button type="submit" className="boton btn btn-transparent"
+            style={{
+              backgroundColor: "#a659c8",
+              color: "#ffffff",
+              borderRadius: "15px",
+            }}
+          >Submit</button></center>
         </form>
         <br></br>
       </div>
-    </div>
+    </div><div>
+        <Footer />
+      </div></>
 
   );
 }

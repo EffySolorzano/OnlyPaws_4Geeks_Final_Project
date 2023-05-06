@@ -1,11 +1,13 @@
-.onlypaws{
-max-height: 10rem;
+.onlypaws {
+    max-height: 10rem;
 }
 
-.bot{
+.bot {
     background-color: #a659c8;
-    }
+    width: 30px;
 
-    .second{
-        mix-blend-mode: multiply;
-        }
+}
+
+.second {
+    mix-blend-mode: multiply;
+}
