@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png"
+import Footer from "./footer.jsx";
 
 const AddPetSitter = () => {
   const { store, actions } = useContext(Context);
@@ -55,7 +56,7 @@ const AddPetSitter = () => {
     <div className="container p-4 mt-4 col-3 bg-light rounded-3 border border-secondary-emphasis">
       <center><img src={OnlyPaws} className="imagen-paws img d-flex justify-content-center" /></center>
       <div className="title-add d-flex justify-content-center">
-        <h1>Create your account</h1>
+        <h4>Create your account</h4>
       </div>
       <form className="row g-3">
         <div className="col-md-12">
@@ -75,7 +76,7 @@ const AddPetSitter = () => {
         </div>
         <div className="col-md-12">
           <label for="last-name" className="form-label">
-            Last name:
+            Surname:
           </label>
           <input
             type="text"
@@ -174,7 +175,7 @@ const AddPetSitter = () => {
             className="add-sitter btn text-light"
             onClick={async () => {
               const full_name = document.getElementById("full-name").value;
-              const last_name = document.getElementById("last-name").value;
+              const surname = document.getElementById("surname").value;
               const username = document.getElementById("username").value;
               const country = document.getElementById("country").value;
               const email = document.getElementById("email").value;
@@ -183,7 +184,7 @@ const AddPetSitter = () => {
 
               const newContact = {
                 full_name,
-                last_name,
+                surname,
                 username,
                 country,
                 email,
@@ -205,7 +206,7 @@ const AddPetSitter = () => {
               }
 
               document.getElementById("full-name").value = "";
-              document.getElementById("last-name").value = "";
+              document.getElementById("surname").value = "";
               document.getElementById("username").value = "";
               document.getElementById("country").value = "";
               document.getElementById("email").value = "";
@@ -222,6 +223,9 @@ const AddPetSitter = () => {
           </Link>
         </div>
       </form>
+    </div>
+    <div>
+      <Footer />
     </div>
   </>);
 };

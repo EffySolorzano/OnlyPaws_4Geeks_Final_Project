@@ -5,6 +5,7 @@ import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
+import Footer from "./footer.jsx";
 
 const Register = () => {
     const { store, actions } = useContext(Context);
@@ -57,7 +58,7 @@ const Register = () => {
                             <center><img src={Onlypaws} alt="onlypaws.png" className="second onlypaws" /></center>
                         </h1>
                     </div>
-                    <div className="form">
+                    <div className="form mb-5">
                         <form>
                             <label htmlFor="name">Name:</label>
                             <input
@@ -106,15 +107,19 @@ const Register = () => {
                                     setPassword(e.target.value);
                                 }}
                             />
-                            <p className="">Already have account? <Link to="/sign-in">
+                            <p className="">Already have account? <Link to="/login">
                                 Sign In
                             </Link></p>
 
-                            <center><div className=" bot register-button-container">
+                            <center><div className=" bot- rounded">
                                 <button
-                                    type="button"
-                                    className="btn btn-outline-warning"
+                                    className="btn btn-transparent"
                                     onClick={handleRegister}
+                                    style={{
+                                        backgroundColor: "#a659c8",
+                                        color: "#ffffff",
+                                        borderRadius: "15px",
+                                    }}
                                 >
                                     Register
                                 </button>
@@ -122,8 +127,10 @@ const Register = () => {
                         </form>
                     </div>
                 </div>
-
             </div >
+            <div>
+                <Footer />
+            </div>
 
         </>
     );
