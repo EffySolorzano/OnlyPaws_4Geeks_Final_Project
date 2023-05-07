@@ -101,14 +101,16 @@ const Register = () => {
                                 }}
                             />
                             <label htmlFor="country">Country:</label>
-                            <input
-                                type="text"
-                                className="form-control mb-3"
-                                placeholder="Enter your country"
-                                onChange={(e) => {
-                                    setCountry(e.target.value);
-                                }}
-                            />
+                            <select id="country" name="country" className="form-select p-2" onChange={(e) => {
+                                setCountry(e.target.value);
+                            }}>
+                                <option>Select your country</option>
+                                <option>Costa Rica</option>
+                                <option>Venezuela</option>
+                                <option>Argentina</option>
+                                <option>United States</option>
+                                <option>Germany</option>
+                            </select>
                             <label htmlFor="password">Password:</label>
                             <input
                                 type="password"
