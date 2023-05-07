@@ -25,11 +25,11 @@ const AddPetSitter = () => {
   }, [password]);
   const handleAddPetSitter = async (e) => {
     e.preventDefault(); // prevent form from submitting
-    const response = await actions.register(
+    const response = await actions.signup(
       name,
       surname,
-      username,
       country,
+      username,
       email,
       password,
       isAuthenticated
@@ -50,6 +50,7 @@ const AddPetSitter = () => {
       });
     }
   };
+
   console.log(actions);
 
   return (<>

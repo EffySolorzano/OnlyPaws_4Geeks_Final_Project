@@ -195,22 +195,26 @@ def login():
 
     user = User.query.filter_by(email=email).first()
     provider = Provider.query.filter_by(email=email).first()
-    print(password)
+    
     # Verificamos el nombre de usuario
     if user is None and provider is None:
-      return jsonify({"message": "Login failed"}), 401
-    
+        return jsonify({"message": "Login failed"}), 401
     
     # Validar clave
-    print(user.password)
-    if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"message":"NOPE"}), 401
+    if user and not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"message": "Login failed"}), 401
     
     #Generar Token
-    access_token = create_access_token(identity=user.id)
+    if user:
+        identity = user.id
+    else:
+        identity = provider.id
+    
+    access_token = create_access_token(identity=identity)
     
     # Successful login
     return jsonify({"message": "Logged in successfully", "access_token": access_token}), 200
+
     
     
 
