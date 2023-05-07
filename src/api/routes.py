@@ -216,6 +216,7 @@ def login():
     return jsonify({"message": "Logged in successfully", "access_token": access_token}), 200
 
     
+    
 
 @api.route('/logout', methods=['POST'])
 @jwt_required()
