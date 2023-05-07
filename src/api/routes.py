@@ -194,10 +194,12 @@ def login():
     password = request.json.get("password", None)
 
     user = User.query.filter_by(email=email).first()
+    provider = Provider.query.filter_by(email=email).first()
     print(password)
     # Verificamos el nombre de usuario
-    if user is None:
-        return jsonify({"message":"Login failed"}), 401
+    if user is None and provider is None:
+      return jsonify({"message": "Login failed"}), 401
+    
     
     # Validar clave
     print(user.password)

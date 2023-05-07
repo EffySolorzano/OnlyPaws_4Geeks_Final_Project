@@ -1,6 +1,6 @@
 .onlypaws-logo {
-  height: 100px;
-  width: 150px;
+  height: 200px;
+  width: 250px;
   margin-left: -10px;
 }
 
@@ -14,11 +14,9 @@
 
 .log {
   margin-top: 200px;
+
 }
 
-.boton {
-  background-color: #a659c8;
-}
 
 .principal {
   mix-blend-mode: multiply;
