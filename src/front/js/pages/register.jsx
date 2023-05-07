@@ -13,8 +13,9 @@ const Register = () => {
     const [surname, setSurname] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [country, setCountry] = useState("");
     const [password, setPassword] = useState("");
-    const [isActive, setIsActive] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         console.log(email);
@@ -27,10 +28,11 @@ const Register = () => {
         const response = await actions.register(
             name,
             surname,
+            country,
             username,
             email,
             password,
-            isActive
+            isAuthenticated
         ); // call register action
         console.log(response);
         if (response.ok) {
@@ -48,6 +50,7 @@ const Register = () => {
             });
         }
     };
+
     console.log(actions);
     return (
         <>
@@ -70,7 +73,6 @@ const Register = () => {
                                 }}
                             />
                             <label for="floatingInput">Surname:</label>
-                            <label for="floatingInput">Username</label>
                             <input
                                 type="text"
                                 className="form-control mb-3"
@@ -96,6 +98,15 @@ const Register = () => {
                                 placeholder="Enter your email"
                                 onChange={(e) => {
                                     setEmail(e.target.value);
+                                }}
+                            />
+                            <label htmlFor="country">Country:</label>
+                            <input
+                                type="text"
+                                className="form-control mb-3"
+                                placeholder="Enter your country"
+                                onChange={(e) => {
+                                    setCountry(e.target.value);
                                 }}
                             />
                             <label htmlFor="password">Password:</label>

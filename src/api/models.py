@@ -12,7 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     country = db.Column(db.String(150), nullable=False)
-    is_authenticated = db.Column(db.Boolean, unique=True, nullable=False)
+    is_authenticated = db.Column(db.Boolean, nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'))
     def __init__(self, name, surname, username, email, password, country, is_authenticated):
         self.name = name
