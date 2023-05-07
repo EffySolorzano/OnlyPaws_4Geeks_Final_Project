@@ -128,7 +128,7 @@ export const userActions = (getStore, getActions, setStore) => {
         return { ok: false, message };
       }
     },
-    petSitterRegister: async (
+    signup: async (
       name,
       surname,
       country,

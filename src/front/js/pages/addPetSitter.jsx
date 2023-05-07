@@ -25,11 +25,11 @@ const AddPetSitter = () => {
   }, [password]);
   const handleAddPetSitter = async (e) => {
     e.preventDefault(); // prevent form from submitting
-    const response = await actions.register(
+    const response = await actions.signup(
       name,
       surname,
-      username,
       country,
+      username,
       email,
       password,
       isAuthenticated
@@ -70,7 +70,7 @@ const AddPetSitter = () => {
             name="full-name"
             placeholder="Insert your name"
             onChange={(e) => {
-              setFullName(e.target.value);
+              setName(e.target.value);
             }}
           />
         </div>
@@ -85,7 +85,7 @@ const AddPetSitter = () => {
             name="last-name"
             placeholder="Insert your last name"
             onChange={(e) => {
-              setLastName(e.target.value);
+              setSurname(e.target.value);
             }}
           />
         </div>
