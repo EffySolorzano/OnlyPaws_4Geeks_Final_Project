@@ -50,6 +50,7 @@ const AddPetSitter = () => {
       });
     }
   };
+
   console.log(actions);
 
   return (<>
