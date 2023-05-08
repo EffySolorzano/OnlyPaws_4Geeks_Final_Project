@@ -14,11 +14,12 @@ import Paw from "../../img/paw.png";
 import "react-datepicker/dist/react-datepicker.css";
 
 const countryOptions = [
-  { value: "AF", label: "Argentina" },
-  { value: "AL", label: "Costa Rica" },
-  { value: "DZ", label: "Venezuela" },
-  { value: "UY", label: "Uruguay" },
+  { value: "AR", label: "Argentina" },
+  { value: "CR", label: "Costa Rica" },
+  { value: "PA", label: "Panamá" },
   { value: "US", label: "United States" },
+  { value: "UY", label: "Uruguay" },
+  { value: "VZ", label: "Venezuela" },
 ];
 
 export const Home = () => {

@@ -105,11 +105,12 @@ const Register = () => {
                                 setCountry(e.target.value);
                             }}>
                                 <option>Select your country</option>
-                                <option>Costa Rica</option>
-                                <option>Venezuela</option>
                                 <option>Argentina</option>
+                                <option>Costa Rica</option>
+                                <option>Panama</option>
                                 <option>United States</option>
-                                <option>Germany</option>
+                                <option>Uruguay</option>
+                                <option>Venezuela</option>
                             </select>
                             <label htmlFor="password">Password:</label>
                             <input

@@ -68,6 +68,11 @@ class Provider(db.Model):
             "is_authenticated": self.is_authenticated,
         }
          # do not serialize the password, its a security breach
+         
+    
+
+
+
 
 class TokenBlockedList(db.Model):
     id = db.Column(db.Integer, primary_key=True)

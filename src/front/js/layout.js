@@ -52,7 +52,6 @@ const Layout = () => {
             <Route element={<Register />} path="/signup" />
             <Route element={<AddPetSitter />} path="/add-petsitter" />
             <Route element={<ContactUs />} path="/contact" />
-            <Route element={<SignInPetSitter />} path="/sign-in-pet-sitter" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
           <Footer />
