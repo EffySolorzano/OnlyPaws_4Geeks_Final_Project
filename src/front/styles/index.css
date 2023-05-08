@@ -202,7 +202,7 @@ body {
 }
 
 .ml-auto {
-  margin-right: 300px;
+  margin-right: 800px;
 }
 
 #about,
@@ -214,20 +214,53 @@ body {
   outline: none;
 }
 
-.logup {
-  margin-right: 30px;
-}
-
-#login,
-#signup,
-#addsitter {
-  margin-left: -10px;
+.login {
+  margin-left: -100px;
   font-family: "Noto Serif Hebrew", serif;
   font-size: 20px;
-  outline: none;
-  justify-content: space-between;
+
 }
 
+.signup {
+  margin-left: -150px;
+  margin-right: 100px;
+  font-family: "Noto Serif Hebrew", serif;
+  font-size: 20px;
+}
+
+.env,
+.fa-bell {
+  margin-right: 10px;
+}
+
+.pers {
+  margin-right: 10px;
+  background-color: #a659c8;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.fa-bell {
+  background-color: transparent;
+  color: #a659c8;
+  font-size: 24px;
+}
+
+.env {
+  background-color: transparent;
+  color: #a659c8;
+  font-size: 24px;
+}
+
+
+.user-icons {
+  display: flex;
+  align-items: center;
+  margin-left: -200px;
+}
+
+.dropdown-toggle {}
 
 /*----------------------- HeaderImg, Search -------------------------*/
 .header {

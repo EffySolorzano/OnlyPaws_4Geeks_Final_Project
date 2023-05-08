@@ -71,7 +71,7 @@ const AddPetSitter = () => {
             name="full-name"
             placeholder="Insert your name"
             onChange={(e) => {
-              setFullName(e.target.value);
+              setName(e.target.value);
             }}
           />
         </div>
@@ -86,7 +86,7 @@ const AddPetSitter = () => {
             name="last-name"
             placeholder="Insert your last name"
             onChange={(e) => {
-              setLastName(e.target.value);
+              setSurname(e.target.value);
             }}
           />
         </div>
@@ -113,11 +113,13 @@ const AddPetSitter = () => {
             setCountry(e.target.value);
           }}>
             <option>Select your country</option>
-            <option>Costa Rica</option>
-            <option>Venezuela</option>
             <option>Argentina</option>
+            <option>Costa Rica</option>
+            <option>Panama</option>
             <option>United States</option>
-            <option>Germany</option>
+            <option>Uruguay</option>
+            <option>Venezuela</option>
+
           </select>
         </div>
         <div className="col-md-12">
@@ -152,7 +154,7 @@ const AddPetSitter = () => {
           />
         </div>
 
-        <p>Already have account? <Link to="/sign-in-pet-sitter">
+        <p>Already have account? <Link to="/login">
           Sign in
         </Link></p>
         <div className="col-md-12 d-flex align-items-end justify-content-center mt-1">
