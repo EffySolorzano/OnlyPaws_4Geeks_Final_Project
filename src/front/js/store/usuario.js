@@ -10,28 +10,10 @@ export const userStore = {
 };
 
 export const userActions = (getStore, getActions, setStore) => {
-  const useLocalFetch = async (endpoint, body = "", method = "GET") => {
-    try {
-      const url = "http://127.0.0.1:3001/api" + endpoint;
-      const requestInit = {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: body ? JSON.stringify(body) : null,
-      };
-      const response = await fetch(url, requestInit);
-      const respuestaJson = await response.json();
-      return { respuestaJson, response };
-    } catch (error) {
-      console.log("Error loading data from local API", error);
-    }
-  };
-
   return {
     login: async (email, password) => {
       try {
+        const store = getStore();
         const token = localStorage.getItem("token");
         const response = await fetch("http://127.0.0.1:3001/api" + "/login", {
           method: "POST",
@@ -54,14 +36,33 @@ export const userActions = (getStore, getActions, setStore) => {
     },
 
     logout: async () => {
-      let body = "";
-      let { respuestaJson, response } = await useFetch("/logout", body, "POST");
-      if (response && response.ok) {
-        localStorage.setItem("token", "");
-        sessionStorage.setItem("token", "");
-        setStore({ ...getStore(), isLoggedIn: false });
-      } else {
-        console.log("Error logging out", respuestaJson.message);
+      const store = getStore();
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No token found");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:3001/api/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          localStorage.setItem("token", "");
+          sessionStorage.setItem("token", "");
+          setStore({ ...getStore(), isLoggedIn: false });
+        } else {
+          const responseData = await response.json();
+          console.log("Error logging out", responseData.message);
+        }
+      } catch (error) {
+        console.log("Error logging out", error);
       }
     },
 
@@ -128,7 +129,7 @@ export const userActions = (getStore, getActions, setStore) => {
         return { ok: false, message };
       }
     },
-    petSitterRegister: async (
+    signup: async (
       name,
       surname,
       country,
