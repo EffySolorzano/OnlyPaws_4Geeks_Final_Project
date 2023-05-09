@@ -3,9 +3,13 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png";
+import Footer from "./footer.jsx";
 
 const ContactUs = () => {
     const { store, actions } = useContext(Context);
+
+
+
 
     return (
         <>
@@ -135,6 +139,9 @@ const ContactUs = () => {
                         </div>
                     </fieldset>
                 </form>
+            </div>
+            <div>
+                <Footer />
             </div>
         </>
     );

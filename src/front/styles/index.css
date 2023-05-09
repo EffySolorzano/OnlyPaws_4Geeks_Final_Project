@@ -19,18 +19,13 @@ body {
   scrollbar-width: none;
 }
 
-.animacion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  /* Adjust the height as per your requirement */
+.animation-container {
+  height: 100vh;
 }
 
 .area {
   background: transparent;
   width: 100%;
-  height: 200vh;
   overflow-x: hidden;
 }
 
@@ -207,7 +202,7 @@ body {
 }
 
 .ml-auto {
-  margin-right: 550px;
+  margin-right: 300px;
 }
 
 #about,
@@ -224,12 +219,15 @@ body {
 }
 
 #login,
-#signup {
-  margin-right: 20px;
+#signup,
+#addsitter {
+  margin-left: -10px;
   font-family: "Noto Serif Hebrew", serif;
   font-size: 20px;
   outline: none;
+  justify-content: space-between;
 }
+
 
 /*----------------------- HeaderImg, Search -------------------------*/
 .header {

@@ -5,6 +5,7 @@ import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
+import Footer from "./footer.jsx";
 
 const Register = () => {
     const { store, actions } = useContext(Context);
@@ -12,8 +13,9 @@ const Register = () => {
     const [surname, setSurname] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [country, setCountry] = useState("");
     const [password, setPassword] = useState("");
-    const [isActive, setIsActive] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
     const navigate = useNavigate();
     useEffect(() => {
         console.log(email);
@@ -26,10 +28,11 @@ const Register = () => {
         const response = await actions.register(
             name,
             surname,
+            country,
             username,
             email,
             password,
-            isActive
+            isAuthenticated
         ); // call register action
         console.log(response);
         if (response.ok) {
@@ -47,6 +50,7 @@ const Register = () => {
             });
         }
     };
+
     console.log(actions);
     return (
         <>
@@ -57,7 +61,7 @@ const Register = () => {
                             <center><img src={Onlypaws} alt="onlypaws.png" className="second onlypaws" /></center>
                         </h1>
                     </div>
-                    <div className="form">
+                    <div className="form mb-5">
                         <form>
                             <label htmlFor="name">Name:</label>
                             <input
@@ -69,7 +73,6 @@ const Register = () => {
                                 }}
                             />
                             <label for="floatingInput">Surname:</label>
-                            <label for="floatingInput">Username</label>
                             <input
                                 type="text"
                                 className="form-control mb-3"
@@ -97,6 +100,17 @@ const Register = () => {
                                     setEmail(e.target.value);
                                 }}
                             />
+                            <label htmlFor="country">Country:</label>
+                            <select id="country" name="country" className="form-select p-2" onChange={(e) => {
+                                setCountry(e.target.value);
+                            }}>
+                                <option>Select your country</option>
+                                <option>Costa Rica</option>
+                                <option>Venezuela</option>
+                                <option>Argentina</option>
+                                <option>United States</option>
+                                <option>Germany</option>
+                            </select>
                             <label htmlFor="password">Password:</label>
                             <input
                                 type="password"
@@ -106,15 +120,19 @@ const Register = () => {
                                     setPassword(e.target.value);
                                 }}
                             />
-                            <p className="">Already have account? <Link to="/sign-in">
+                            <p className="">Already have account? <Link to="/login">
                                 Sign In
                             </Link></p>
 
-                            <center><div className=" bot register-button-container">
+                            <center><div className=" bot- rounded">
                                 <button
-                                    type="button"
-                                    className="btn btn-outline-warning"
+                                    className="btn btn-transparent"
                                     onClick={handleRegister}
+                                    style={{
+                                        backgroundColor: "#a659c8",
+                                        color: "#ffffff",
+                                        borderRadius: "15px",
+                                    }}
                                 >
                                     Register
                                 </button>
@@ -122,8 +140,10 @@ const Register = () => {
                         </form>
                     </div>
                 </div>
-
             </div >
+            <div>
+                <Footer />
+            </div>
 
         </>
     );

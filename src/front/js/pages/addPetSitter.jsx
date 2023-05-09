@@ -1,61 +1,63 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png"
+import Footer from "./footer.jsx";
 
 const AddPetSitter = () => {
   const { store, actions } = useContext(Context);
-  // const [fullname, setFullName] = useState("");
-  // const [lastname, setLastName] = useState("");
-  // const [username, setUserName] = useState("");
-  // const [country, setCountry] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [repeatpassword, setRepeatPassword] = useState("");
-  // const [isActive, setIsActive] = useState(true);
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log(username);
-  // }, [email]);
-  // useEffect(() => {
-  //   console.log(password);
-  // }, [password]);
-  // const handleRegister = async (e) => {
-  //   e.preventDefault(); // prevent form from submitting
-  //   const response = await actions.register(
-  //     fullname,
-  //     lastname,
-  //     username,
-  //     country,
-  //     email,
-  //     password,
-  //     repeatpassword,
-  //     isActive
-  //   ); // call register action
-  //   console.log(response);
-  //   if (response.ok) {
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Registration successful!",
-  //     }).then(() => {
-  //       navigate("/login"); // redirect to login component
-  //     });
-  //   } else {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Oops...",
-  //       text: "Registration failed. Please try again later.",
-  //     });
-  //   }
-  // };
-  // console.log(actions);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [username, setUserName] = useState("");
+  const [country, setCountry] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(username);
+  }, [email]);
+  useEffect(() => {
+    console.log(password);
+  }, [password]);
+  const handleAddPetSitter = async (e) => {
+    e.preventDefault(); // prevent form from submitting
+    const response = await actions.signup(
+      name,
+      surname,
+      country,
+      username,
+      email,
+      password,
+      isAuthenticated
+    ); // call register action
+    console.log(response);
+    if (response.ok) {
+      Swal.fire({
+        icon: "success",
+        title: "Registration successful!",
+      }).then(() => {
+        navigate("/login"); // redirect to login component
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Registration failed. Please try again later.",
+      });
+    }
+  };
+
+  console.log(actions);
 
   return (<>
     <div className="container p-4 mt-4 col-3 bg-light rounded-3 border border-secondary-emphasis">
       <center><img src={OnlyPaws} className="imagen-paws img d-flex justify-content-center" /></center>
       <div className="title-add d-flex justify-content-center">
-        <h1>Create your account</h1>
+        <h4>Create your account</h4>
       </div>
       <form className="row g-3">
         <div className="col-md-12">
@@ -75,7 +77,7 @@ const AddPetSitter = () => {
         </div>
         <div className="col-md-12">
           <label for="last-name" className="form-label">
-            Last name:
+            Surname:
           </label>
           <input
             type="text"
@@ -149,22 +151,7 @@ const AddPetSitter = () => {
             }}
           />
         </div>
-        <div className="col-md-12">
-          <label for="password-repeat" className="form-label">
-            Repeat Password:
-          </label>
-          <input
-            type="password"
-            pattern=".{6,}"
-            className="form-control p-2"
-            id="password-repeat"
-            name="password-repeat"
-            placeholder="Repeat your password"
-            onChange={(e) => {
-              setRepeatPassword(e.target.value);
-            }}
-          />
-        </div>
+
         <p>Already have account? <Link to="/sign-in-pet-sitter">
           Sign in
         </Link></p>
@@ -172,46 +159,7 @@ const AddPetSitter = () => {
           <button
             type="button"
             className="add-sitter btn text-light"
-            onClick={async () => {
-              const full_name = document.getElementById("full-name").value;
-              const last_name = document.getElementById("last-name").value;
-              const username = document.getElementById("username").value;
-              const country = document.getElementById("country").value;
-              const email = document.getElementById("email").value;
-              const password = document.getElementById("password").value;
-              const password_repeat = document.getElementById("password-repeat").value;
-
-              const newContact = {
-                full_name,
-                last_name,
-                username,
-                country,
-                email,
-                password,
-                password_repeat,
-                agenda_slug: "agenda_de_marce",
-              };
-              let { respuestaJson, response } = await actions.useFetch(
-                "/apis/fake/contact/",
-                newContact,
-                "POST"
-              );
-              if (response.ok) {
-                console.log(response);
-                alert("Contacto cargado con éxito!");
-              } else {
-                alert("Error! datos ingresados incorrectamente");
-                return;
-              }
-
-              document.getElementById("full-name").value = "";
-              document.getElementById("last-name").value = "";
-              document.getElementById("username").value = "";
-              document.getElementById("country").value = "";
-              document.getElementById("email").value = "";
-              document.getElementById("password").value = "";
-              document.getElementById("password-repeat").value = "";
-            }}
+            onClick={handleAddPetSitter}
           >
             Register
           </button>
@@ -222,6 +170,9 @@ const AddPetSitter = () => {
           </Link>
         </div>
       </form>
+    </div>
+    <div>
+      <Footer />
     </div>
   </>);
 };
