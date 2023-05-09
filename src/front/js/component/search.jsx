@@ -1,27 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import Footer from "../pages/footer.jsx";
 import Providerss from "../../styles/providerss.css";
 import Swal from "sweetalert2";
 
 const Provider = () => {
-  const [people, setPeople] = useState([
-    {
-      name: "John Doe",
-      age: 24,
-      imgUrl: "https://example.com/images/john.jpg",
-    },
-    {
-      name: "Jane Smith",
-      age: 28,
-      imgUrl: "https://example.com/images/jane.jpg",
-    },
-    {
-      name: "Bob Johnson",
-      age: 32,
-      imgUrl: "https://example.com/images/bob.jpg",
-    },
-  ]);
+  const [people, setPeople] = useState([]);
 
   const onSwipe = (direction) => {
     console.log("You swiped: " + direction);
@@ -45,6 +29,39 @@ const Provider = () => {
       `,
     });
   };
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        console.log("Fetching providers...");
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await fetch("http://127.0.0.1:3001/api/providers", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const providers = data.providers.map((provider) => ({
+            name: provider.name,
+            service: provider.service,
+            imgUrl: provider.imgUrl,
+            description: provider.description,
+          }));
+          setPeople(providers);
+          console.log(providers)
+        } else {
+          console.error("Error fetching providers:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching providers:", error);
+      }
+    };
+
+    fetchProviders();
+  }, []);
 
   return (
     <>
