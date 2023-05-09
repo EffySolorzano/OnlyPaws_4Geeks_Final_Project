@@ -66,16 +66,14 @@ export const userActions = (getStore, getActions, setStore) => {
       }
     },
 
-    getUser: async () => {
+    getProvider: async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return null;
-        const response = await fetch(
-          "http://127.0.0.1:3001/api" + "/get-user",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await fetch("http://127.0.0.1:3001/api/providers", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const data = await response.json();
         const user = data.user;
         setStore({ user, error: null });
