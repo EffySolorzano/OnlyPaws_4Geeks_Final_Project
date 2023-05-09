@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import TokenBlockedList, db, User, Provider
+from api.models import TokenBlockedList, db, User, Provider, Image
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity, get_jwt
@@ -25,6 +25,17 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config( 
+  cloud_name = os.getenv("CLOUDINARY_NAME"), 
+  api_key = os.getenv("CLOUDINARY_KEY"), 
+  api_secret = os.getenv("CLOUDINARY_SECRET"),
+  secure = "http://proxy.server:9999"
+)
 
 api = Blueprint('api', __name__)
 
@@ -138,7 +149,7 @@ def register_handle():
     db.session.commit() #guardamos los cambios en la base de datos
     return jsonify({"mensaje":"User successfully created"}), 201
 
-############# PROVIDER REGISTER################
+############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
 @api.route('/register-provider', methods=['POST'])
 def register_provider():
     body = request.get_json()
@@ -177,6 +188,16 @@ def register_provider():
     db.session.commit()
     return jsonify({"mensaje":"Provider successfully created"}), 201
 
+
+####GET#####
+
+@api.route('/providers', methods=['GET'])
+def get_provider():
+    provider = Provider.query.all()
+    serialized_provider = [provider.serialize() for provider in provider]
+    return jsonify(serialized_provider), 200
+
+
  ################ LOGIN / LOGOUT ###################
 def verificacionToken(jti):
     jti#Identificador del JWT (es más corto)
@@ -214,9 +235,7 @@ def login():
     
     # Successful login
     return jsonify({"message": "Logged in successfully", "access_token": access_token}), 200
-
-    
-    
+ 
 
 @api.route('/logout', methods=['POST'])
 @jwt_required()
@@ -238,3 +257,42 @@ def protected():
     print("The user is: ", user.name)
     return jsonify({"message":"Protected route"}), 200
 
+######IMG UPLOAD######
+@api.route('/upload', methods=['POST', 'GET'])
+def handle_upload():
+    if 'image' not in request.files:
+        raise APIException("No image to upload")
+    print("FORMA DEL ARCHIVO")
+    my_image = Image()
+
+    result = cloudinary.uploader.upload(
+        request.files['image'],
+        public_id=f'sample_folder/profile/my-image-name',
+        crop='limit',
+        width=450,
+        height=450,
+        eager=[{
+            'width': 200, 'height': 200,
+            'crop': 'thumb', 'gravity': 'face',
+            'radius': 100
+        }],
+        tags=['profile_picture']
+    )
+
+    my_image.ruta = result['secure_url']
+    my_image.user_id = 1  # Here you would extract the user ID from the token
+    db.session.add(my_image)
+    db.session.commit()
+
+    return jsonify(my_image.serialize()), 200
+
+
+@api.route('/upload', methods=['GET'])
+def handle_image_list():
+    images = Image.query.all()
+    images = list(map(lambda item: item.serialize(), images)),
+    
+    response_body = {
+        "lista": images
+   }
+    return jsonify(response_body), 200
