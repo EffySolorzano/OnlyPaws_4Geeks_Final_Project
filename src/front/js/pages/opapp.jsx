@@ -22,7 +22,7 @@ function opApp() {
         </a>
       </div>
       <div>
-        <a href="https://play.google.com/store/games" target="_blank">
+        <a href="https://apps.microsoft.com/store/apps" target="_blank">
           <img src={Windows} alt="windows" className="windows" />
         </a>
       </div>

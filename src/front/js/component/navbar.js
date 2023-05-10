@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import OnlyPaws from "../../img/onlypaws.png";
 import { Modal } from "react-bootstrap";
@@ -10,12 +10,21 @@ import { userActions } from "../store/usuario.js";
 export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const { store, actions } = useContext(Context); // Wrap Navbar component with Context component
+  const [loading, setLoading] = useState(true);
 
   const handleLogout = async () => {
     await actions.logout();
     localStorage.removeItem("token");
     window.location.reload();
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      actions.login();
+    }
+    setLoading(false);
+  }, []);
 
   const handleModalClose = () => {
     setShowModal(false);
