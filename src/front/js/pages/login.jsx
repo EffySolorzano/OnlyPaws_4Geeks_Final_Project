@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import Loginn from "../../styles/Loginn.css";
@@ -14,6 +14,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    console.log('email')
+    console.log('password')
     e.preventDefault();
     if (!email || !password) {
       Swal.fire({
@@ -71,31 +73,53 @@ const Login = () => {
         <h1 className="fs-1 fw-bold mt-5">
           <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
         </h1>
-        <form className="d-flex flex-column" onSubmit={handleLogin}>
+        <form className="d-flex flex-column">
         </form>
         <form>
-          <div className="form-floating col-md-12 mb-3 ">
-            <input type="email" className="form-control w-100 col-md-12" id="floatingInput" placeholder="name@example.com"></input>
-            <label for="floatingInput">Email</label>
+          <div className="form-floating col-md-12 mb-3">
+            <input
+              type="email"
+              className="form-control w-100 col-md-12"
+              id="floatingInput"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="floatingInput">Email</label>
           </div>
           <div className="form-floating">
-            <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
-            <label for="floatingPassword">Password</label><br></br>
+            <input
+              type="password"
+              className="form-control"
+              id="floatingPassword"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="floatingPassword">Password</label>
+            <br />
           </div>
           <label className="forgot mb-3" htmlFor="forgotPassword">
             <a href="#" onClick={handleForgotPassword}>
               Forgot password?
             </a>
           </label>
-          <center><button type="submit" className="boton btn btn-transparent"
-            style={{
-              backgroundColor: "#a659c8",
-              color: "#ffffff",
-              borderRadius: "15px",
-            }}
-          >Submit</button></center>
+          <center>
+            <button
+              type="submit"
+              className="boton btn btn-transparent"
+              onClick={handleLogin}
+              style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+              }}
+            >
+              Submit
+            </button>
+          </center>
         </form>
-        <br></br>
+
       </div>
     </div><div>
         <Footer />

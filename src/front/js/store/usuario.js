@@ -13,20 +13,19 @@ export const userActions = (getStore, getActions, setStore) => {
   return {
     login: async (email, password) => {
       try {
-        const store = getStore();
         const token = localStorage.getItem("token");
-        const response = await fetch("http://127.0.0.1:3001/api" + "/login", {
+        const response = await fetch("http://127.0.0.1:3001/api/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ email: email, password: password }),
+          body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
         const user = data.user;
         localStorage.setItem("token", data.token);
-        setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
+        setStore({ ...getStore(), isLoggedIn: true });
         return response;
       } catch (error) {
         const message = error.message || "Something went wrong";
@@ -66,7 +65,7 @@ export const userActions = (getStore, getActions, setStore) => {
       }
     },
 
-   getProvider: async () => {
+    getProvider: async () => {
       try {
         const response = await fetch("http://127.0.0.1:3001/api/providers", {
           method: "GET",
@@ -99,8 +98,7 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
-    
-    
+
     register: async (
       name,
       surname,
