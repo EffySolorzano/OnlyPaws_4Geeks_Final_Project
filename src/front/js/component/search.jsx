@@ -23,6 +23,7 @@ const Provider = () => {
     }, */}
   ]);
 
+
   const onSwipe = (direction) => {
     console.log("You swiped: " + direction);
   };
@@ -46,7 +47,7 @@ const Provider = () => {
     });
   };
 
-  useEffect(() => {
+useEffect(() => {
     const fetchProviders = async () => {
       try {
         console.log("Fetching providers...");
