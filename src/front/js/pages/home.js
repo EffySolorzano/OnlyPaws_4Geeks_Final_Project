@@ -53,7 +53,7 @@ export const Home = () => {
       checkout,
       numberOfPets,
     });
-    const searchResultsUrl = `/search-btn?${urlSearchParams.toString()}`;
+    const searchResultsUrl = `/providers?${urlSearchParams.toString()}`;
     window.location.href = searchResultsUrl;
   };
 
@@ -116,7 +116,7 @@ export const Home = () => {
               ))}
             </select>
           </div>
-          <Link to="/search-btn">
+          <Link to="/providers">
             <button
               className="btn btn-transparent"
               id="search-btn"

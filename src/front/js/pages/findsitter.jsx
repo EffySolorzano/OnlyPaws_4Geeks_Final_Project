@@ -16,9 +16,9 @@ function findSitter() {
               sitters who will make sure your beloved are safe and happy in the
               comfort of their own home, no matter the season!
             </p>
-            <a href="#" className="card-link">
+            <Link to="/providers">
               Find a pet sitter
-            </a>
+            </Link>
           </div>
         </div>
         <div className="card" style={{ width: "25rem" }}>
@@ -28,9 +28,7 @@ function findSitter() {
               Come explore our latest house sits with adorable pets all around
               the world!
             </p>
-            <a href="#" className="card-link">
-              Find a house sit
-            </a>
+            <Link to="/users">Find a house sit</Link>
           </div>
         </div>
       </div>

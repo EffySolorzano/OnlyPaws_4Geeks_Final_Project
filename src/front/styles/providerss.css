@@ -11,7 +11,8 @@
   flex-direction: column;
   margin-left: -510px;
   align-items: center;
-  height: 400px; /* set a fixed height for the stack */
+  height: 400px;
+  /* set a fixed height for the stack */
 }
 
 .carticas {
@@ -72,6 +73,7 @@
   margin-top: 30px;
   margin-bottom: 60px;
 }
+
 .texto {
   font-family: "Noto Serif Hebrew", serif;
   margin-top: 290px;

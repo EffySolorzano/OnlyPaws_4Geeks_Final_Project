@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import Loginn from "../../styles/Loginn.css";
@@ -14,6 +14,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    console.log('email')
+    console.log('password')
     e.preventDefault();
     if (!email || !password) {
       Swal.fire({
@@ -42,109 +44,91 @@ const Login = () => {
     }
   };
 
-  const showPasswordResetModel = async (e) => {
-    e.preventDefault();
-
-    const { value: email } = await Swal.fire({
-      title: 'Submit your email',
+  const handleForgotPassword = () => {
+    Swal.fire({
+      title: 'Forgot password',
       input: 'email',
       inputAttributes: {
-        autocapitalize: 'off'
+        autocapitalize: 'off',
+        required: 'true'
       },
       showCancelButton: true,
-      confirmButtonText: 'Reset Password',
+      confirmButtonText: 'Send email',
       showLoaderOnConfirm: true,
-      preConfirm: (email) => {
-        const emailRegex = /^\S+@\S+\.\S+$/; // Regular expression for basic email validation
-        if (!emailRegex.test(email)) {
-          Swal.showValidationMessage('Please enter a valid email address');
-        } else {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, 2000);
-          });
-        }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const email = result.value;
+        Swal.fire({
+          title: 'Password Reset',
+          text: `An email with a link to reset your password has been sent to ${email}`,
+          icon: 'success'
+        });
+      }
     });
-
-    if (email) {
-      Swal.fire({
-        title: 'Password Reset Request',
-        text: `An email has been sent to ${email} with instructions on how to reset your password.`,
-        icon: 'success'
-      });
-    }
   };
 
-
   return (
-    <>
-      <div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
-        <div className="login-form">
-          <h1 className="fs-1 fw-bold mt-5">
+    <><div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
+      <div className="login-form">
+        <h1 className="fs-1 fw-bold mt-5">
+          <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
+        </h1>
+        <form className="d-flex flex-column">
+          <div className="form-floating col-md-12 mb-3">
+            <input
+              type="email"
+              className="form-control w-100 col-md-12"
+              id="floatingInput"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="floatingInput">Email</label>
+          </div>
+          <div className="form-floating">
+            <input
+              type="password"
+              className="form-control"
+              id="floatingPassword"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="floatingPassword">Password</label>
+            <br />
+          </div>
+          <div>
             <center>
-              <img
-                src={Onlypaws}
-                alt="onlypaws_logo"
-                className="principal img-fluid onlypaws-logo"
-              />
+              <label className="forgot mb-3" htmlFor="forgotPassword">
+                <a href="#" onClick={handleForgotPassword}>
+                  Forgot password?
+                </a>
+              </label>
             </center>
-          </h1>
-          <form className="d-flex flex-column" onSubmit={handleLogin}>
-            <div className="form-floating col-md-12 mb-3">
-              <input
-                type="email"
-                className="form-control w-100 col-md-12"
-                id="floatingInput"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <label htmlFor="floatingInput">Email</label>
-            </div>
-            <div className="form-floating">
-              <input
-                type="password"
-                className="form-control"
-                id="floatingPassword"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <label htmlFor="floatingPassword">Password</label>
-              <br />
-            </div>
-            <div className="forgotPassword">
-              <a href="#" onClick={showPasswordResetModel}>
-                Forgot Password?
-              </a>
-            </div>
-            <center>
-              <button
-                type="submit"
-                className="boton btn btn-transparent"
-                style={{
-                  backgroundColor: "#a659c8",
-                  color: "#ffffff",
-                  borderRadius: "15px",
-                  marginTop: "25px",
-                }}
-              >
-                Submit
-              </button>
-            </center>
-          </form>
-          <br />
-        </div>
+          </div>
+          <center>
+            <button
+              type="submit"
+              className="boton btn btn-transparent mb-5"
+              onClick={handleLogin}
+              style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+              }}
+            >
+              Submit
+            </button>
+          </center>
+        </form>
+
       </div>
+    </div>
       <div>
         <Footer />
-      </div>
-    </>
-  );
+      </div></>
 
+  );
 }
 
 export default Login;
