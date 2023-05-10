@@ -66,7 +66,7 @@ export const userActions = (getStore, getActions, setStore) => {
       }
     },
 
-   getProvider: async () => {
+    getProvider: async () => {
       try {
         const response = await fetch("http://127.0.0.1:3001/api/providers", {
           method: "GET",
@@ -99,8 +99,7 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
-    
-    
+
     register: async (
       name,
       surname,
