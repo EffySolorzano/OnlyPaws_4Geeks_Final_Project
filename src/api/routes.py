@@ -157,6 +157,7 @@ def get_users():
     serialized_users = [user.serialize() for user in users]
     return jsonify(serialized_users), 200
 
+
 ############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
 @api.route('/register-provider', methods=['POST'])
 def register_provider():
@@ -198,6 +199,7 @@ def register_provider():
 
 
 ####GET#####
+
 @api.route('/providers', methods=['GET'])
 def get_providers():
     providers = Provider.query.all()

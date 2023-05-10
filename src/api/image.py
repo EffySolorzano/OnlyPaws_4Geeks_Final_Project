@@ -16,6 +16,3 @@ class Image(db.Model):
             "ruta": self.ruta,
             "user_id": self.user_id,
             "provider_id": self.provider_id
-        }
-        
-        
