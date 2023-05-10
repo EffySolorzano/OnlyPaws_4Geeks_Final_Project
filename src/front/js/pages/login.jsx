@@ -42,6 +42,29 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    Swal.fire({
+      title: 'Forgot password',
+      input: 'email',
+      inputAttributes: {
+        autocapitalize: 'off',
+        required: 'true'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Send email',
+      showLoaderOnConfirm: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const email = result.value;
+        Swal.fire({
+          title: 'Password Reset',
+          text: `An email with a link to reset your password has been sent to ${email}`,
+          icon: 'success'
+        });
+      }
+    });
+  };
+
   return (
     <><div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
@@ -53,16 +76,17 @@ const Login = () => {
         <form>
           <div className="form-floating col-md-12 mb-3 ">
             <input type="email" className="form-control w-100 col-md-12" id="floatingInput" placeholder="name@example.com"></input>
-            <label for="floatingInput">Username</label>
+            <label for="floatingInput">Email</label>
           </div>
           <div className="form-floating">
             <input type="password" className="form-control" id="floatingPassword" placeholder="Password"></input>
             <label for="floatingPassword">Password</label><br></br>
           </div>
-          <div className="mb-3 form-check">
-            <input type="checkbox" className="form-check-input" id="exampleCheck1"></input>
-            <label className="form-check-label" for="exampleCheck1">Check me out</label>
-          </div>
+          <label className="forgot mb-3" htmlFor="forgotPassword">
+            <a href="#" onClick={handleForgotPassword}>
+              Forgot password?
+            </a>
+          </label>
           <center><button type="submit" className="boton btn btn-transparent"
             style={{
               backgroundColor: "#a659c8",
