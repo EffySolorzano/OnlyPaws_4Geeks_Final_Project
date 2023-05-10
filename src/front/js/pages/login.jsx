@@ -74,8 +74,6 @@ const Login = () => {
           <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
         </h1>
         <form className="d-flex flex-column">
-        </form>
-        <form>
           <div className="form-floating col-md-12 mb-3">
             <input
               type="email"
@@ -99,15 +97,19 @@ const Login = () => {
             <label htmlFor="floatingPassword">Password</label>
             <br />
           </div>
-          <label className="forgot mb-3" htmlFor="forgotPassword">
-            <a href="#" onClick={handleForgotPassword}>
-              Forgot password?
-            </a>
-          </label>
+          <div>
+            <center>
+              <label className="forgot mb-3" htmlFor="forgotPassword">
+                <a href="#" onClick={handleForgotPassword}>
+                  Forgot password?
+                </a>
+              </label>
+            </center>
+          </div>
           <center>
             <button
               type="submit"
-              className="boton btn btn-transparent"
+              className="boton btn btn-transparent mb-5"
               onClick={handleLogin}
               style={{
                 backgroundColor: "#a659c8",
@@ -121,7 +123,8 @@ const Login = () => {
         </form>
 
       </div>
-    </div><div>
+    </div>
+      <div>
         <Footer />
       </div></>
 
