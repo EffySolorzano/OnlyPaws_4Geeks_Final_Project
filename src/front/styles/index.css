@@ -260,7 +260,6 @@ body {
   margin-left: -200px;
 }
 
-.dropdown-toggle {}
 
 /*----------------------- HeaderImg, Search -------------------------*/
 .header {
@@ -330,7 +329,7 @@ body {
 .services-container {
   position: absolute;
   /* position search container on top of image */
-  bottom: -5%;
+  bottom: -15%;
   /* position search container at vertical center of image */
   left: 50%;
   /* position search container at horizontal center of image */
@@ -467,6 +466,7 @@ body {
 /* Mobile devices */
 @media (max-width: 767px) {
   /* styles for screens up to 767px wide */
+
 }
 
 /* Desktop devices */
@@ -482,8 +482,455 @@ body {
   /* styles for Android screens up to 640px wide */
 }
 
+
+
+
+
+
+
 @media only screen and (min-device-width: 640px) and (max-device-width: 1024px) {
   /* styles for Microsoft screens between 640px and 1024px wide */
+
+
+  /*------------ANIMATION---------*/
+  * {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    background-color: transparent;
+    scrollbar-width: none;
+  }
+
+  .animation-container {
+    height: 100vh;
+  }
+
+  .area {
+    background: transparent;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 150vh;
+    width: 100%;
+    height: 290%;
+    overflow: overlay;
+    z-index: -1;
+  }
+
+  .circles li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(135, 36, 242, 0.785);
+    animation: animate 30s linear infinite;
+    bottom: -50px;
+  }
+
+  .circles li:nth-child(1) {
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+  }
+
+  .circles li:nth-child(2) {
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+  }
+
+  .circles li:nth-child(3) {
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+  }
+
+  .circles li:nth-child(4) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+  }
+
+  .circles li:nth-child(5) {
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+  }
+
+  .circles li:nth-child(6) {
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+  }
+
+  .circles li:nth-child(7) {
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+  }
+
+  .circles li:nth-child(8) {
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+  }
+
+  .circles li:nth-child(9) {
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+  }
+
+  .circles li:nth-child(10) {
+    left: 90%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+  }
+
+  .circles li:nth-child(11) {
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 15s;
+  }
+
+  .circles li:nth-child(12) {
+    left: 80%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+  }
+
+  .circles li:nth-child(13) {
+    left: 15%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 10s;
+  }
+
+  .circles li:nth-child(14) {
+    left: 25%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 9s;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+      border-radius: 0;
+    }
+
+    60% {
+      transform: translateY(-2000px) rotate(720deg);
+      opacity: 0.5;
+      border-radius: 50%;
+    }
+
+    70% {
+      opacity: 0.5;
+    }
+
+    80% {
+      opacity: 0.3;
+    }
+
+    90% {
+      opacity: 0.1;
+    }
+
+    100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0;
+      border-radius: 50%;
+    }
+  }
+
+  /*------------------NAVBAR-------------*/
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .logo {
+    max-height: 80px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .ml-auto {
+    margin-right: 20px;
+  }
+
+  #about,
+  #how,
+  #services {
+    margin-right: 10px;
+    font-family: "Noto Serif Hebrew", serif;
+    font-size: 18px;
+    outline: none;
+  }
+
+  .login {
+    margin-left: -100px;
+    font-family: "Noto Serif Hebrew", serif;
+    font-size: 18px;
+  }
+
+  .signup {
+    margin-left: -150px;
+    margin-right: 100px;
+    font-family: "Noto Serif Hebrew", serif;
+    font-size: 18px;
+  }
+
+  .env,
+  .fa-bell {
+    margin-right: 10px;
+  }
+
+  .pers {
+    margin-right: 10px;
+    background-color: #a659c8;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  .fa-bell {
+    background-color: transparent;
+    color: #a659c8;
+    font-size: 22px;
+  }
+
+  .env {
+    background-color: transparent;
+    color: #a659c8;
+    font-size: 22px;
+  }
+
+  .user-icons {
+    display: flex;
+    align-items: center;
+    margin-left: -200px;
+  }
+
+  /*----------------------- HeaderImg, Search -------------------------*/
+
+  .container .header {
+    margin-top: 20px;
+    max-height: 550px;
+    width: 1290px;
+    margin-left: 5px;
+    border-radius: 15px;
+  }
+
+  .container .search-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-style: ridge;
+    border: 6px solid #a659c8;
+    border-radius: 25px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 1000px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .container .location-dot {
+    margin-right: 8px;
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .container .checkin {
+    margin-right: -40px;
+  }
+
+  .container .checkout {
+    margin-left: -40px;
+  }
+
+  .container .paw {
+    margin-right: 8px;
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .container .calendar {
+    margin-right: 8px;
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  /*--------------SERVICES ICONS -----------------------*/
+
+  .services-container {
+    position: absolute;
+    bottom: -5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 600px;
+    border-radius: 15px;
+  }
+
+  .icon {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .icon:hover {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+
+  .beauty-salon {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .housesit {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .vet {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .petshop {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .dogwalk {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  .pettaxi {
+    height: 50px;
+    width: 50px;
+    margin-left: 15px;
+  }
+
+  /* ------------------------------CARDS--------------------------------------*/
+
+  .title-next {
+    font-family: "Noto Serif Hebrew", serif;
+    color: #a659c8;
+    text-align: center;
+    margin-top: 120px;
+  }
+
+  .container-cards {
+    display: flex;
+    justify-content: center;
+  }
+
+  .card {
+    height: 15rem;
+    margin: 70px;
+    margin-top: 30px;
+    border-radius: 10px;
+    border-style: groove;
+    background-color: #eaeaec;
+  }
+
+  .card-text {
+    font-family: "Noto Serif Hebrew", serif;
+  }
+
+  /*---------------------APP STORE---------------------------*/
+  .appImg {
+    position: relative;
+    width: 1290px;
+    margin-bottom: -100px;
+    border-radius: 15px;
+  }
+
+  .google {
+    position: absolute;
+    top: 88rem;
+    right: 30rem;
+    height: 50px;
+    width: 50px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  }
+
+  .apple {
+    position: absolute;
+    top: 88rem;
+    right: 25rem;
+    height: 50px;
+    width: 50px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  }
+
+  .windows {
+    position: absolute;
+    top: 88rem;
+    right: 20rem;
+    height: 50px;
+    width: 50px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  }
+
+
 }
 
 /* Styles for screens wider than 1280px (Macintosh desktops) */
