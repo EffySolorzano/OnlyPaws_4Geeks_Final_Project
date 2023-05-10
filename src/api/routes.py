@@ -100,13 +100,8 @@ def handle_email():
     return jsonify({"message": "email sent"}), 200
 
 
-<<<<<<< HEAD
-############# USER - PET PARENT REGISTER ############
-@api.route("/register", methods=["POST"])
-=======
 ############# USER - PET PARENT REGISTER, GET, PUT, POST, DELETE ############
-@api.route('/register', methods=['POST'])
->>>>>>> 78f05daa3f4d09789ec81aa0f9586ac1f630c3ad
+@api.route("/register", methods=["POST"])
 def register_handle():
     body = request.get_json()
     print()
@@ -141,7 +136,6 @@ def register_handle():
     if "country" not in body:  # add this check for the 'password' key
         raise APIException("You need to specify the country", status_code=400)
 
-<<<<<<< HEAD
     # hashing the password
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
@@ -163,10 +157,7 @@ def register_handle():
 
 ############# PROVIDER REGISTER################
 @api.route("/register-provider", methods=["POST"])
-=======
-
-
-@api.route('/users', methods=['GET'])
+@api.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
     serialized_users = [user.serialize() for user in users]
@@ -174,8 +165,7 @@ def get_users():
 
 
 ############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
-@api.route('/register-provider', methods=['POST'])
->>>>>>> 78f05daa3f4d09789ec81aa0f9586ac1f630c3ad
+@api.route("/register-provider", methods=["POST"])
 def register_provider():
     body = request.get_json()
     print(body)
@@ -226,21 +216,17 @@ def register_provider():
     return jsonify({"mensaje": "Provider successfully created"}), 201
 
 
-<<<<<<< HEAD
-################ LOGIN / LOGOUT ###################
-=======
 ####GET#####
 
-@api.route('/providers', methods=['GET'])
+
+@api.route("/providers", methods=["GET"])
 def get_providers():
     providers = Provider.query.all()
     serialized_providers = [provider.serialize() for provider in providers]
     return jsonify(serialized_providers), 200
 
 
-
- ################ LOGIN / LOGOUT ###################
->>>>>>> 78f05daa3f4d09789ec81aa0f9586ac1f630c3ad
+################ LOGIN / LOGOUT ###################
 def verificacionToken(jti):
     jti  # Identificador del JWT (es más corto)
     print("jit", jti)

@@ -115,7 +115,7 @@ const AddPetSitter = () => {
             <option>Select your country</option>
             <option>Argentina</option>
             <option>Costa Rica</option>
-            <option>Panama</option>
+            <option>Panamá</option>
             <option>United States</option>
             <option>Uruguay</option>
             <option>Venezuela</option>

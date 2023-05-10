@@ -1,4 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Enum
+
+# from flask_wtf import FlaskForm
+# from wtforms import SelectField
+# from flask_migrate import Migrate
+# from flask_sqlalchemy import SQLAlchemy
+from enum import Enum as UserEnum
 from .db import db
 from .ext import bcrypt
 
@@ -43,10 +51,23 @@ class User(db.Model):
         }
 
 
+class Gender(UserEnum):
+    Male = "M"
+    Female = "F"
+    Other = "O"
+
+
+# class MyForm(FlaskForm):
+#     cantidad_mascotas = SelectField(
+#         "Number of pets", choices=[(i, i) for i in range(1, 11)]
+#     )
+
+
 class InfoUser(db.Model):
+    __tablename__ = "infoUser"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(120), nullable=False)
-    gender = db.Column(db.String(120), nullable=False)
+    gender = db.Column(db.Enum(Gender), nullable=False)
     pets = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
     pet_size = db.Column(db.String(120), nullable=False)
@@ -54,7 +75,9 @@ class InfoUser(db.Model):
     phone = db.Column(db.String(120), unique=True, nullable=False)
     payment_method = db.Column(db.Boolean, unique=True, nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
-    infoProvider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
+    info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
+    provider = relationship("InfoProvider", back_populates="info_users")
+    images = relationship("Image", back_populates="user")
 
     def __init__(
         self,
@@ -79,7 +102,7 @@ class InfoUser(db.Model):
         self.is_authenticated = is_authenticated
 
     def __repr__(self):
-        return f"<InfoUser {self.email}>"
+        return f"<InfoUser {self.phone}>"
 
     def serialize(self):
         return {
@@ -93,7 +116,6 @@ class InfoUser(db.Model):
             "address": self.address,
             "payment_method": self.payment_method,
             "is_authenticated": self.is_authenticated,
-            # do not serialize the password, its a security breach
         }
 
 
@@ -137,9 +159,10 @@ class Provider(db.Model):
 
 
 class InfoProvider(db.Model):
+    __tablename__ = "infoProvider"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(120), nullable=False)
-    gender = db.Column(db.String(120), nullable=False)
+    gender = db.Column(db.Enum(Gender), nullable=False)
     work_time = db.Column(db.String(120), nullable=False)
     service = db.Column(db.Boolean, nullable=False)
     pets_admited = db.Column(db.String(120), unique=True, nullable=False)
@@ -148,7 +171,7 @@ class InfoProvider(db.Model):
     phone = db.Column(db.String(120), unique=True, nullable=False)
     payment_method = db.Column(db.Boolean, unique=True, nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
-    info_users = db.relationship("InfoUser", backref="InfoProvider", lazy=True)
+    info_users = relationship("InfoUser", back_populates="provider")
 
     def __init__(
         self,
@@ -175,7 +198,7 @@ class InfoProvider(db.Model):
         self.is_authenticated = is_authenticated
 
     def __repr__(self):
-        return f"<InfoProvider {self.email}>"
+        return f"<InfoProvider {self.phone}>"
 
     def serialize(self):
         return {
@@ -190,16 +213,17 @@ class InfoProvider(db.Model):
             "phone": self.phone,
             "payment_method": self.payment_method,
             "is_authenticated": self.is_authenticated,
-            # do not serialize the password, its a security breach
         }
 
 
 class Image(db.Model):
+    __tablename__ = "image"
     id = db.Column(db.Integer, primary_key=True)
     ruta = db.Column(db.String(300), unique=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
-    infoProvider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
-    infoUser_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
+    info_user_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
+    user = relationship("InfoUser", back_populates="images")
 
     def __repr__(self):
         return f"<Image %r>" % self.id
@@ -209,7 +233,8 @@ class Image(db.Model):
             "id": self.id,
             "ruta": self.ruta,
             "user_id": self.user_id,
-            "provider_id": self.provider_id,
+            "infoprovider_id": self.info_provider_id,
+            "infouser_id": self.info_user_id,
         }
 
 
