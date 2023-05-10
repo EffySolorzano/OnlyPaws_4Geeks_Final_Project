@@ -26,7 +26,7 @@ export const userActions = (getStore, getActions, setStore) => {
         const data = await response.json();
         const user = data.user;
         localStorage.setItem("token", data.token);
-        setStore({ ...getStore(), isLoggedIn: true });
+        setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
         return response;
       } catch (error) {
         const message = error.message || "Something went wrong";
@@ -66,24 +66,41 @@ export const userActions = (getStore, getActions, setStore) => {
       }
     },
 
-    getProvider: async () => {
+   getProvider: async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return null;
         const response = await fetch("http://127.0.0.1:3001/api/providers", {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
-        const user = data.user;
-        setStore({ user, error: null });
-        return user;
+        console.log(data); // Log the response data
+        const providers = data; // Assuming the response contains an array of providers
+        setStore({ providers, error: null }); // Update the store with providers instead of user
+        return providers;
       } catch (error) {
         const message = error.message || "Something went wrong";
-        setStore({ user: null, error: message });
+        setStore({ providers: null, error: message }); // Update the store with providers as null
         throw error;
       }
     },
+
+    getUser: async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:3001/api/providers", {
+          method: "GET",
+        });
+        const data = await response.json();
+        console.log(data);
+        const users = data;
+        setStore({ users, error: null });
+        return users;
+      } catch (error) {
+        const message = error.message || "Something went wrong";
+        setStore({ users: null, error: message });
+        throw error;
+      }
+    },
+    
+    
     register: async (
       name,
       surname,

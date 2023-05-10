@@ -18,6 +18,7 @@ import Privacy from "./component/privacy.jsx";
 import Services from "./component/services.jsx";
 import Team from "./component/team.jsx";
 import Search from "./component/search.jsx";
+import Housesit from "./component/housesit.jsx";
 import BodyPetSitter from "./component/bodyPetSitter.jsx";
 import AddPetSitter from "./pages/addPetSitter.jsx";
 import ContactUs from "./pages/contactUs.jsx";
@@ -46,7 +47,8 @@ const Layout = () => {
             <Route element={<Privacy />} path="/privacy-policy" />
             <Route element={<Services />} path="/services" />
             <Route element={<Team />} path="/team" />
-            <Route element={<Search />} path="/search-btn" />
+            <Route element={<Search />} path="/providers" />
+            <Route element={<Housesit />} path="/users" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/signup" />

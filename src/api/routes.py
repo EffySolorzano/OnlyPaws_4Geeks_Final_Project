@@ -108,7 +108,7 @@ def handle_email():
     return jsonify({"message": "email sent"}), 200
 
 
-############# USER - PET PARENT REGISTER ############
+############# USER - PET PARENT REGISTER, GET, PUT, POST, DELETE ############
 @api.route('/register', methods=['POST'])
 def register_handle():
     body = request.get_json()
@@ -148,6 +148,15 @@ def register_handle():
     db.session.add(new_user) #agregamos el nuevo usuario a la base de datos
     db.session.commit() #guardamos los cambios en la base de datos
     return jsonify({"mensaje":"User successfully created"}), 201
+
+
+
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    serialized_users = [user.serialize() for user in users]
+    return jsonify(serialized_users), 200
+
 
 ############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
 @api.route('/register-provider', methods=['POST'])
@@ -192,10 +201,11 @@ def register_provider():
 ####GET#####
 
 @api.route('/providers', methods=['GET'])
-def get_provider():
-    provider = Provider.query.all()
-    serialized_provider = [provider.serialize() for provider in provider]
-    return jsonify(serialized_provider), 200
+def get_providers():
+    providers = Provider.query.all()
+    serialized_providers = [provider.serialize() for provider in providers]
+    return jsonify(serialized_providers), 200
+
 
 
  ################ LOGIN / LOGOUT ###################
