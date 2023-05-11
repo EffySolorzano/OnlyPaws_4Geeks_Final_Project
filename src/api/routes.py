@@ -2,6 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
+import openai
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import TokenBlockedList, db, User, Provider, Image
 from api.utils import generate_sitemap, APIException
@@ -25,6 +26,20 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+cloud_name = os.getenv("CLOUDINARY_NAME"),
+api_key = os.getenv("CLOUDINARY_KEY"),
+api_secret = os.getenv("CLOUDINARY_SECRET"),
+api_proxy = "http://proxy.server:9999"
+)
+
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+
 
 api = Blueprint("api", __name__)
 
@@ -291,3 +306,21 @@ def protected():
         raise APIException("Black listed token", status_code=404)
     print("The user is: ", user.name)
     return jsonify({"message": "Protected route"}), 200
+
+######### API 3rd PARTY INTEGRATION ###########
+
+@api.route('/chatgpt', methods=['POST'])
+def open_ai():
+    body =request.get_json()    
+    prompt = "You're a website name Onlypaws that offers pet sitting and house sitting services for pet parent, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + body['prompt']
+
+    completation = openai.Completion.create(engine="text-davinci-003",
+                            prompt=prompt,
+                            n=1,
+                            max_tokens=2048)
+    
+    print(completation.choices[0])
+    print(completation.choices[0].text)
+    
+    
+    return jsonify(completation.choices[0].text), 200
