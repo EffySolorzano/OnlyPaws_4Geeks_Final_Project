@@ -329,7 +329,7 @@ body {
 .services-container {
   position: absolute;
   /* position search container on top of image */
-  bottom: -15%;
+  bottom: -5%;
   /* position search container at vertical center of image */
   left: 50%;
   /* position search container at horizontal center of image */
