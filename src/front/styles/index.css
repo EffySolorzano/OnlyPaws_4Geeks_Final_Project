@@ -488,8 +488,8 @@ body {
 
 
 
-@media only screen and (min-device-width: 640px) and (max-device-width: 1024px) {
-  /* styles for Microsoft screens between 640px and 1024px wide */
+@media only screen and (max-width: 2000px) {
+  /* styles for Microsoft screens 2000px wide */
 
 
   /*------------ANIMATION---------*/
@@ -692,13 +692,13 @@ body {
   }
 
   .ml-auto {
-    margin-right: 20px;
+    margin-right: 75rem;
   }
 
   #about,
   #how,
   #services {
-    margin-right: 10px;
+    margin-right: 50px;
     font-family: "Noto Serif Hebrew", serif;
     font-size: 18px;
     outline: none;
@@ -760,7 +760,7 @@ body {
 
   .container .search-container {
     position: absolute;
-    top: 40%;
+    top: 28%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
@@ -808,7 +808,7 @@ body {
 
   .services-container {
     position: absolute;
-    bottom: -5%;
+    bottom: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
@@ -906,7 +906,7 @@ body {
   .google {
     position: absolute;
     top: 88rem;
-    right: 30rem;
+    right: 45rem;
     height: 50px;
     width: 50px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -915,7 +915,7 @@ body {
   .apple {
     position: absolute;
     top: 88rem;
-    right: 25rem;
+    right: 40rem;
     height: 50px;
     width: 50px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -924,7 +924,7 @@ body {
   .windows {
     position: absolute;
     top: 88rem;
-    right: 20rem;
+    right: 35rem;
     height: 50px;
     width: 50px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
