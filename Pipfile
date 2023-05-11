@@ -23,6 +23,7 @@ mysqlclient = "*"
 flask-jwt-extended = "*"
 flask-bcrypt = "*"
 bcrypt = "*"
+bash = "*"
 
 [requires]
 python_version = "3.10"

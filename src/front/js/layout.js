@@ -19,7 +19,6 @@ import Services from "./component/services.jsx";
 import Team from "./component/team.jsx";
 import Search from "./component/search.jsx";
 import Housesit from "./component/housesit.jsx";
-import BodyPetSitter from "./component/bodyPetSitter.jsx";
 import AddPetSitter from "./pages/addPetSitter.jsx";
 import ContactUs from "./pages/contactUs.jsx";
 import SignInPetSitter from "./pages/signInPetSitter.jsx";
