@@ -312,15 +312,15 @@ def protected():
 @api.route('/chatgpt', methods=['POST'])
 def open_ai():
     body =request.get_json()    
-    prompt = "You're a website name Onlypaws that offers pet sitting and house sitting services for pet parent, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + body['prompt']
+    prompt = "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + body['prompt']
 
-    completation = openai.Completion.create(engine="text-davinci-003",
+    completion = openai.Completion.create(engine="text-davinci-003",
                             prompt=prompt,
                             n=1,
                             max_tokens=2048)
     
-    print(completation.choices[0])
-    print(completation.choices[0].text)
+    print(completion.choices[0])
+    print(completion.choices[0].text)
     
     
-    return jsonify(completation.choices[0].text), 200
+    return jsonify(completion.choices[0].text), 200
