@@ -76,6 +76,7 @@
     "@react-spring/web": "^9.7.2",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "openai": "^3.2.1",
     "prop-types": "^15.6.1",
     "react": "^16.8.4",
     "react-bootstrap": "^2.7.4",
