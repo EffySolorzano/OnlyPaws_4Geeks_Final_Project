@@ -1,0 +1,26 @@
+.chat-bubble {
+    background-color: #007bff;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: fixed;
+    bottom: 120px;
+    right: 70px;
+    z-index: 9999;
+    transition: right 0.3s ease;
+}
+
+
+.chat-card {
+    height: 350px;
+    width: 350px;
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    z-index: 9999;
+}

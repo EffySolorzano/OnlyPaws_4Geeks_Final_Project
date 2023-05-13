@@ -171,7 +171,6 @@ def register_handle():
 
 
 ############# PROVIDER REGISTER################
-@api.route("/register-provider", methods=["POST"])
 @api.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
@@ -226,7 +225,7 @@ def register_provider():
         country=country,
         is_authenticated=is_authenticated,
     )
-    db.session.add(new_Provider)  # agregamos el nuevo usuario a la base de datos
+    db.session.add(new_Provider)
     db.session.commit()
     return jsonify({"mensaje": "Provider successfully created"}), 201
 
@@ -321,6 +320,7 @@ def open_ai():
     
     print(completion.choices[0])
     print(completion.choices[0].text)
+    dictionary = {"reply": completion.choices[0].text}
     
     
-    return jsonify(completion.choices[0].text), 200
+    return jsonify(dictionary), 200

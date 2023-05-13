@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Location from "../../img/location.png";
 import Calendar from "../../img/calendar.png";
 import Paw from "../../img/paw.png";
-import Uploader from "../component/upoloader/uploader.jsx";
+import ChatBubble from "../component/chatbubble.jsx";
 import "react-datepicker/dist/react-datepicker.css";
 
 const countryOptions = [
@@ -136,6 +136,7 @@ export const Home = () => {
       <div>
         <Home_moreServices />
         <Findsitter />
+        <ChatBubble />
         <Opapp />
         <Footer />
       </div>
