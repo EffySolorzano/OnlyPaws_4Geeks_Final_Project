@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Aboutus from "../../styles/aboutus.css";
 
+
 function about() {
   const [animationHeight, setAnimationHeight] = useState(0);
 

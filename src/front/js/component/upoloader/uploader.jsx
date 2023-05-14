@@ -24,10 +24,16 @@ const Uploader = () => {
 
     return (
         <div className="jumbotron">
-            <form onSubmit={uploadImage}>
-                <input type="file" onChange={(e) => setFiles(e.target.files)} />
-                <button>Upload</button>
-            </form>
+            <input type="file" onChange={(e) => setFiles(e.target.files)} />
+            <button onClick={uploadImage} style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+                fontFamily: "Noto Serif Hebrew, serif",
+                fontSize: "20px",
+                width: "30%",
+                textAlign: "center",
+            }}>Upload</button>
         </div>
     );
 };
