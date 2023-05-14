@@ -22,6 +22,7 @@ import Housesit from "./component/housesit.jsx";
 import AddPetSitter from "./pages/addPetSitter.jsx";
 import ContactUs from "./pages/contactUs.jsx";
 import Chatbubble from "./component/chatbubble.jsx";
+import Profile from "./component/profile.jsx";
 
 //create your first component
 const Layout = () => {
@@ -52,6 +53,7 @@ const Layout = () => {
             <Route element={<Login />} path="/login" />
             <Route element={<Register />} path="/signup" />
             <Route element={<Chatbubble />} path="/chatgpt" />
+            <Route element={<Profile />} path="/profile" />
             <Route element={<AddPetSitter />} path="/add-petsitter" />
             <Route element={<ContactUs />} path="/contact" />
             <Route element={<h1>Not found!</h1>} />

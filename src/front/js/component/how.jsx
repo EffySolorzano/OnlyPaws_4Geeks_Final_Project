@@ -6,6 +6,7 @@ import Stepbystep from "../../img/stepbystep.jpg";
 import Stephbysteph from "../../img/stephbysteph.jpg";
 import Howitworks from "../../styles/howitworks.css";
 
+
 function howWorks() {
   const [displaySitterInfo, setDisplaySitterInfo] = useState(true);
   const [displayParentInfo, setDisplayParentInfo] = useState(false);

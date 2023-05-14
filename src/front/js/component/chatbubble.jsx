@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Chatgptlogo from "../../img/chatgptlogo.png";
+import Onlypawsp from "../../img/onlypawsp.jpeg";
 import Chatbubble from "../../styles/chatbubbles.css";
 
 const ChatBubble = () => {
@@ -37,7 +39,7 @@ const ChatBubble = () => {
             ]);
 
             // Set the chatbot response
-            setChatbotResponse(responseData.reply);
+            // setChatbotResponse(responseData.reply);
 
             // Clear the input message
             setInputMessage('');
@@ -47,21 +49,17 @@ const ChatBubble = () => {
         }
     };
 
-
-
-
-
     return (
         <div className="container py-5">
             <div className="row d-flex justify-content-end">
                 <div className="col-md-8 col-lg-6 col-xl-4">
                     {isExpanded && (
                         <div className="card chat-card" id="chat1" style={{ borderRadius: '15px' }}>
-                            <div className="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0" style={{ borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }} onClick={handleBubbleClick}>
+                            <div className="card-header d-flex justify-content-between align-items-center p-3 bg-custom text-white border-bottom-0" style={{ borderTopLeftRadius: '15px', borderTopRightRadius: '15px', }} onClick={handleBubbleClick}>
                                 <p className="mb-0 fw-bold">Live chat</p>
                                 <i className="fas fa-times"></i>
                             </div>
-                            <div className="card-body" style={{ width: "340px", overflowY: "auto", padding: "10px", margin: "0", }}>
+                            <div className="card-body" style={{ width: "450px", overflowY: "auto", padding: "10px", margin: "0", }}>
                                 {messages.map((message, index) => {
                                     const { text, sender } = message;
 
@@ -77,9 +75,9 @@ const ChatBubble = () => {
                                                 </div>
                                             )}
                                             {sender === 'user' ? (
-                                                <img src="" alt="avatar 1" style={{ width: '45px', height: '100%' }} />
+                                                <img src={Onlypawsp} alt="avatar 1" style={{ width: '45px', height: '100%' }} />
                                             ) : (
-                                                <img src="" alt="avatar 2" style={{ width: '45px', height: '100%' }} />
+                                                <img src={Chatgptlogo} alt="avatar 2" style={{ width: '45px', height: '100%' }} />
                                             )}
                                         </div>
                                     );
@@ -90,7 +88,6 @@ const ChatBubble = () => {
                                         <div className="p-3 me-3 border" style={{ borderRadius: '15px', background: '#fbfbfb' }}>
                                             <p className="small mb-0">{chatbotResponse}</p>
                                         </div>
-                                        <img src="" alt="avatar 2" style={{ width: '45px', height: '100%' }} />
                                     </div>
                                 )}
                             </div>
@@ -105,7 +102,7 @@ const ChatBubble = () => {
                                                 value={inputMessage}
                                                 onChange={(e) => setInputMessage(e.target.value)}
                                             />
-                                            <button type="submit" className="btn btn-primary">Send</button>
+                                            <button type="submit" className="btn btn-trasparent send">Send</button>
                                         </div>
                                     </form>
                                 </div>

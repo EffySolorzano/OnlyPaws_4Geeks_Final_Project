@@ -190,25 +190,5 @@ export const userActions = (getStore, getActions, setStore) => {
         return { ok: false, message };
       }
     },
-
-    sendChatQuestion: async (question) => {
-      try {
-        console.log("Question:", question);
-        const response = await fetch("http://127.0.0.1:3001/api/chatgpt", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt: question }),
-        });
-        const data = await response.json();
-        const store = getStore();
-        setStore({ ...store, chatbotResponse: data.message }); // Update the chatbot response in the store
-        return data;
-      } catch (error) {
-        const message = error.message || "Something went wrong";
-        throw error;
-      }
-    },
   };
 };

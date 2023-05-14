@@ -273,7 +273,7 @@ body {
 .search-container {
   position: absolute;
   /* position search container on top of image */
-  top: 40%;
+  top: 42%;
   /* position search container at vertical center of image */
   left: 50%;
   /* position search container at horizontal center of image */
