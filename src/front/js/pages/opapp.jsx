@@ -7,26 +7,31 @@ import { Link } from "react-router-dom";
 
 function opApp() {
   return (
-    <div>
-      <div className="appImg">
-        <img src={App} alt="appImg" className="appImg" />
-      </div>
-      <div>
-        <a href="https://play.google.com/store/games" target="_blank">
-          <img src={Google} alt="google" className="google" />
-        </a>
-      </div>
-      <div>
-        <a href="https://www.apple.com/app-store/" target="_blank">
-          <img src={Apple} alt="apple" className="apple" />
-        </a>
-      </div>
-      <div>
-        <a href="https://apps.microsoft.com/store/apps" target="_blank">
-          <img src={Windows} alt="windows" className="windows" />
-        </a>
+    <div className="oapp container-fluid">
+      <div className="row">
+        <div className="col-md-6 col-lg-4">
+          <div className="appImg">
+            <img src={App} alt="appImg" className="appImg img-fluid" />
+          </div>
+        </div>
+        <div className="col-md-6 col-lg-2">
+          <a href="https://play.google.com/store/games" target="_blank">
+            <img src={Google} alt="google" className="google img-fluid" />
+          </a>
+        </div>
+        <div className="col-md-6 col-lg-2">
+          <a href="https://www.apple.com/app-store/" target="_blank">
+            <img src={Apple} alt="apple" className="apple img-fluid" />
+          </a>
+        </div>
+        <div className="col-md-6 col-lg-2">
+          <a href="https://apps.microsoft.com/store/apps" target="_blank">
+            <img src={Windows} alt="windows" className="windows img-fluid" />
+          </a>
+        </div>
       </div>
     </div>
+
   );
 }
 

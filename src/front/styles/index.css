@@ -412,9 +412,14 @@ body {
 .container-cards {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card {
+  /*flex: 0 0 calc(33.33% - 60px);*/
+  /* Adjust the width of each card */
+  /*max-width: calc(33.33% - 60px);*/
+  /* Adjust the max-width of each card */
   height: 15rem;
   margin: 70px;
   margin-top: 30px;
@@ -428,10 +433,14 @@ body {
 }
 
 /*---------------------APP STORE---------------------------*/
+.oapp {
+  flex-wrap: wrap;
+}
+
 .appImg {
   position: relative;
   width: 1290px;
-  margin-bottom: -100px;
+  margin-bottom: -130px;
   border-radius: 15px;
 }
 
