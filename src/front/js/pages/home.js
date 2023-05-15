@@ -66,7 +66,7 @@ export const Home = () => {
     <>
       <div className="container">
         <div className="header">
-          <img src={header} alt="header" className="header" />
+          <img src={header} alt="header" className="header img-fluid" />
         </div>
         <div className="container-fluid">
           <div className="search-container">

@@ -1,7 +1,7 @@
 /*---------------FOOTER-----------------------------*/
 .footer {
   position: relative;
-  bottom: -550px;
+  bottom: -520px;
   width: 100%;
   text-align: center;
   font-family: "Noto Serif Hebrew", serif;
@@ -10,7 +10,7 @@
 
 .container-footer {
   position: relative;
-  bottom: -270px;
+  bottom: -260px;
   width: 100%;
   font-family: "Noto Serif Hebrew", serif;
   /* add some padding to create spacing */
@@ -24,6 +24,7 @@
 #privacy-footer,
 #team-footer,
 #contact-footer {
+  position: relative;
   margin-left: 60px;
   margin-right: 10px;
   font-family: "Noto Serif Hebrew", serif;
@@ -32,6 +33,7 @@
 }
 
 .social {
+  position: relative;
   margin-top: 20px;
   align-items: center;
   margin-left: -30px;
