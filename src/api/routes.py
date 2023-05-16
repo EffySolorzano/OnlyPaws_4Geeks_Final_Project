@@ -311,7 +311,7 @@ def protected():
 @api.route('/chatgpt', methods=['POST'])
 def open_ai():
     body =request.get_json()    
-    prompt = "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + body['prompt']
+    prompt = "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + "puedes responder en español cuando te lo pidan" + body['prompt']
 
     completion = openai.Completion.create(engine="text-davinci-003",
                             prompt=prompt,
@@ -338,11 +338,11 @@ def handle_upload():
 
 
     my_image = Image()
-    my_image.ruta = f"sample_folder/profile/my-image-name - {timestamp}"
+    my_image.ruta = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
 
     result = cloudinary.uploader.upload(
         request.files['image'],
-        public_id=f'sample_folder/profile/my-image-name',
+        public_id=f'sample_folder/profile/my-image-name - {timestamp}',
         crop='limit',
         width=450,
         height=450,

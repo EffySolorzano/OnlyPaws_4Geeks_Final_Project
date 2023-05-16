@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Context } from "react";
 
-const Uploader = () => {
+const Uploader = ({ onUpload }) => {
     const [files, setFiles] = useState(null);
 
     const uploadImage = evt => {
@@ -18,7 +18,10 @@ const Uploader = () => {
         const currentUserId = localStorage.getItem("token");
         fetch(`${process.env.BACKEND_URL}/api/upload`, options)
             .then((resp) => resp.json())
-            .then((data) => console.log("Success!!!!", data))
+            .then((data) => {
+                console.log("Success!!!!", data);
+                onUpload(data.ruta);  // Call the callback function with the new URL
+            })
             .catch((error) => console.error("ERRORRRRRR!!!", error));
     };
 
