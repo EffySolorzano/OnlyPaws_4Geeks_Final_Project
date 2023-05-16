@@ -351,9 +351,7 @@ def create_info_user():
     new_info_user = InfoUser(
         date=data["date"],
         gender=data["gender"],
-        pets=data["pets"],
         description=data["description"],
-        pet_size=data["pet_size"],
         phone=data["phone"],
         address=data["address"],
         payment_method=data["payment_method"],
@@ -394,9 +392,7 @@ def update_info_user(info_user_id):
     data = request.get_json()
     info_user.date = data["date"]
     info_user.gender = data["gender"]
-    info_user.pets = data["pets"]
     info_user.description = data["description"]
-    info_user.pet_size = data["pet_size"]
     info_user.phone = data["phone"]
     info_user.address = data["address"]
     info_user.payment_method = data["payment_method"]
@@ -425,7 +421,6 @@ def create_info_provider():
         gender=data["gender"],
         work_time=data["work_time"],
         service=data["service"],
-        allowed_pets=data["allowed_pets"],
         number_admitted_pets=data["number_admitted_pets"],
         description=data["description"],
         address=data["address"],
@@ -462,6 +457,7 @@ def create_info_provider():
         raise APIException(
             "You need to specify the accepted_payment_method", status_code=400
         )
+
     db.session.add(new_info_provider)
     db.session.commit()
     return jsonify(new_info_provider.serialize()), 201
@@ -478,7 +474,6 @@ def update_info_provider(info_provider_id):
     info_provider.gender = data["gender"]
     info_provider.work_time = data["work_time"]
     info_provider.service = data["service"]
-    info_provider.allowed_pets = data["allowed_pets"]
     info_provider.number_admitted_pets = data["number_admitted_pets"]
     info_provider.description = data["description"]
     info_provider.address = data["address"]
