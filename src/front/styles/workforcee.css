@@ -7,6 +7,10 @@
   width: 70%;
 }
 
+.workforce-container {
+  max-height: 600px;
+}
+
 .team-title {
   font-family: "Noto Serif Hebrew", serif;
   color: #a659c8;
@@ -15,8 +19,7 @@
 
 .team-img {
   width: 1290px;
-  margin-top: 70px;
+  margin-top: 200px;
   margin-left: 90px;
-  margin-bottom: -700px;
   border-radius: 20px;
 }

@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Location from "../../img/location.png";
 import Calendar from "../../img/calendar.png";
 import Paw from "../../img/paw.png";
-import Uploader from "../component/upoloader/uploader.jsx";
+import ChatBubble from "../component/chatbubble.jsx";
 import "react-datepicker/dist/react-datepicker.css";
 
 const countryOptions = [
@@ -63,82 +63,87 @@ export const Home = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <img src={header} alt="header" className="header" />
-      </div>
+    <>
       <div className="container">
-        <div className="search-container">
-          <div className="location-container">
-            <img src={Location} alt="location-dot" className="location-dot" />
-            <label htmlFor="location"></label>
+        <div className="header">
+          <img src={header} alt="header" className="header img-fluid" />
+        </div>
+        <div className="container-fluid">
+          <div className="search-container">
+            <div className="location-container">
+              <img src={Location} alt="location-dot" className="location-dot" />
+              <label htmlFor="location"></label>
 
-            <Select
-              options={countryOptions}
-              value={selectedCountry}
-              onChange={(e) => {
-                handleCountryChange(e);
-              }}
-              placeholder="Select a country "
-            />
-          </div>
-          <div className="checkin">
-            <label htmlFor="checkin"></label>
-            <DatePicker
-              id="checkin"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            />
-          </div>
-          <img src={Calendar} alt="calendar" className="calendar" />
-          <div className="checkout">
-            <label htmlFor="checkout"></label>
-            <DatePicker
-              id="checkout"
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              minDate={startDate} // Add minDate prop to ensure checkout date is never before checkin
-            />
-          </div>
-          <div className="pets-container">
-            <img src={Paw} alt="paw" className="paw" />
-            <label htmlFor="pets"></label>
+              <Select
+                options={countryOptions}
+                value={selectedCountry}
+                onChange={(e) => {
+                  handleCountryChange(e);
+                }}
+                placeholder="Select a country "
+              />
+            </div>
+            <div className="checkin">
+              <label htmlFor="checkin"></label>
+              <DatePicker
+                id="checkin"
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+              />
+            </div>
+            <img src={Calendar} alt="calendar" className="calendar" />
+            <div className="checkout">
+              <label htmlFor="checkout"></label>
+              <DatePicker
+                id="checkout"
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                minDate={startDate} // Add minDate prop to ensure checkout date is never before checkin
+              />
+            </div>
+            <div className="pets-container">
+              <img src={Paw} alt="paw" className="paw" />
+              <label htmlFor="pets"></label>
 
-            <select
-              id="pets"
-              value={numberOfPets}
-              onChange={(e) => setPets(e.target.value)}
-            >
-              {[...Array(11).keys()].map((num) => (
-                <option value={num} key={num}>
-                  {num}
-                </option>
-              ))}
-            </select>
+              <select
+                id="pets"
+                value={numberOfPets}
+                onChange={(e) => setPets(e.target.value)}
+              >
+                {[...Array(11).keys()].map((num) => (
+                  <option value={num} key={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Link to="/providers">
+              <button
+                className="btn btn-transparent"
+                id="search-btn"
+                style={{
+                  backgroundColor: "#a659c8",
+                  color: "#ffffff",
+                  borderRadius: "15px",
+                  height: "50px",
+                }}
+                onClick={handleSearchSubmit}
+              >
+                Search <i className="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </Link>
           </div>
-          <Link to="/providers">
-            <button
-              className="btn btn-transparent"
-              id="search-btn"
-              style={{
-                backgroundColor: "#a659c8",
-                color: "#ffffff",
-                borderRadius: "15px",
-                height: "50px",
-              }}
-              onClick={handleSearchSubmit}
-            >
-              Search <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </Link>
+        </div>
+        <div>
+          <Home_moreServices />
+          <Findsitter />
+          <ChatBubble />
+          <Opapp />
         </div>
       </div>
-      <div>
-        <Home_moreServices />
-        <Findsitter />
-        <Opapp />
+      <div className="container-footer">
         <Footer />
       </div>
-    </div>
+    </>
   );
 };

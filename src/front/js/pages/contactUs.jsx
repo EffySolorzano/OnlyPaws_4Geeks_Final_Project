@@ -4,20 +4,18 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png";
 import Footer from "./footer.jsx";
+import Contact from "../../styles/contact.css";
 
 const ContactUs = () => {
     const { store, actions } = useContext(Context);
 
-
-
-
     return (
         <>
-            <div className="contact container p-3 mt-5 d-flex flex-column justify-content-center bg-light rounded-3 border border-secondary-emphasis w-25">
+            <div className="contact-container p-3 mt-5 d-flex flex-column justify-content-center bg-light rounded-3 border border-secondary-emphasis w-25">
                 <center>
                     <img src={OnlyPaws} className="img mt-2 d-flex justify-content-center" />
                 </center>
-                <form className="well form-horizontal" method="post" id="contact_form">
+                <form className="form-horizontal" method="post" id="contact_form">
                     <fieldset>
                         <h1 className="title-add d-flex justify-content-center">Contact Us Today!</h1>
 
@@ -140,7 +138,7 @@ const ContactUs = () => {
                     </fieldset>
                 </form>
             </div>
-            <div>
+            <div className="container-footer">
                 <Footer />
             </div>
         </>

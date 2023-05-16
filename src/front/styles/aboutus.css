@@ -1,22 +1,23 @@
 /*----------ABOUT US--------------------*/
-body {
-  margin: 0;
-  bottom: 0;
-}
 .aboutus {
   border-top: 1px solid #a659c8;
   width: 70%;
   margin-top: 70px;
   margin-left: 230px;
+
 }
+
 .container-about {
-  max-height: 70%;
+  max-height: 500px;
+
 }
+
 .card-about {
   width: 1290px;
   margin-top: 50px;
   margin-left: 50px;
 }
+
 .card-title-about {
   font-family: "Noto Serif Hebrew", serif;
   font-size: 40px;
@@ -25,24 +26,16 @@ body {
   margin-left: 180px;
   background-size: 50px;
 }
+
 .card-text-about {
   margin-left: 200px;
   font-family: "Noto Serif Hebrew", serif;
   border-radius: 10px;
 }
+
 .about-new {
   height: 550px;
   width: 515px;
   border-radius: 15px;
   margin-left: 80px;
-}
-.about-start {
-  font-family: "Noto Serif Hebrew", serif;
-  color: #a659c8;
-  text-align: center;
-  margin-top: 100px;
-  margin-left: 100px;
-}
-.about-signup {
-  margin-bottom: -300px;
 }

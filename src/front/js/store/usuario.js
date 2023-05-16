@@ -7,6 +7,7 @@ export const userStore = {
   isLoggedIn: false,
   usersData: [],
   favoritos: [],
+  chatbotResponse: "",
 };
 
 export const userActions = (getStore, getActions, setStore) => {

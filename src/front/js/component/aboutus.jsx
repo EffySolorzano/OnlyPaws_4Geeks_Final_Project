@@ -4,22 +4,8 @@ import { Link } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Aboutus from "../../styles/aboutus.css";
 
+
 function about() {
-  const [animationHeight, setAnimationHeight] = useState(0);
-
-  useEffect(() => {
-    function handleResize() {
-      setAnimationHeight(window.innerHeight - 3);
-    }
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <>
       <div className="aboutus"></div>
@@ -64,26 +50,6 @@ function about() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="about-start">
-        <h2>Ready to start?</h2>
-      </div>
-      <div className="about-signup">
-        <Link to="/signup">
-          <button
-            className="btn btn-transparent"
-            style={{
-              backgroundColor: "#a659c8",
-              color: "#ffffff",
-              borderRadius: "15px",
-              fontFamily: "Noto Serif Hebrew, serif",
-              marginLeft: "45.5rem",
-              fontSize: "20px",
-            }}
-          >
-            Sign up
-          </button>
-        </Link>
       </div>
       <div className="container-footer">
         <Footer />

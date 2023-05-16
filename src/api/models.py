@@ -256,6 +256,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ruta = db.Column(db.String(300), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    provider_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
     info_user_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
     user = relationship("InfoUser", back_populates="images")
