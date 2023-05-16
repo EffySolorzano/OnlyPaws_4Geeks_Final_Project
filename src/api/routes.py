@@ -2,6 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
+import openai
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import TokenBlockedList, db, User, Provider, Image
 from api.utils import generate_sitemap, APIException
@@ -25,6 +26,20 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+cloud_name = os.getenv("CLOUDINARY_NAME"),
+api_key = os.getenv("CLOUDINARY_KEY"),
+api_secret = os.getenv("CLOUDINARY_SECRET"),
+api_proxy = "http://proxy.server:9999"
+)
+
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+
 
 api = Blueprint("api", __name__)
 
@@ -156,7 +171,6 @@ def register_handle():
 
 
 ############# PROVIDER REGISTER################
-@api.route("/register-provider", methods=["POST"])
 @api.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
@@ -211,7 +225,7 @@ def register_provider():
         country=country,
         is_authenticated=is_authenticated,
     )
-    db.session.add(new_Provider)  # agregamos el nuevo usuario a la base de datos
+    db.session.add(new_Provider)
     db.session.commit()
     return jsonify({"mensaje": "Provider successfully created"}), 201
 
@@ -258,10 +272,10 @@ def login():
     # Generar Token
     if user:
         identity = user.id
+        access_token = create_access_token(identity=user.id)
     else:
         identity = provider.id
-
-    access_token = create_access_token(identity=identity)
+        access_token = create_access_token(identity=provider.id)
 
     # Successful login
     return (
@@ -292,39 +306,79 @@ def protected():
     print("The user is: ", user.name)
     return jsonify({"message": "Protected route"}), 200
 
+######### API 3rd PARTY INTEGRATION ###########
 
-#----------------------forgot password--------------
+@api.route('/chatgpt', methods=['POST'])
+def open_ai():
+    body =request.get_json()    
+    prompt = "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + body['prompt']
 
+    completion = openai.Completion.create(engine="text-davinci-003",
+                            prompt=prompt,
+                            n=1,
+                            max_tokens=2048)
+    
+    print(completion.choices[0])
+    print(completion.choices[0].text)
+    dictionary = {"reply": completion.choices[0].text}
+    
+    
+    return jsonify(dictionary), 200
 
-@api.route('/forgot-password', methods=['POST'])
-def forgot_password():
-    # Validar la entrada del usuario
-    email = request.json.get('email')  # Suponiendo que se envía el correo electrónico del usuario
+#################IMG UPLOAD##############
 
-    # Generar un token de restablecimiento de contraseña
-    token = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}),
+@api.route('/upload', methods=['POST'])
+#@jwt_required()
+def handle_upload():
 
-    # Guardar el token en la base de datos o en algún lugar seguro junto con la información del usuario
-
-    # Aquí deberías enviar un correo electrónico al usuario con el enlace de restablecimiento de contraseña
-
-    return 'Se ha enviado un correo electrónico para restablecer la contraseña'
-
-@api.route('/reset-password', methods=['POST'])
-def reset_password():
-    token = request.json.get('token')  # Suponiendo que se envía el token desde el frontend
-
-    try:
-        # Verificar la validez del token
-        decoded = jwt.decode(token)
-        email = decoded['email']  # Extraer el correo electrónico del token decodificado
-
-        # Actualizar la contraseña del usuario en la base de datos o en el lugar donde se almacena la información del usuario
-
-        return 'La contraseña se ha restablecido correctamente'
-    except jwt.ExpiredSignatureError:
-        return 'El token ha expirado', 400
-    except jwt.InvalidTokenError:
-        return 'El token es inválido', 400
+    if 'image' not in request.files:
+        raise APIException("No image to upload")
+    
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
 
 
+    my_image = Image()
+    my_image.ruta = f"sample_folder/profile/my-image-name - {timestamp}"
+
+    result = cloudinary.uploader.upload(
+        request.files['image'],
+        public_id=f'sample_folder/profile/my-image-name',
+        crop='limit',
+        width=450,
+        height=450,
+        eager=[{
+            'width': 200, 'height': 200,
+            'crop': 'thumb', 'gravity': 'face',
+            'radius': 100
+        },
+        ],
+        tags=['profile_picture']
+    )
+
+    #current_user = get_jwt_identity()
+
+    #if current_user["role"] == "user":
+     #   my_image.user_id = current_user["id"]
+    #elif current_user["role"] == "provider":
+     #   my_image.provider_id = current_user["id"]
+    #else:
+    #    raise APIException("Invalid user role")
+    
+    my_image.url = result[ 'secure_url']
+    db.session.add(my_image)
+    db.session.commit()
+    
+    
+    return jsonify(my_image.serialize()), 200
+
+
+
+@api.route('/image-list', methods=['GET'])
+def handle_image_list():
+    images = Image.query.all() #Objeto de SQLAlchemy
+    images = list(map(lambda item: item.serialize(), images))
+
+    response_body={
+        "lista": images
+    }
+    return jsonify(response_body), 200

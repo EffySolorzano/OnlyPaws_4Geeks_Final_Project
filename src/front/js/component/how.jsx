@@ -6,6 +6,7 @@ import Stepbystep from "../../img/stepbystep.jpg";
 import Stephbysteph from "../../img/stephbysteph.jpg";
 import Howitworks from "../../styles/howitworks.css";
 
+
 function howWorks() {
   const [displaySitterInfo, setDisplaySitterInfo] = useState(true);
   const [displayParentInfo, setDisplayParentInfo] = useState(false);
@@ -57,24 +58,7 @@ function howWorks() {
         </div>
         <img src={Howcardimg} alt="how-it-works" className="howimg" />
       </div>
-      <div className="how-start">
-        <h2>Let's get started</h2>
-      </div>
-      <div className="how-1st-join">
-        <Link to="/signup">
-          <button
-            className="btn btn-transparent"
-            id="signup"
-            style={{
-              backgroundColor: "#a659c8",
-              color: "#ffffff",
-              borderRadius: "15px",
-            }}
-          >
-            Sign up
-          </button>
-        </Link>
-      </div>
+      <div className="bottom-how"></div>
       <br />
 
       {displaySitterInfo && (
@@ -88,25 +72,6 @@ function howWorks() {
           <img src={Stephbysteph} alt="stepbystep_img" className="step" />
         </div>
       )}
-
-      <div className="how-start-2nd">
-        <h2>Let's get started</h2>
-      </div>
-      <div className="how-2st-join">
-        <Link to="/signup">
-          <button
-            className="btn btn-transparent"
-            id="signup"
-            style={{
-              backgroundColor: "#a659c8",
-              color: "#ffffff",
-              borderRadius: "15px",
-            }}
-          >
-            Sign up
-          </button>
-        </Link>
-      </div>
       <div className="container-footer">
         <Footer />
       </div>

@@ -45,77 +45,79 @@ function Srvcs() {
       </div>
 
       {displayCurrentServices && (
-        <div className="row row-cols-1 row-cols-md-2 g-3">
-          <div className="col">
-            <div className="card h-100">
-              <img src={Petsit} className="card-img-top" alt="petsitting" />
-              <div className="card-body">
-                <h5 className="card-title-srvcs">Pet Sitter</h5>
-                <p className="card-text">
-                  We offer professional and reliable pet sitting services for
-                  busy pet owners who need a trustworthy caretaker for their
-                  furry family members. Our experienced pet sitters provide
-                  personalized care and attention to your pets in the comfort of
-                  your own home or in our pet-friendly facilities. We understand
-                  that pets have unique needs and personalities, which is why we
-                  offer customized care plans to meet their individual
-                  requirements. You can rest easy knowing that your pets are in
-                  good hands while you're away.
-                </p>
+        <div className="srvcs-container">
+          <div className="row row-cols-1 row-cols-md-2 g-3">
+            <div className="col">
+              <div className="card h-100">
+                <img src={Petsit} className="card-img-top" alt="petsitting" />
+                <div className="card-body">
+                  <h5 className="card-title-srvcs">Pet Sitter</h5>
+                  <p className="card-text">
+                    We offer professional and reliable pet sitting services for
+                    busy pet owners who need a trustworthy caretaker for their
+                    furry family members. Our experienced pet sitters provide
+                    personalized care and attention to your pets in the comfort of
+                    your own home or in our pet-friendly facilities. We understand
+                    that pets have unique needs and personalities, which is why we
+                    offer customized care plans to meet their individual
+                    requirements. You can rest easy knowing that your pets are in
+                    good hands while you're away.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <img src={Housesit} className="card-img-top" alt="housesit" />
-              <div className="card-body">
-                <h5 className="card-title-srvcs">House Sit</h5>
-                <p className="card-text">
-                  Our house sitting service for pets provides your furry family
-                  members with the care and attention they need while you're
-                  away. We'll make sure your pets are fed, watered, and given
-                  plenty of love and affection, all in the comfort of their own
-                  home. You can relax and enjoy your time away, knowing that
-                  your pets are in good hands.
-                </p>
+            <div className="col">
+              <div className="card h-100">
+                <img src={Housesit} className="card-img-top" alt="housesit" />
+                <div className="card-body">
+                  <h5 className="card-title-srvcs">House Sit</h5>
+                  <p className="card-text">
+                    Our house sitting service for pets provides your furry family
+                    members with the care and attention they need while you're
+                    away. We'll make sure your pets are fed, watered, and given
+                    plenty of love and affection, all in the comfort of their own
+                    home. You can relax and enjoy your time away, knowing that
+                    your pets are in good hands.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <img
-                src={Petgrooming}
-                className="card-img-top"
-                alt="pet-grooming"
-              />
-              <div className="card-body">
-                <h5 className="card-title-srvcs">Grooming Services</h5>
-                <p className="card-text">
-                  In addition to our pet sitting and house sitting services, we
-                  also offer a pet grooming referral service. We know how
-                  important it is to keep your pet looking and feeling their
-                  best, so we've done the research for you and will provide
-                  recommendations for the nearest and highest-rated pet groomers
-                  in your area. Just let us know your location and we'll take
-                  care of the rest!
-                </p>
+            <div className="col">
+              <div className="card h-100">
+                <img
+                  src={Petgrooming}
+                  className="card-img-top"
+                  alt="pet-grooming"
+                />
+                <div className="card-body">
+                  <h5 className="card-title-srvcs">Grooming Services</h5>
+                  <p className="card-text">
+                    In addition to our pet sitting and house sitting services, we
+                    also offer a pet grooming referral service. We know how
+                    important it is to keep your pet looking and feeling their
+                    best, so we've done the research for you and will provide
+                    recommendations for the nearest and highest-rated pet groomers
+                    in your area. Just let us know your location and we'll take
+                    care of the rest!
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <img
-                src={Dogwalkerservs}
-                className="card-img-top"
-                alt="dog-walker"
-              />
-              <div className="card-body">
-                <h5 className="card-title-srvcs">Dog Walkers</h5>
-                <p className="card-text">
-                  Need someone to walk your dogs? Our reliable dog walking
-                  services will keep your pup happy and healthy with regular
-                  exercise and fresh air. Contact us to schedule a walk today!"
-                </p>
+            <div className="col">
+              <div className="card h-100">
+                <img
+                  src={Dogwalkerservs}
+                  className="card-img-top"
+                  alt="dog-walker"
+                />
+                <div className="card-body">
+                  <h5 className="card-title-srvcs">Dog Walkers</h5>
+                  <p className="card-text">
+                    Need someone to walk your dogs? Our reliable dog walking
+                    services will keep your pup happy and healthy with regular
+                    exercise and fresh air. Contact us to schedule a walk today!"
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -185,25 +187,8 @@ function Srvcs() {
             </div>
           </div>
         </div>
+
       )}
-      <div className="how-start-2nd">
-        <h2>Let's get started</h2>
-      </div>
-      <div className="how-2st-join">
-        <Link to="/signup">
-          <button
-            className="btn btn-transparent"
-            id="signup"
-            style={{
-              backgroundColor: "#a659c8",
-              color: "#ffffff",
-              borderRadius: "15px",
-            }}
-          >
-            Sign up
-          </button>
-        </Link>
-      </div>
       <div className="container-footer">
         <Footer />
       </div>

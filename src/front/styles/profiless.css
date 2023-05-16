@@ -1,0 +1,12 @@
+.profile-picture {
+    width: 1290px;
+    margin-top: 150px;
+    margin-left: 90px;
+    margin-bottom: -190px;
+    border-radius: 20px;
+}
+
+
+@media screen and (max-width: 768px) {
+    /*enter display later */
+}

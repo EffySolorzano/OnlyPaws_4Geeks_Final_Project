@@ -146,42 +146,59 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-white bg-white sticky-top">
+    <nav className="navbar navbar-expand-lg navbar-white bg-white sticky-top">
       <div className="container-fluid">
-        <Link to="/">
-          <img className="logo img-fluid" src={OnlyPaws} alt="onlyPaws_logo" />
-        </Link>
-        <div className="ml-auto">
-          <Link to="/about">
-            <button
-              className="btn btn-transparent"
-              id="about"
-              style={{
-                backgroundColor: "transparent",
-                color: "#a659c8",
-              }}
-            >
-              About us
-            </button>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <Link to="/">
+            <img
+              className="logo img-fluid"
+              src={OnlyPaws}
+              alt="onlyPaws_logo"
+            />
           </Link>
-          <Link to="/how-it-works">
-            <button
-              className="btn btn-transparent"
-              id="how"
-              style={{ backgroundColor: "transparent", color: "#a659c8" }}
-            >
-              How it works
-            </button>
-          </Link>
-          <Link to="/services">
-            <button
-              className="btn btn-transparent"
-              id="services"
-              style={{ backgroundColor: "transparent", color: "#a659c8" }}
-            >
-              Services
-            </button>
-          </Link>
+          <div className="ml-auto">
+            <Link to="/about">
+              <button
+                className="btn btn-transparent"
+                id="about"
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#a659c8",
+                }}
+              >
+                About us
+              </button>
+            </Link>
+            <Link to="/how-it-works">
+              <button
+                className="btn btn-transparent"
+                id="how"
+                style={{ backgroundColor: "transparent", color: "#a659c8" }}
+              >
+                How it works
+              </button>
+            </Link>
+            <Link to="/services">
+              <button
+                className="btn btn-transparent"
+                id="services"
+                style={{ backgroundColor: "transparent", color: "#a659c8" }}
+              >
+                Services
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
       {navbarItems}
