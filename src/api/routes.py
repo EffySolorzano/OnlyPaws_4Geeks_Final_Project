@@ -346,37 +346,18 @@ def get_info_user():
 
 @api.route("/info_user", methods=["POST"])
 def create_info_user():
-    data = request.get_json()
+    body = request.get_json()
+    # Create a new InfoProvider instance
     new_info_user = InfoUser(
-        date=data["date"],
-        gender=data["gender"],
-        description=data["description"],
-        phone=data["phone"],
-        address=data["address"],
-        payment_method=data["payment_method"],
-        is_authenticated=data["is_authenticated"],
+    date=body["date"],
+    gender=body["gender"],
+    description=body["description"],
+    address=body["address"],
+    phone=body["phone"],
+    payment_method=body["payment_method"],
+    is_authenticated=body["is_authenticated"],
     )
-    # validaciones
-    if data is None:
-        raise APIException(
-            "You need to specify the request body as json object", status_code=400
-        )
-    if "date" not in data:
-        raise APIException("You need to specify the date", status_code=400)
-    if "gender" not in data:
-        raise APIException("You need to specify the gender", status_code=400)
-    if "pets" not in data:
-        raise APIException("You need to specify the pets", status_code=400)
-    if "description" not in data:
-        raise APIException("You need to specify the description", status_code=400)
-    if "pet_size" not in data:
-        raise APIException("You need to specify the pet_size", status_code=400)
-    if "phone" not in data:
-        raise APIException("You need to specify the phone", status_code=400)
-    if "address" not in data:
-        raise APIException("You need to specify the address", status_code=400)
-    if "payment_method" not in data:
-        raise APIException("You need to specify the payment_method", status_code=400)
+    # Save the new InfoProvider instance to the database
     db.session.add(new_info_user)
     db.session.commit()
     return jsonify(new_info_user.serialize()), 201
@@ -388,14 +369,14 @@ def update_info_user(info_user_id):
     if not info_user:
         return jsonify({"error": "InfoUser not found"}), 404
 
-    data = request.get_json()
-    info_user.date = data["date"]
-    info_user.gender = data["gender"]
-    info_user.description = data["description"]
-    info_user.phone = data["phone"]
-    info_user.address = data["address"]
-    info_user.payment_method = data["payment_method"]
-    info_user.is_authenticated = data["is_authenticated"]
+    body = request.get_json()
+    info_user.date = body["date"]
+    info_user.gender = body["gender"]
+    info_user.description = body["description"]
+    info_user.phone = body["phone"]
+    info_user.address = body["address"]
+    info_user.payment_method = body["payment_method"]
+    info_user.is_authenticated = body["is_authenticated"]
     db.session.commit()
     return jsonify(info_user.serialize()), 200
 
@@ -414,49 +395,21 @@ def get_info_provider():
 
 @api.route("/info_provider", methods=["POST"])
 def create_info_provider():
-    data = request.get_json()
+    body = request.get_json()
+    # Create a new InfoProvider instance
     new_info_provider = InfoProvider(
-        date=data["date"],
-        gender=data["gender"],
-        work_time=data["work_time"],
-        service=data["service"],
-        number_admitted_pets=data["number_admitted_pets"],
-        description=data["description"],
-        address=data["address"],
-        phone=data["phone"],
-        accepted_payment_method=data["accepted_payment_method"],
-        is_authenticated=data["is_authenticated"],
+        date=body["date"],
+        gender=body["gender"],
+        availability=body["availability"],
+        service=body["service"],
+        number_of_pets=body["number_of_pets"],
+        description=body["description"],
+        address=body["address"],
+        phone=body["phone"],
+        payment_method=body["payment_method"],
+        is_authenticated=body["is_authenticated"],
     )
-    # validaciones
-    if data is None:
-        raise APIException(
-            "You need to specify the request body as json object", status_code=400
-        )
-    if "date" not in data:
-        raise APIException("You need to specify the date", status_code=400)
-    if "gender" not in data:
-        raise APIException("You need to specify the gender", status_code=400)
-    if "work_time" not in data:
-        raise APIException("You need to specify the work_time", status_code=400)
-    if "service" not in data:
-        raise APIException("You need to specify the service", status_code=400)
-    if "allowed_pets" not in data:
-        raise APIException("You need to specify the allowed_pets", status_code=400)
-    if "number_admitted_pets" not in data:
-        raise APIException(
-            "You need to specify the number_admitted_pets", status_code=400
-        )
-    if "description" not in data:
-        raise APIException("You need to specify the description", status_code=400)
-    if "address" not in data:
-        raise APIException("You need to specify the address", status_code=400)
-    if "phone" not in data:
-        raise APIException("You need to specify the phone", status_code=400)
-    if "accepted_payment_method" not in data:
-        raise APIException(
-            "You need to specify the accepted_payment_method", status_code=400
-        )
-
+    # Save the new InfoProvider instance to the database
     db.session.add(new_info_provider)
     db.session.commit()
     return jsonify(new_info_provider.serialize()), 201
@@ -464,23 +417,42 @@ def create_info_provider():
 
 @api.route("/info_provider/<int:info_provider_id>", methods=["PUT"])
 def update_info_provider(info_provider_id):
-    info_provider = InfoProvider.query.filter_by(id=info_provider_id).first()
+    info_provider = InfoProvider.query.get(info_provider_id)
     if not info_provider:
         return jsonify({"error": "InfoProvider not found"}), 404
 
-    data = request.get_json()
-    info_provider.date = data["date"]
-    info_provider.gender = data["gender"]
-    info_provider.work_time = data["work_time"]
-    info_provider.service = data["service"]
-    info_provider.number_admitted_pets = data["number_admitted_pets"]
-    info_provider.description = data["description"]
-    info_provider.address = data["address"]
-    info_provider.phone = data["phone"]
-    info_provider.accepted_payment_method = data["accepted_payment_method"]
-    info_provider.is_authenticated = data["is_authenticated"]
+    body = request.get_json()
+    # Update the InfoProvider instance with the new data
+    info_provider.date = body["date"]
+    info_provider.gender = body["gender"]
+    info_provider.availability = body["availability"]
+    info_provider.service = body["service"]
+    info_provider.number_of_pets = body["number_of_pets"]
+    info_provider.description = body["description"]
+    info_provider.address = body["address"]
+    info_provider.phone = body["phone"]
+    info_provider.payment_method = body["payment_method"]
+    info_provider.is_authenticated = body["is_authenticated"]
+
+    # Save the updated InfoProvider instance to the database
     db.session.commit()
     return jsonify(info_provider.serialize()), 200
+
+
+@api.route("/choices", methods=["GET"])
+def get_choices():
+    services = ["Pet Sitter", "Pet Groomer", "Dog Walker", "Pet Groomer"]
+    availability = ["Morning", "Evening", "Afternoon"]
+    number_of_pets = [str(i) for i in range(0, 11)]
+    
+    choices = {
+        "services": services,
+        "availability": availability,
+        "number_of_pets": number_of_pets
+    }
+    
+    return jsonify(choices), 200
+
 
 
 #################IMG UPLOAD##############

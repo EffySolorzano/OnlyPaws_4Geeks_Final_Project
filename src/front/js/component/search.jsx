@@ -97,7 +97,6 @@ const Provider = () => {
           {providers.length > 0 ? (
             providers.map((provider, index) => (
               <TinderCard
-                ref={cardRefs[index]}
                 key={index} // Use the index as the key
                 onSwipe={(dir) => onSwipe(dir)}
                 onCardLeftScreen={() => onCardLeftScreen(provider.name)}
