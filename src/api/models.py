@@ -1,14 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Enum
-
-# from flask_wtf import FlaskForm
-# from wtforms import SelectField
-# from flask_migrate import Migrate
-# from flask_sqlalchemy import SQLAlchemy
 from enum import Enum as UserEnum
 from .db import db
 from .ext import bcrypt
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -57,23 +53,33 @@ class Gender(UserEnum):
     Other = "O"
 
 
-# class MyForm(FlaskForm):
-#     cantidad_mascotas = SelectField(
-#         "Number of pets", choices=[(i, i) for i in range(1, 11)]
-#     )
+class PetSize(UserEnum):
+    Small = "S"
+    Medium = "M"
+    Big = "B"
+
+
+class Payment(UserEnum):
+    Credit = "C"
+    Debit = "D"
+    Bank_Transfer = "BT"
+
+
+number_pets = [str(i) for i in range(1, 11)]
 
 
 class InfoUser(db.Model):
     __tablename__ = "infoUser"
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    # Time default=datetime.utcnow
     gender = db.Column(db.Enum(Gender), nullable=False)
-    pets = db.Column(db.String(120), unique=True, nullable=False)
+    pets = db.Column(Enum(*number_pets), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
-    pet_size = db.Column(db.String(120), nullable=False)
+    pet_size = db.Column(db.Enum(PetSize), nullable=False)
     address = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(120), unique=True, nullable=False)
-    payment_method = db.Column(db.Boolean, unique=True, nullable=False)
+    payment_method = db.Column(db.Enum(Payment), unique=True, nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
     info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
     provider = relationship("InfoProvider", back_populates="info_users")
@@ -158,18 +164,44 @@ class Provider(db.Model):
         # do not serialize the password, its a security breach
 
 
+class WorkTime(UserEnum):
+    Morning = "M"
+    Afternoon = "A"
+    Evening = "E"
+
+
+class Services(UserEnum):
+    Pet_Sitter = "PS"
+    Pet_Walker = "W"
+    House_Sitter = "HS"
+    Groomer = "G"
+
+
+class TypePetsAllowed(UserEnum):
+    Dogs = "D"
+    Cats = "C"
+    Birds = "B"
+    Horses = "H"
+    Reptiles = "R"
+
+
+admitted_pets = [str(i) for i in range(1, 11)]
+
+
 class InfoProvider(db.Model):
     __tablename__ = "infoProvider"
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    # Time default=datetime.utcnow
     gender = db.Column(db.Enum(Gender), nullable=False)
-    work_time = db.Column(db.String(120), nullable=False)
-    service = db.Column(db.Boolean, nullable=False)
-    pets_admited = db.Column(db.String(120), unique=True, nullable=False)
+    work_time = db.Column(db.Enum(WorkTime), nullable=False)
+    service = db.Column(db.Enum(Services), nullable=False)
+    allowed_pets = db.Column(db.Enum(TypePetsAllowed), unique=True, nullable=False)
+    number_admitted_pets = db.Column(Enum(*admitted_pets), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
     address = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(120), unique=True, nullable=False)
-    payment_method = db.Column(db.Boolean, unique=True, nullable=False)
+    accepted_payment_method = db.Column(db.Enum(Payment), unique=True, nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
     info_users = relationship("InfoUser", back_populates="provider")
 
@@ -179,22 +211,24 @@ class InfoProvider(db.Model):
         gender,
         work_time,
         service,
-        pets_admited,
+        allowed_pets,
+        number_admitted_pets,
         description,
         address,
         phone,
-        payment_method,
+        accepted_payment_method,
         is_authenticated,
     ):
         self.date = date
         self.gender = gender
         self.work_time = work_time
         self.service = service
-        self.pets_admited = pets_admited
+        self.allowed_pets = allowed_pets
+        self.number_admitted_pets = number_admitted_pets
         self.description = description
         self.address = address
         self.phone = phone
-        payment_method = payment_method
+        self.accepted_payment_method = accepted_payment_method
         self.is_authenticated = is_authenticated
 
     def __repr__(self):
@@ -207,11 +241,12 @@ class InfoProvider(db.Model):
             "gender": self.gender,
             "work_time": self.work_time,
             "service": self.service,
-            "pets_admited": self.pets_admited,
+            "allowed_pets": self.allowed_pets,
+            "number_admitted_pets": self.number_admitted_pets,
             "description": self.description,
             "address": self.address,
             "phone": self.phone,
-            "payment_method": self.payment_method,
+            "accepted_payment_method": self.accepted_payment_method,
             "is_authenticated": self.is_authenticated,
         }
 
