@@ -8,14 +8,11 @@ const ChatBubble = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [chatbotResponse, setChatbotResponse] = useState('');
-
     const handleBubbleClick = () => {
         setIsExpanded(!isExpanded);
     };
-
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
         try {
             const response = await fetch('http://127.0.0.1:3001/api/chatgpt', {
                 method: 'POST',
@@ -24,23 +21,18 @@ const ChatBubble = () => {
                 },
                 body: JSON.stringify({ prompt: inputMessage }),
             });
-
             if (!response.ok) {
                 throw new Error('Failed to fetch response from the server');
             }
-
             const responseData = await response.json();
-
             // Add user's message and generated response to the messages list
             setMessages([
                 ...messages,
                 { text: inputMessage, sender: 'user' },
                 { text: responseData.reply, sender: 'bot' },
             ]);
-
             // Set the chatbot response
             // setChatbotResponse(responseData.reply);
-
             // Clear the input message
             setInputMessage('');
         } catch (error) {
@@ -48,7 +40,6 @@ const ChatBubble = () => {
             // Handle error here
         }
     };
-
     return (
         <div className="container py-5">
             <div className="row d-flex justify-content-end">
@@ -62,7 +53,6 @@ const ChatBubble = () => {
                             <div className="card-body" style={{ width: "450px", overflowY: "auto", padding: "10px", margin: "0", }}>
                                 {messages.map((message, index) => {
                                     const { text, sender } = message;
-
                                     return (
                                         <div key={index} className={`d-flex flex-row justify-content-${sender === 'user' ? 'start' : 'end'} mb-4`}>
                                             {sender === 'user' ? (
@@ -70,7 +60,7 @@ const ChatBubble = () => {
                                                     <p className="small mb-0">{text}</p>
                                                 </div>
                                             ) : (
-                                                <div className="p-3 me-3 border" style={{ borderRadius: '15px', background: '#fbfbfb' }}>
+                                                <div className="p-3 me-3 border" style={{ borderRadius: '15px', background: '#FBFBFB' }}>
                                                     <p className="small mb-0">{text}</p>
                                                 </div>
                                             )}
@@ -85,7 +75,7 @@ const ChatBubble = () => {
                                 {/* Display chatbot response */}
                                 {chatbotResponse && (
                                     <div className="d-flex flex-row justify-content-end mb-4">
-                                        <div className="p-3 me-3 border" style={{ borderRadius: '15px', background: '#fbfbfb' }}>
+                                        <div className="p-3 me-3 border" style={{ borderRadius: '15px', background: '#FBFBFB' }}>
                                             <p className="small mb-0">{chatbotResponse}</p>
                                         </div>
                                     </div>
@@ -117,6 +107,4 @@ const ChatBubble = () => {
         </div>
     );
 };
-
-
 export default ChatBubble;
