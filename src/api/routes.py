@@ -291,3 +291,40 @@ def protected():
         raise APIException("Black listed token", status_code=404)
     print("The user is: ", user.name)
     return jsonify({"message": "Protected route"}), 200
+
+
+#----------------------forgot password--------------
+
+
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    # Validar la entrada del usuario
+    email = request.json.get('email')  # Suponiendo que se envía el correo electrónico del usuario
+
+    # Generar un token de restablecimiento de contraseña
+    token = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}),
+
+    # Guardar el token en la base de datos o en algún lugar seguro junto con la información del usuario
+
+    # Aquí deberías enviar un correo electrónico al usuario con el enlace de restablecimiento de contraseña
+
+    return 'Se ha enviado un correo electrónico para restablecer la contraseña'
+
+@api.route('/reset-password', methods=['POST'])
+def reset_password():
+    token = request.json.get('token')  # Suponiendo que se envía el token desde el frontend
+
+    try:
+        # Verificar la validez del token
+        decoded = jwt.decode(token)
+        email = decoded['email']  # Extraer el correo electrónico del token decodificado
+
+        # Actualizar la contraseña del usuario en la base de datos o en el lugar donde se almacena la información del usuario
+
+        return 'La contraseña se ha restablecido correctamente'
+    except jwt.ExpiredSignatureError:
+        return 'El token ha expirado', 400
+    except jwt.InvalidTokenError:
+        return 'El token es inválido', 400
+
+
