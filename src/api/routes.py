@@ -4,7 +4,15 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import openai
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import TokenBlockedList, db, User, Provider, Image
+from api.models import (
+    TokenBlockedList,
+    db,
+    User,
+    Provider,
+    InfoUser,
+    InfoProvider,
+    Image,
+)
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity, get_jwt
@@ -32,13 +40,13 @@ import cloudinary.uploader
 import cloudinary.api
 
 cloudinary.config(
-cloud_name = os.getenv("CLOUDINARY_NAME"),
-api_key = os.getenv("CLOUDINARY_KEY"),
-api_secret = os.getenv("CLOUDINARY_SECRET"),
-api_proxy = "http://proxy.server:9999"
+    cloud_name=os.getenv("CLOUDINARY_NAME"),
+    api_key=os.getenv("CLOUDINARY_KEY"),
+    api_secret=os.getenv("CLOUDINARY_SECRET"),
+    api_proxy="http://proxy.server:9999",
 )
 
-openai.api_key = os.environ.get('OPENAI_API_KEY')
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 api = Blueprint("api", __name__)
@@ -306,36 +314,185 @@ def protected():
     print("The user is: ", user.name)
     return jsonify({"message": "Protected route"}), 200
 
+
 ######### API 3rd PARTY INTEGRATION ###########
 
-@api.route('/chatgpt', methods=['POST'])
+@api.route("/chatgpt", methods=["POST"])
 def open_ai():
-    body =request.get_json()    
-    prompt = "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  " + "puedes responder en español cuando te lo pidan" + body['prompt']
-
-    completion = openai.Completion.create(engine="text-davinci-003",
-                            prompt=prompt,
-                            n=1,
-                            max_tokens=2048)
-    
+    body = request.get_json()
+    prompt = (
+        "You're a website named Onlypaws that offers pet sitting and house sitting services for pet parents, along other features like pet playdates, grooming, dog walker and tips how to care for different types of pets  "
+        + "puedes responder en español cuando te lo pidan"
+        + body["prompt"]
+    )
+    completion = openai.Completion.create(
+        engine="text-davinci-003", prompt=prompt, n=1, max_tokens=2048
+    )
     print(completion.choices[0])
     print(completion.choices[0].text)
     dictionary = {"reply": completion.choices[0].text}
-    
-    
     return jsonify(dictionary), 200
+
+
+######### INFOUSER - GET, POST, PUT ###########
+
+
+@api.route("/info_user", methods=["GET"])
+def get_info_user():
+    info_users = InfoUser.query.all()
+    serialized_info_users = [info_user.serialize() for info_user in info_users]
+    return jsonify(serialized_info_users), 200
+
+
+@api.route("/info_user", methods=["POST"])
+def create_info_user():
+    data = request.get_json()
+    new_info_user = InfoUser(
+        date=data["date"],
+        gender=data["gender"],
+        description=data["description"],
+        phone=data["phone"],
+        address=data["address"],
+        payment_method=data["payment_method"],
+        is_authenticated=data["is_authenticated"],
+    )
+    # validaciones
+    if data is None:
+        raise APIException(
+            "You need to specify the request body as json object", status_code=400
+        )
+    if "date" not in data:
+        raise APIException("You need to specify the date", status_code=400)
+    if "gender" not in data:
+        raise APIException("You need to specify the gender", status_code=400)
+    if "pets" not in data:
+        raise APIException("You need to specify the pets", status_code=400)
+    if "description" not in data:
+        raise APIException("You need to specify the description", status_code=400)
+    if "pet_size" not in data:
+        raise APIException("You need to specify the pet_size", status_code=400)
+    if "phone" not in data:
+        raise APIException("You need to specify the phone", status_code=400)
+    if "address" not in data:
+        raise APIException("You need to specify the address", status_code=400)
+    if "payment_method" not in data:
+        raise APIException("You need to specify the payment_method", status_code=400)
+    db.session.add(new_info_user)
+    db.session.commit()
+    return jsonify(new_info_user.serialize()), 201
+
+
+@api.route("/info_user/<int:info_user_id>", methods=["PUT"])
+def update_info_user(info_user_id):
+    info_user = InfoUser.query.filter_by(id=info_user_id).first()
+    if not info_user:
+        return jsonify({"error": "InfoUser not found"}), 404
+
+    data = request.get_json()
+    info_user.date = data["date"]
+    info_user.gender = data["gender"]
+    info_user.description = data["description"]
+    info_user.phone = data["phone"]
+    info_user.address = data["address"]
+    info_user.payment_method = data["payment_method"]
+    info_user.is_authenticated = data["is_authenticated"]
+    db.session.commit()
+    return jsonify(info_user.serialize()), 200
+
+
+######### INFOPROVIDER - GET, POST, PUT ###########
+
+
+@api.route("/info_providers", methods=["GET"])
+def get_info_provider():
+    info_providers = InfoProvider.query.all()
+    serialized_info_providers = [
+        info_provider.serialize() for info_provider in info_providers
+    ]
+    return jsonify(serialized_info_providers), 200
+
+
+@api.route("/info_provider", methods=["POST"])
+def create_info_provider():
+    data = request.get_json()
+    new_info_provider = InfoProvider(
+        date=data["date"],
+        gender=data["gender"],
+        work_time=data["work_time"],
+        service=data["service"],
+        number_admitted_pets=data["number_admitted_pets"],
+        description=data["description"],
+        address=data["address"],
+        phone=data["phone"],
+        accepted_payment_method=data["accepted_payment_method"],
+        is_authenticated=data["is_authenticated"],
+    )
+    # validaciones
+    if data is None:
+        raise APIException(
+            "You need to specify the request body as json object", status_code=400
+        )
+    if "date" not in data:
+        raise APIException("You need to specify the date", status_code=400)
+    if "gender" not in data:
+        raise APIException("You need to specify the gender", status_code=400)
+    if "work_time" not in data:
+        raise APIException("You need to specify the work_time", status_code=400)
+    if "service" not in data:
+        raise APIException("You need to specify the service", status_code=400)
+    if "allowed_pets" not in data:
+        raise APIException("You need to specify the allowed_pets", status_code=400)
+    if "number_admitted_pets" not in data:
+        raise APIException(
+            "You need to specify the number_admitted_pets", status_code=400
+        )
+    if "description" not in data:
+        raise APIException("You need to specify the description", status_code=400)
+    if "address" not in data:
+        raise APIException("You need to specify the address", status_code=400)
+    if "phone" not in data:
+        raise APIException("You need to specify the phone", status_code=400)
+    if "accepted_payment_method" not in data:
+        raise APIException(
+            "You need to specify the accepted_payment_method", status_code=400
+        )
+
+    db.session.add(new_info_provider)
+    db.session.commit()
+    return jsonify(new_info_provider.serialize()), 201
+
+
+@api.route("/info_provider/<int:info_provider_id>", methods=["PUT"])
+def update_info_provider(info_provider_id):
+    info_provider = InfoProvider.query.filter_by(id=info_provider_id).first()
+    if not info_provider:
+        return jsonify({"error": "InfoProvider not found"}), 404
+
+    data = request.get_json()
+    info_provider.date = data["date"]
+    info_provider.gender = data["gender"]
+    info_provider.work_time = data["work_time"]
+    info_provider.service = data["service"]
+    info_provider.number_admitted_pets = data["number_admitted_pets"]
+    info_provider.description = data["description"]
+    info_provider.address = data["address"]
+    info_provider.phone = data["phone"]
+    info_provider.accepted_payment_method = data["accepted_payment_method"]
+    info_provider.is_authenticated = data["is_authenticated"]
+    db.session.commit()
+    return jsonify(info_provider.serialize()), 200
+
 
 #################IMG UPLOAD##############
 
-@api.route('/upload', methods=['POST'])
-#@jwt_required()
+
+@api.route("/upload", methods=["POST"])
+# @jwt_required()
 def handle_upload():
-
-    if 'image' not in request.files:
+    if "image" not in request.files:
         raise APIException("No image to upload")
-    
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
 
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
 
     my_image = Image()
     my_image.ruta = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
@@ -346,39 +503,38 @@ def handle_upload():
         crop='limit',
         width=450,
         height=450,
-        eager=[{
-            'width': 200, 'height': 200,
-            'crop': 'thumb', 'gravity': 'face',
-            'radius': 100
-        },
+        eager=[
+            {
+                "width": 200,
+                "height": 200,
+                "crop": "thumb",
+                "gravity": "face",
+                "radius": 100,
+            },
         ],
-        tags=['profile_picture']
+        tags=["profile_picture"],
     )
 
-    #current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
 
-    #if current_user["role"] == "user":
-     #   my_image.user_id = current_user["id"]
-    #elif current_user["role"] == "provider":
-     #   my_image.provider_id = current_user["id"]
-    #else:
+    # if current_user["role"] == "user":
+    #   my_image.user_id = current_user["id"]
+    # elif current_user["role"] == "provider":
+    #   my_image.provider_id = current_user["id"]
+    # else:
     #    raise APIException("Invalid user role")
-    
-    my_image.url = result[ 'secure_url']
+
+    my_image.url = result["secure_url"]
     db.session.add(my_image)
     db.session.commit()
-    
-    
+
     return jsonify(my_image.serialize()), 200
 
 
-
-@api.route('/image-list', methods=['GET'])
+@api.route("/image-list", methods=["GET"])
 def handle_image_list():
-    images = Image.query.all() #Objeto de SQLAlchemy
+    images = Image.query.all()  # Objeto de SQLAlchemy
     images = list(map(lambda item: item.serialize(), images))
 
-    response_body={
-        "lista": images
-    }
+    response_body = {"lista": images}
     return jsonify(response_body), 200
