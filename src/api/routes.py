@@ -317,7 +317,6 @@ def protected():
 
 ######### API 3rd PARTY INTEGRATION ###########
 
-
 @api.route("/chatgpt", methods=["POST"])
 def open_ai():
     body = request.get_json()
@@ -496,12 +495,12 @@ def handle_upload():
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
 
     my_image = Image()
-    my_image.ruta = f"sample_folder/profile/my-image-name - {timestamp}"
+    my_image.ruta = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
 
     result = cloudinary.uploader.upload(
-        request.files["image"],
-        public_id=f"sample_folder/profile/my-image-name",
-        crop="limit",
+        request.files['image'],
+        public_id=f'sample_folder/profile/my-image-name - {timestamp}',
+        crop='limit',
         width=450,
         height=450,
         eager=[
