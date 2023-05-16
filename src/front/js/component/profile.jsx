@@ -41,6 +41,10 @@ const Profile = () => {
     }
   };
 
+  const handleUpload = (newUrl) => {
+    setProfilePictureUrl(newUrl);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Perform form submission logic based on the selected role
@@ -104,8 +108,8 @@ const Profile = () => {
               <div className="card mb-6" >
                 <div className="card-body text-center" >
                   <figure>
-                    <img src={profilePictureUrl} className="rounded-circle img-fluid" alt="profile" />
-                    <Uploader setProfilePictureUrl={setProfilePictureUrl} />
+                    <img src={profilePictureUrl} className="rounded-circle img-fluid" alt="profile" style={{ width: "150px", height: "150px", }} />
+                    <Uploader onUpload={handleUpload} />
                   </figure>
                 </div>
               </div>
@@ -315,7 +319,7 @@ const Profile = () => {
       <div>
         <img src={Profilebottom} alt="profilebottom" className="profile-picture img-fluid" />
       </div>
-      <div>
+      <div className="container-footer">
         <Footer />
       </div></>
   );
