@@ -8,6 +8,26 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+class Gender(UserEnum):
+    MALE = "M"
+    FEMALE = "F"
+    OTHER = "O"
+
+class Payment(UserEnum):
+    VISA = "C"
+    MASTERCARD = "D"
+    PAYPAL = "BT"
+    
+class ServiceChoices(UserEnum):
+    PET_SITTER = "Pet Sitter"
+    HOUSE_SITTER = "House Sitter"
+    DOG_WALKER = "Dog Walker"
+    PET_GROOMER = "Pet Groomer"
+
+class AvailabilityChoices(UserEnum):
+    MORNING = "Morning"
+    AFTERNOON = "Afternoon"
+    EVENING = "Evening"    
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +39,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
     info_user = db.relationship("InfoUser", uselist=False, back_populates="user")
+    images = db.relationship("Image", backref="User_images", lazy=True)
 
     def __init__(
         self, name, surname, username, country, email, password, is_authenticated
@@ -30,6 +51,7 @@ class User(db.Model):
         self.email = email
         self.password = password
         self.is_authenticated = is_authenticated
+        
 
     def __repr__(self):
         return f"<User {self.email}>"
@@ -43,58 +65,42 @@ class User(db.Model):
             "country": self.country,
             "email": self.email,
             "is_authenticated": self.is_authenticated,
+            "images": [image.serialize() for image in self.images]
             # do not serialize the password, its a security breach
         }
 
-
-class Gender(UserEnum):
-    Male = "M"
-    Female = "F"
-    Other = "O"
-
-
-class Payment(UserEnum):
-    VISA = "C"
-    Mastercard = "D"
-    PayPal = "BT"
 
 
 class InfoUser(db.Model):
     __tablename__ = "infoUser"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    gender = db.Column(db.Enum(Gender), nullable=False)
+    gender = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(120), nullable=False)
-    address = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(120), unique=True, nullable=False)
-    payment_method = db.Column(db.Enum(Payment), unique=True, nullable=False)
-    is_authenticated = db.Column(db.Boolean, nullable=False)
+    address = db.Column(db.String(120),  nullable=False)
+    phone = db.Column(db.String(120),  nullable=False)
+    payment_method = db.Column(db.String(30), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="info_user")
-    images = relationship("Image", back_populates="user")
-    images = db.relationship("Image", back_populates="info_user")
+    
 
     def __init__(
         self,
         date,
         gender,
-        pets,
         description,
-        pet_size,
         phone,
         address,
         payment_method,
-        is_authenticated,
+        user_id=None
     ):
         self.date = date
         self.gender = gender
-        self.pets = pets
         self.description = description
-        self.pet_size = pet_size
         self.phone = phone
         self.address = address
         self.payment_method = payment_method
-        self.is_authenticated = is_authenticated
+        self.user_id = user_id
 
     def __repr__(self):
         return f"<InfoUser {self.phone}>"
@@ -104,13 +110,10 @@ class InfoUser(db.Model):
             "id": self.id,
             "gender": self.gender,
             "date": self.date,
-            "pets": self.pets,
             "description": self.description,
-            "pet_size": self.pet_size,
             "phone": self.phone,
             "address": self.address,
             "payment_method": self.payment_method,
-            "is_authenticated": self.is_authenticated,
         }
 
 
@@ -123,9 +126,8 @@ class Provider(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
-    info_provider = db.relationship(
-        "InfoProvider", uselist=False, back_populates="provider"
-    )
+    info_provider = db.relationship("InfoProvider", uselist=False, back_populates="provider")
+    images = db.relationship("Image", backref="Provider_images", lazy=True)
 
     def __init__(
         self, name, surname, username, country, email, password, is_authenticated
@@ -150,68 +152,49 @@ class Provider(db.Model):
             "country": self.country,
             "email": self.email,
             "is_authenticated": self.is_authenticated,
+            
         }
         # do not serialize the password, its a security breach
-
-
-class WorkTime(UserEnum):
-    Morning = "M"
-    Afternoon = "A"
-    Evening = "E"
-
-
-class Services(UserEnum):
-    Pet_Sitter = "PS"
-    Pet_Walker = "W"
-    House_Sitter = "HS"
-    Groomer = "G"
-
-
-admitted_pets = [str(i) for i in range(1, 11)]
-
 
 class InfoProvider(db.Model):
     __tablename__ = "infoProvider"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    gender = db.Column(db.Enum(Gender), nullable=False)
-    work_time = db.Column(db.Enum(WorkTime), nullable=False)
-    service = db.Column(db.Enum(Services), nullable=False)
-    number_admitted_pets = db.Column(Enum(*admitted_pets), unique=True, nullable=False)
+    gender = db.Column(db.String(10), nullable=False)
+    services = db.Column(db.String(255), nullable=False)
+    availability = db.Column(db.String(255), nullable=False)
+    number_of_pets = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(120), nullable=False)
-    address = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(120), unique=True, nullable=False)
-    accepted_payment_method = db.Column(db.Enum(Payment), unique=True, nullable=False)
-    is_authenticated = db.Column(db.Boolean, nullable=False)
+    address = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(120), nullable=False)
+    payment_method = db.Column(db.String(120), nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))
     provider = db.relationship("Provider", back_populates="info_provider")
-    images = db.relationship("Image", back_populates="info_provider")
+    
 
     def __init__(
         self,
         date,
         gender,
-        work_time,
-        service,
-        allowed_pets,
-        number_admitted_pets,
+        availability,
+        services,
+        number_of_pets,
         description,
         address,
         phone,
-        accepted_payment_method,
-        is_authenticated,
+        payment_method,
+        provider_id 
     ):
         self.date = date
         self.gender = gender
-        self.work_time = work_time
-        self.service = service
-        self.allowed_pets = allowed_pets
-        self.number_admitted_pets = number_admitted_pets
+        self.availability = availability
+        self.services = services
+        self. number_of_pets =  number_of_pets
         self.description = description
         self.address = address
         self.phone = phone
-        self.accepted_payment_method = accepted_payment_method
-        self.is_authenticated = is_authenticated
+        self.payment_method = payment_method
+        self.provider_id = provider_id 
 
     def __repr__(self):
         return f"<InfoProvider {self.phone}>"
@@ -221,15 +204,14 @@ class InfoProvider(db.Model):
             "id": self.id,
             "date": self.date,
             "gender": self.gender,
-            "work_time": self.work_time,
-            "service": self.service,
-            "allowed_pets": self.allowed_pets,
-            "number_admitted_pets": self.number_admitted_pets,
+            "services": self.services,
+            "availability": self.availability,
+            "number_of_pets": self. number_of_pets,
             "description": self.description,
             "address": self.address,
             "phone": self.phone,
-            "accepted_payment_method": self.accepted_payment_method,
-            "is_authenticated": self.is_authenticated,
+            "payment_method": self.payment_method,
+            "provider_id ": self.provider_id 
         }
 
 
@@ -238,22 +220,23 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ruta = db.Column(db.String(300), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    provider_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))
     info_user_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
     info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
-    info_user = db.relationship("InfoUser", back_populates="images")
-    info_provider = db.relationship("InfoProvider", back_populates="images")
+    user = db.relationship("User", back_populates="images")
+    provider = db.relationship("Provider", back_populates="images")
 
     def __repr__(self):
-        return f"<Image %r>" % self.id
+        return f"<Image {self.id}>"
 
     def serialize(self):
         return {
             "id": self.id,
             "ruta": self.ruta,
             "user_id": self.user_id,
-            "info_provider_id": self.info_provider_id,
+            "provider_id": self.provider_id,
             "info_user_id": self.info_user_id,
+            "info_provider_id": self.info_provider_id,
         }
 
 
@@ -267,6 +250,7 @@ class TokenBlockedList(db.Model):
         return {
             "id": self.id,
             "token": self.token,
-            "created": self.created_at,
+            "created_at": self.created_at,
             "email": self.email,
         }
+

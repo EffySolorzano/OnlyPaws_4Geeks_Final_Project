@@ -47,7 +47,10 @@ const Provider = () => {
     });
   };
 
-useEffect(() => {
+
+
+
+  useEffect(() => {
     const fetchProviders = async () => {
       try {
         console.log("Fetching providers...");
@@ -109,22 +112,24 @@ useEffect(() => {
                     {provider.name} {/*{provider.service}*/}
                   </h2>
                   {/*<p>{provider.description}</p>*/}
-                  <button
-                    className="btn btn-transparent booknow"
-                    style={{
-                      backgroundColor: "#a659c8",
-                      color: "#ffffff",
-                      borderRadius: "15px",
-                      fontFamily: "Noto Serif Hebrew, serif",
-                      fontSize: "20px",
-                      width: "30%",
-                      marginTop: "80px",
-                      marginLeft: "160px",
-                    }}
-                    onClick={handleBookNowClick}
-                  >
-                    Book now!
-                  </button>
+                  <div>
+                    <button
+                      className="btn btn-transparent booknow"
+                      style={{
+                        backgroundColor: "#a659c8",
+                        color: "#ffffff",
+                        borderRadius: "15px",
+                        fontFamily: "Noto Serif Hebrew, serif",
+                        fontSize: "20px",
+                        width: "30%",
+                        marginTop: "80px",
+                        marginLeft: "160px",
+                      }}
+                      onClick={handleBookNowClick}
+                    >
+                      Book now!
+                    </button>
+                  </div>
                 </div>
               </TinderCard>
             ))

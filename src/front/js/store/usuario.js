@@ -15,19 +15,29 @@ export const userActions = (getStore, getActions, setStore) => {
     login: async (email, password) => {
       try {
         const store = getStore();
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://127.0.0.1:3001/api" + "/login", {
+        const response = await fetch("http://127.0.0.1:3001/api/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ email: email, password: password }),
         });
         const data = await response.json();
         const user = data.user;
-        localStorage.setItem("token", data.token);
-        setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
+
+        console.log("Response Data:", data);
+
+        if (response.ok) {
+          const token = data.access_token; // Modify this line to use the correct token property name (e.g., access_token)
+          localStorage.setItem("token", token); // Store the token in localStorage
+          console.log("Token stored in localStorage:", token);
+          setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
+        } else {
+          console.log("Login failed");
+          localStorage.removeItem("token"); // Remove token from localStorage
+          setStore({ ...getStore(), isLoggedIn: false }); // Set the isLoggedIn state to false
+        }
+
         return response;
       } catch (error) {
         const message = error.message || "Something went wrong";

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ada807561636
+Revision ID: 48fdab7c1790
 Revises: 
-Create Date: 2023-05-16 00:59:40.166331
+Create Date: 2023-05-17 03:07:12.170068
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ada807561636'
+revision = '48fdab7c1790'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,38 +55,29 @@ def upgrade():
     op.create_table('infoProvider',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
-    sa.Column('work_time', sa.Enum('Morning', 'Afternoon', 'Evening', name='worktime'), nullable=False),
-    sa.Column('service', sa.Enum('Pet_Sitter', 'Pet_Walker', 'House_Sitter', 'Groomer', name='services'), nullable=False),
-    sa.Column('number_admitted_pets', sa.Enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
+    sa.Column('services', sa.String(length=255), nullable=False),
+    sa.Column('availability', sa.String(length=255), nullable=False),
+    sa.Column('number_of_pets', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('accepted_payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
+    sa.Column('payment_method', sa.String(length=120), nullable=False),
     sa.Column('provider_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('accepted_payment_method'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('number_admitted_pets'),
-    sa.UniqueConstraint('phone')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('infoUser',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
+    sa.Column('payment_method', sa.String(length=30), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('payment_method'),
-    sa.UniqueConstraint('phone')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('image',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -97,7 +88,7 @@ def upgrade():
     sa.Column('info_provider_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['info_provider_id'], ['infoProvider.id'], ),
     sa.ForeignKeyConstraint(['info_user_id'], ['infoUser.id'], ),
-    sa.ForeignKeyConstraint(['provider_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('ruta')

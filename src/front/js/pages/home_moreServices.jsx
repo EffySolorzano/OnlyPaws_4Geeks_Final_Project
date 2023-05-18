@@ -11,26 +11,38 @@ function moreServices() {
   return (
     <div className="services-container">
       <button className="btn btn-bg-transparent">
-        <img
-          src={Beautysalon}
-          alt="beauty-salon"
-          className="icon beauty-salon"
-        />
+        <Link to="/under-construction">
+          <img
+            src={Beautysalon}
+            alt="beauty-salon"
+            className="icon beauty-salon"
+          />
+        </Link>
       </button>
       <button className="btn btn-bg-transparent">
-        <img src={Housesit} alt="beauty-salon" className="icon housesit" />
+        <Link to="/under-construction">
+          <img src={Housesit} alt="beauty-salon" className="icon housesit" />
+        </Link>
       </button>
       <button className="btn btn-bg-transparent">
-        <img src={Veterinaria} alt="beauty-salon" className=" icon vet" />
+        <Link to="/under-construction">
+          <img src={Veterinaria} alt="beauty-salon" className=" icon vet" />
+        </Link>
       </button>
       <button className="btn btn-bg-transparent">
-        <img src={Petshop} alt="beauty-salon" className="icon petshop" />
+        <Link to="/under-construction">
+          <img src={Petshop} alt="beauty-salon" className="icon petshop" />
+        </Link>
       </button>
       <button className="btn btn-bg-transparent">
-        <img src={Dogwalk} alt="beauty-salon" className="icon dogwalk" />
+        <Link to="/under-construction">
+          <img src={Dogwalk} alt="beauty-salon" className="icon dogwalk" />
+        </Link>
       </button>
       <button className="btn btn-bg-transparent">
-        <img src={Pettaxi} alt="beauty-salon" className=" icon pettaxi" />
+        <Link to="/under-construction">
+          <img src={Pettaxi} alt="beauty-salon" className=" icon pettaxi" />
+        </Link>
       </button>
     </div>
   );
