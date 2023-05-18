@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 88780074dde6
+Revision ID: 48fdab7c1790
 Revises: 
-Create Date: 2023-05-16 04:27:55.637662
+Create Date: 2023-05-17 03:07:12.170068
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '88780074dde6'
+revision = '48fdab7c1790'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,35 +55,29 @@ def upgrade():
     op.create_table('infoProvider',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('gender', sa.Enum('MALE', 'FEMALE', 'OTHER', name='gender'), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('services', sa.String(length=255), nullable=False),
     sa.Column('availability', sa.String(length=255), nullable=False),
     sa.Column('number_of_pets', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('payment_method', sa.Enum('VISA', 'MASTERCARD', 'PAYPAL', name='payment_enum'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
+    sa.Column('payment_method', sa.String(length=120), nullable=False),
     sa.Column('provider_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('phone')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('infoUser',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
-    sa.Column('gender', sa.Enum('MALE', 'FEMALE', 'OTHER', name='gender'), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('payment_method', sa.Enum('VISA', 'MASTERCARD', 'PAYPAL', name='payment_enum'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
+    sa.Column('payment_method', sa.String(length=30), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('phone')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('image',
     sa.Column('id', sa.Integer(), nullable=False),
