@@ -11,6 +11,7 @@ from api.models import (
     Provider,
     InfoUser,
     InfoProvider,
+    AvailabilityAndServices,
     Image,
 )
 from api.utils import generate_sitemap, APIException
@@ -174,7 +175,9 @@ def register_handle():
     db.session.commit()  # guardamos los cambios en la base de datos
     return jsonify({"mensaje": "User successfully created"}), 201
 
-############ GET 
+
+############ GET
+
 
 @api.route("/users", methods=["GET"])
 def get_users():
@@ -197,6 +200,7 @@ def get_users():
 
 ###################
 
+
 @api.route("/users/<int:user_id>", methods=["GET"])
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -215,6 +219,7 @@ def get_user(user_id):
 
 
 ######### INFOUSER-POST
+
 
 @api.route("/info_user", methods=["POST"])
 def create_info_user():
@@ -238,7 +243,7 @@ def create_info_user():
         address=body["address"],
         phone=body["phone"],
         payment_method=body["payment_method"],
-        user_id=user_id
+        user_id=user_id,
     )
 
     try:
@@ -251,7 +256,8 @@ def create_info_user():
         return jsonify({"error": "Failed to create info user"}), 500
 
 
- ########### PUT 
+########### PUT
+
 
 @api.route("/users/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
@@ -290,7 +296,8 @@ def update_user(user_id):
     return jsonify(serialized_user), 200
 
 
-######### DELETE 
+######### DELETE
+
 
 @api.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
@@ -310,9 +317,6 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({"message": "User deleted successfully"}), 200
-
-
-
 
 
 ############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
@@ -388,7 +392,9 @@ def get_providers():
 
     return jsonify(serialized_providers), 200
 
+
 #########
+
 
 @api.route("/providers/<int:provider_id>", methods=["GET"])
 def get_provider(provider_id):
@@ -407,7 +413,8 @@ def get_provider(provider_id):
     return jsonify(serialized_provider), 200
 
 
-####### POST 
+####### POST
+
 
 @api.route("/info_provider", methods=["POST"])
 def create_info_provider():
@@ -434,7 +441,7 @@ def create_info_provider():
         address=body["address"],
         phone=body["phone"],
         payment_method=body["payment_method"],
-        provider_id=provider_id
+        provider_id=provider_id,
     )
 
     try:
@@ -446,7 +453,9 @@ def create_info_provider():
         db.session.rollback()
         return jsonify({"error": "Failed to create info provider"}), 500
 
-######## PUT 
+
+######## PUT
+
 
 @api.route("/providers/<int:provider_id>", methods=["PUT"])
 def update_provider(provider_id):
@@ -472,12 +481,18 @@ def update_provider(provider_id):
         info_provider.date = body.get("date", info_provider.date)
         info_provider.gender = body.get("gender", info_provider.gender)
         info_provider.services = body.get("services", info_provider.services)
-        info_provider.availability = body.get("availability", info_provider.availability)
-        info_provider.number_of_pets = body.get("number_of_pets", info_provider.number_of_pets)
+        info_provider.availability = body.get(
+            "availability", info_provider.availability
+        )
+        info_provider.number_of_pets = body.get(
+            "number_of_pets", info_provider.number_of_pets
+        )
         info_provider.description = body.get("description", info_provider.description)
         info_provider.address = body.get("address", info_provider.address)
         info_provider.phone = body.get("phone", info_provider.phone)
-        info_provider.payment_method = body.get("payment_method", info_provider.payment_method)
+        info_provider.payment_method = body.get(
+            "payment_method", info_provider.payment_method
+        )
         db.session.commit()
 
     # Serialize the updated Provider object along with associated InfoProvider information
@@ -487,7 +502,9 @@ def update_provider(provider_id):
 
     return jsonify(serialized_provider), 200
 
-######## DELETE 
+
+######## DELETE
+
 
 @api.route("/providers/<int:provider_id>", methods=["DELETE"])
 def delete_provider(provider_id):
@@ -509,6 +526,73 @@ def delete_provider(provider_id):
     return jsonify({"message": "Provider deleted successfully"}), 200
 
 
+######### AVAILABILITYSERVICES - GET, POST, PUT, DELETE ###########
+
+
+@api.route("/availabilityservices", methods=["GET"])
+def get_worktimeservices():
+    worktimeservices = AvailabilityAndServices.query.all()
+    serialized_worktimeservices = [
+        worktimeservice.serialize() for worktimeservice in worktimeservices
+    ]
+    return jsonify(serialized_worktimeservices), 200
+
+
+@api.route("/availabilityservices", methods=["POST"])
+def create_worktimeservice():
+    data = request.get_json()
+    new_availabilityservice = AvailabilityAndServices(
+        morning=data["morning"],
+        afternoon=data["afternoon"],
+        evening=data["evening"],
+        pet_sitter=data["pet_sitter"],
+        dog_walker=data["dog_walker"],
+        house_sitter=data["house_sitter"],
+        pet_groomer=data["pet_groomer"],
+    )
+    if data is None:
+        raise APIException(
+            "You need to specify the request body as json object", status_code=400
+        )
+
+    db.session.add(new_availabilityservice)
+    db.session.commit()
+    return jsonify(new_availabilityservice.serialize()), 201
+
+
+@api.route("/availabilityservices/<int:availabilityservices_id>", methods=["PUT"])
+def update_worktimeservice(worktimeservice_id):
+    availabilityservices = AvailabilityAndServices.query.filter_by(
+        id=worktimeservice_id
+    ).first()
+    if not availabilityservices:
+        return jsonify({"error": "AvailabilityAndServices not found"}), 404
+
+    data = request.get_json()
+    availabilityservices.morning = data["morning"]
+    availabilityservices.afternoon = data["afternoon"]
+    availabilityservices.evening = data["evening"]
+    availabilityservices.pet_sitter = data["pet_sitter"]
+    availabilityservices.dog_walker = data["dog_walker"]
+    availabilityservices.house_sitter = data["house_sitter"]
+    availabilityservices.pet_groomer = data["pet_groomer"]
+
+    db.session.commit()
+    return jsonify(availabilityservices.serialize()), 200
+
+
+@api.route("/availabilityservices/<int:availabilityservices>", methods=["DELETE"])
+def delete_worktimeservice(availabilityservices_id):
+    availabilityservices = AvailabilityAndServices.query.filter_by(
+        id=availabilityservices_id
+    ).first()
+    if not availabilityservices:
+        return jsonify({"error": "AvailabilityAndServices not found"}), 404
+
+    db.session.delete(availabilityservices)
+    db.session.commit()
+    return jsonify({"message": "AvailabilityAndServices deleted"}), 200
+
 
 ################ LOGIN / LOGOUT ###################
 def verificacionToken(jti):
@@ -523,6 +607,7 @@ def verificacionToken(jti):
 blacklist = set()
 
 ####LOGIN
+
 
 @api.route("/login", methods=["POST"])
 def login():
@@ -547,7 +632,13 @@ def login():
         print("User ID:", user_id)
         print("Access Token:", access_token)
         return (
-            jsonify({"message": "Logged in successfully", "access_token": access_token, "id": user_id}),
+            jsonify(
+                {
+                    "message": "Logged in successfully",
+                    "access_token": access_token,
+                    "id": user_id,
+                }
+            ),
             200,
         )
     else:
@@ -556,7 +647,13 @@ def login():
         print("Provider ID:", provider_id)
         print("Access Token:", access_token)
         return (
-            jsonify({"message": "Logged in successfully", "access_token": access_token, "id": provider_id}),
+            jsonify(
+                {
+                    "message": "Logged in successfully",
+                    "access_token": access_token,
+                    "id": provider_id,
+                }
+            ),
             200,
         )
 
@@ -586,6 +683,7 @@ def protected():
 
 ######### API 3rd PARTY INTEGRATION ###########
 
+
 @api.route("/chatgpt", methods=["POST"])
 def open_ai():
     body = request.get_json()
@@ -600,7 +698,6 @@ def open_ai():
     print(completion.choices[0].text)
     dictionary = {"reply": completion.choices[0].text}
     return jsonify(dictionary), 200
-
 
 
 #################IMG UPLOAD##############
@@ -618,12 +715,14 @@ def handle_upload():
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
 
     my_image = Image()
-    my_image['ruta'] = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
+    my_image[
+        "ruta"
+    ] = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
 
     result = cloudinary.uploader.upload(
-        request.files['image'],
-        public_id=f'sample_folder/profile/my-image-name - {timestamp}',
-        crop='limit',
+        request.files["image"],
+        public_id=f"sample_folder/profile/my-image-name - {timestamp}",
+        crop="limit",
         width=450,
         height=450,
         eager=[
@@ -638,7 +737,6 @@ def handle_upload():
         tags=["profile_picture"],
     )
 
-    
     if current_user["role"] == "user":
         my_image.user_id = current_user["id"]
     elif current_user["role"] == "provider":
