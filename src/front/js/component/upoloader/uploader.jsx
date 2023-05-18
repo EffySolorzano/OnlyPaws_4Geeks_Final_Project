@@ -14,12 +14,12 @@ const Uploader = () => {
         const options = {
             body,
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
+            //headers: {
+            //"Content-Type": "application/json",
+            //Authorization: "Bearer " + localStorage.getItem("token"),
+            //},
         };
-        console.log(options);
+        console.log(options)
         // you need to have the user_id in the localStorage
         const currentUserId = localStorage.getItem("token"); //Aquí tienen que colocar el token
         fetch(`${process.env.BACKEND_URL}/api/upload`, options)

@@ -39,7 +39,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
     info_user = db.relationship("InfoUser", uselist=False, back_populates="user")
-    images = db.relationship("Image", backref="User_images", lazy=True)
+    images = db.relationship("Image", back_populates="user", lazy=True)
 
     def __init__(
         self, name, surname, username, country, email, password, is_authenticated
@@ -127,7 +127,7 @@ class Provider(db.Model):
     password = db.Column(db.String(120), nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
     info_provider = db.relationship("InfoProvider", uselist=False, back_populates="provider")
-    images = db.relationship("Image", backref="Provider_images", lazy=True)
+    images = db.relationship("Image", back_populates="provider", lazy=True)
 
     def __init__(
         self, name, surname, username, country, email, password, is_authenticated
@@ -220,9 +220,8 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ruta = db.Column(db.String(300), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))
-    info_user_id = db.Column(db.Integer, db.ForeignKey("infoUser.id"))
-    info_provider_id = db.Column(db.Integer, db.ForeignKey("infoProvider.id"))
+    provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))    
+    
     user = db.relationship("User", back_populates="images")
     provider = db.relationship("Provider", back_populates="images")
 
@@ -235,8 +234,6 @@ class Image(db.Model):
             "ruta": self.ruta,
             "user_id": self.user_id,
             "provider_id": self.provider_id,
-            "info_user_id": self.info_user_id,
-            "info_provider_id": self.info_provider_id,
         }
 
 

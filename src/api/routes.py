@@ -14,10 +14,7 @@ from api.models import (
     Image,
 )
 from api.utils import generate_sitemap, APIException
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity, get_jwt
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import get_jwt_identity, get_jwt, create_access_token, jwt_required, JWTManager
 from flask_bcrypt import generate_password_hash
 from api.ext import jwt, bcrypt
 import smtplib
@@ -608,12 +605,12 @@ def open_ai():
 
 #################IMG UPLOAD##############
 
-@api.route("/upload", methods=["POST"])
+"""@api.route("/upload", methods=["POST"])
 @jwt_required()
 def handle_upload():
     current_user = get_jwt_identity()
     print(current_user)
-    
+    print(request.files)
     
     if "image" not in request.files:
         raise APIException("No image to upload")
@@ -653,7 +650,42 @@ def handle_upload():
     db.session.add(my_image)
     db.session.commit()
 
-    return jsonify(my_image.serialize()), 200
+    return jsonify(my_image.serialize()), 200"""
+
+@api.route('/upload', methods=['POST'])
+##@jwt_required()
+def handle_upload():
+
+    if 'image' not in request.files:
+        raise APIException("No image to upload")
+
+    print("FORMA DEL ARCHIVO: \n",  request.files['image'])
+    my_image = Image()
+
+    result = cloudinary.uploader.upload(
+        request.files['image'],
+        public_id=f'sample_folder/profile/my-image-name',
+        crop='limit',
+        width=450,
+        height=450,
+        eager=[{
+            'width': 200, 'height': 200,
+            'crop': 'thumb', 'gravity': 'face',
+            'radius': 100
+        },
+        ],
+        tags=['profile_picture']
+    )
+
+    my_image.ruta = result['secure_url']
+    #my_image.user_id = get_jwt_identity()
+    db.session.add(my_image) 
+    db.session.commit()
+
+    return jsonify(my_image.serialize()), 200   
+
+
+
 
 
 @api.route("/image-list", methods=["GET"])
