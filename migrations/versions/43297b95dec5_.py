@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: cb29098bec6b
+Revision ID: 43297b95dec5
 Revises: 
-Create Date: 2023-05-17 23:42:37.437354
+Create Date: 2023-05-18 15:11:38.966486
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cb29098bec6b'
+revision = '43297b95dec5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,7 +52,42 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
-    op.create_table('workTimeAndServices',
+    op.create_table('image',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('ruta', sa.String(length=300), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('provider_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('ruta')
+    )
+    op.create_table('infoProvider',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
+    sa.Column('number_of_pets', sa.String(length=120), nullable=False),
+    sa.Column('description', sa.String(length=120), nullable=False),
+    sa.Column('address', sa.String(length=120), nullable=False),
+    sa.Column('phone', sa.String(length=120), nullable=False),
+    sa.Column('payment_method', sa.String(length=120), nullable=False),
+    sa.Column('provider_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('infoUser',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('gender', sa.String(length=10), nullable=False),
+    sa.Column('description', sa.String(length=120), nullable=False),
+    sa.Column('address', sa.String(length=120), nullable=False),
+    sa.Column('phone', sa.String(length=120), nullable=False),
+    sa.Column('payment_method', sa.String(length=30), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('availability_and_services',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('morning', sa.Boolean(), nullable=False),
     sa.Column('afternoon', sa.Boolean(), nullable=False),
@@ -61,56 +96,23 @@ def upgrade():
     sa.Column('dog_walker', sa.Boolean(), nullable=False),
     sa.Column('house_sitter', sa.Boolean(), nullable=False),
     sa.Column('pet_groomer', sa.Boolean(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('infoProvider',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('day', sa.String(length=2), nullable=False),
-    sa.Column('month', sa.String(length=2), nullable=False),
-    sa.Column('year', sa.String(length=4), nullable=False),
-    sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
-    sa.Column('number_admitted_pets', sa.Enum('ZERO', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', name='numberofpets'), nullable=False),
-    sa.Column('description', sa.String(length=120), nullable=False),
-    sa.Column('address', sa.String(length=120), nullable=False),
-    sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('accepted_payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('provider_id', sa.Integer(), nullable=True),
-    sa.Column('work_time_and_services_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
-    sa.ForeignKeyConstraint(['work_time_and_services_id'], ['workTimeAndServices.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('accepted_payment_method'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('phone')
-    )
-    op.create_table('infoUser',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('day', sa.String(length=2), nullable=False),
-    sa.Column('month', sa.String(length=2), nullable=False),
-    sa.Column('year', sa.String(length=4), nullable=False),
-    sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
-    sa.Column('description', sa.String(length=120), nullable=False),
-    sa.Column('address', sa.String(length=120), nullable=False),
-    sa.Column('phone', sa.String(length=120), nullable=False),
-    sa.Column('payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('payment_method'),
-    sa.UniqueConstraint('phone')
-    )
-    op.create_table('image',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('ruta', sa.String(length=300), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('provider_id', sa.Integer(), nullable=True),
-    sa.Column('info_user_id', sa.Integer(), nullable=True),
     sa.Column('info_provider_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['info_provider_id'], ['infoProvider.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('infoProviderImage',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('ruta', sa.String(length=300), nullable=False),
+    sa.Column('info_provider_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['info_provider_id'], ['infoProvider.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('ruta')
+    )
+    op.create_table('infoUserImage',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('ruta', sa.String(length=300), nullable=False),
+    sa.Column('info_user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['info_user_id'], ['infoUser.id'], ),
-    sa.ForeignKeyConstraint(['provider_id'], ['user.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('ruta')
     )
@@ -119,10 +121,12 @@ def upgrade():
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('image')
+    op.drop_table('infoUserImage')
+    op.drop_table('infoProviderImage')
+    op.drop_table('availability_and_services')
     op.drop_table('infoUser')
     op.drop_table('infoProvider')
-    op.drop_table('workTimeAndServices')
+    op.drop_table('image')
     op.drop_table('user')
     op.drop_table('token_blocked_list')
     op.drop_table('provider')

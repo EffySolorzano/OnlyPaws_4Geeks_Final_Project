@@ -1,0 +1,35 @@
+.container-gif {
+    max-height: 900px;
+}
+
+.pusheen {
+    height: 650px;
+    width: 800px;
+    margin-left: 310px;
+    margin-top: -60px;
+    border-radius: 50px;
+
+}
+
+.build {
+    font-family: "Noto Serif Hebrew", serif;
+    color: #a659c8;
+    margin-top: 60px;
+    margin-bottom: -30px;
+    text-align: center;
+}
+
+.h3 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 20px;
+    font-family: "Noto Serif Hebrew", serif;
+    color: #a659c8;
+}
+
+.borde {
+    border-top: #a659c8 1px solid;
+    margin-top: 60px;
+    width: 70%;
+    margin-left: 210px;
+}

@@ -2,40 +2,41 @@ import React, { useState, useContext } from "react";
 import { Context } from "react";
 
 const Uploader = () => {
+
     const [files, setFiles] = useState(null);
 
     const uploadImage = evt => {
         evt.preventDefault();
         // we are about to send this to the backend.
-        console.log("These are the files", files);
+        console.log("This are the files", files);
         let body = new FormData();
         body.append("image", files[0]);
         const options = {
             body,
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
         };
+        console.log(options);
         // you need to have the user_id in the localStorage
-        const currentUserId = localStorage.getItem("token");
+        const currentUserId = localStorage.getItem("token"); //Aquí tienen que colocar el token
         fetch(`${process.env.BACKEND_URL}/api/upload`, options)
-            .then((resp) => resp.json())
-            .then((data) => console.log("Success!!!!", data))
-            .catch((error) => console.error("ERRORRRRRR!!!", error));
+            .then(resp => resp.json())
+            .then(data => console.log("Success!!!!", data))
+            .catch(error => console.error("ERRORRRRRR!!!", error));
     };
 
     return (
         <div className="jumbotron">
-            <input type="file" onChange={(e) => setFiles(e.target.files)} />
-            <button onClick={uploadImage} style={{
-                backgroundColor: "#a659c8",
-                color: "#ffffff",
-                borderRadius: "15px",
-                fontFamily: "Noto Serif Hebrew, serif",
-                fontSize: "20px",
-                width: "30%",
-                textAlign: "center",
-            }}>Upload</button>
+            <form onSubmit={uploadImage}>
+                <input type="file" onChange={e => setFiles(e.target.files)} />
+                <button>Upload</button>
+            </form>
         </div>
     );
-};
+
+}
 
 export default Uploader;

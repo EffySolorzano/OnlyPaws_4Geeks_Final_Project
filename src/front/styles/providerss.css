@@ -78,3 +78,9 @@
   font-family: "Noto Serif Hebrew", serif;
   margin-top: 290px;
 }
+
+.xmark {
+  margin-top: 80px;
+  margin-right: -90px;
+  margin-left: 90px;
+}

@@ -5,8 +5,10 @@ from .models import (
     User,
     Provider,
     InfoUser,
+    InfoUserImage,
     InfoProvider,
-    WorkTimeAndServices,
+    InfoProviderImage,
+    AvailabilityAndServices,
     Image,
 )
 from flask_admin.contrib.sqla import ModelView
@@ -23,8 +25,10 @@ def setup_admin(app):
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Provider, db.session))
     admin.add_view(ModelView(InfoUser, db.session))
+    admin.add_view(ModelView(InfoUserImage, db.session))
     admin.add_view(ModelView(InfoProvider, db.session))
-    admin.add_view(ModelView(WorkTimeAndServices, db.session))
+    admin.add_view(ModelView(InfoProviderImage, db.session))
+    admin.add_view(ModelView(AvailabilityAndServices, db.session))
     admin.add_view(ModelView(Image, db.session))
 
     # You can duplicate that line to add mew models

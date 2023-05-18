@@ -41,6 +41,10 @@ const Profile = () => {
     }
   };
 
+  const handleUpload = (newUrl) => {
+    setProfilePictureUrl(newUrl);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Perform form submission logic based on the selected role
@@ -52,7 +56,7 @@ const Profile = () => {
         day,
         month,
         year,
-        workTime,
+        availability,
         service,
         numberOfPets,
         description,
@@ -87,7 +91,7 @@ const Profile = () => {
   };
 
   return (
-    <><form className="row g-3 align-items-center d-flex flex-column align-items-center justify-content-center" style={{ marginTop: '20px' }}>
+    <><div className="row g-3 align-items-center d-flex flex-column align-items-center justify-content-center" style={{ marginTop: '20px' }}>
       <div className="col-12 col-md-4 text-center" >
         <label htmlFor="role">Select Role:</label>
         <select id="role" value={role} onChange={handleRoleChange}>
@@ -104,9 +108,9 @@ const Profile = () => {
               <div className="card mb-6" >
                 <div className="card-body text-center" >
                   <figure>
-                    <img src={profilePictureUrl} className="rounded-circle img-fluid" alt="profile" />
-                    <Uploader setProfilePictureUrl={setProfilePictureUrl} />
+                    <img src={profilePictureUrl} className="rounded-circle img-fluid" alt="profile" style={{ width: "150px", height: "150px", }} />
                   </figure>
+                  <Uploader />
                 </div>
               </div>
             </div>
@@ -311,11 +315,11 @@ const Profile = () => {
           >Save</button>
         </>
       )}
-    </form>
+    </div>
       <div>
         <img src={Profilebottom} alt="profilebottom" className="profile-picture img-fluid" />
       </div>
-      <div>
+      <div className="container-footer">
         <Footer />
       </div></>
   );
