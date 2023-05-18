@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ada807561636
+Revision ID: cb29098bec6b
 Revises: 
-Create Date: 2023-05-16 00:59:40.166331
+Create Date: 2023-05-17 23:42:37.437354
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ada807561636'
+revision = 'cb29098bec6b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,35 +52,47 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
+    op.create_table('workTimeAndServices',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('morning', sa.Boolean(), nullable=False),
+    sa.Column('afternoon', sa.Boolean(), nullable=False),
+    sa.Column('evening', sa.Boolean(), nullable=False),
+    sa.Column('pet_sitter', sa.Boolean(), nullable=False),
+    sa.Column('dog_walker', sa.Boolean(), nullable=False),
+    sa.Column('house_sitter', sa.Boolean(), nullable=False),
+    sa.Column('pet_groomer', sa.Boolean(), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('infoProvider',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('day', sa.String(length=2), nullable=False),
+    sa.Column('month', sa.String(length=2), nullable=False),
+    sa.Column('year', sa.String(length=4), nullable=False),
     sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
-    sa.Column('work_time', sa.Enum('Morning', 'Afternoon', 'Evening', name='worktime'), nullable=False),
-    sa.Column('service', sa.Enum('Pet_Sitter', 'Pet_Walker', 'House_Sitter', 'Groomer', name='services'), nullable=False),
-    sa.Column('number_admitted_pets', sa.Enum('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'), nullable=False),
+    sa.Column('number_admitted_pets', sa.Enum('ZERO', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', name='numberofpets'), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
     sa.Column('accepted_payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
     sa.Column('provider_id', sa.Integer(), nullable=True),
+    sa.Column('work_time_and_services_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['provider_id'], ['provider.id'], ),
+    sa.ForeignKeyConstraint(['work_time_and_services_id'], ['workTimeAndServices.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('accepted_payment_method'),
     sa.UniqueConstraint('address'),
-    sa.UniqueConstraint('number_admitted_pets'),
     sa.UniqueConstraint('phone')
     )
     op.create_table('infoUser',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('day', sa.String(length=2), nullable=False),
+    sa.Column('month', sa.String(length=2), nullable=False),
+    sa.Column('year', sa.String(length=4), nullable=False),
     sa.Column('gender', sa.Enum('Male', 'Female', 'Other', name='gender'), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),
     sa.Column('phone', sa.String(length=120), nullable=False),
     sa.Column('payment_method', sa.Enum('VISA', 'Mastercard', 'PayPal', name='payment'), nullable=False),
-    sa.Column('is_authenticated', sa.Boolean(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -110,6 +122,7 @@ def downgrade():
     op.drop_table('image')
     op.drop_table('infoUser')
     op.drop_table('infoProvider')
+    op.drop_table('workTimeAndServices')
     op.drop_table('user')
     op.drop_table('token_blocked_list')
     op.drop_table('provider')

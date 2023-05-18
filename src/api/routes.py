@@ -11,6 +11,7 @@ from api.models import (
     Provider,
     InfoUser,
     InfoProvider,
+    WorkTimeAndServices,
     Image,
 )
 from api.utils import generate_sitemap, APIException
@@ -123,7 +124,7 @@ def handle_email():
     return jsonify({"message": "email sent"}), 200
 
 
-############# USER - PET PARENT REGISTER, GET, PUT, POST, DELETE ############
+############# USER - PET PARENT REGISTER, POST, GET############
 @api.route("/register", methods=["POST"])
 def register_handle():
     body = request.get_json()
@@ -178,7 +179,6 @@ def register_handle():
     return jsonify({"mensaje": "User successfully created"}), 201
 
 
-############# PROVIDER REGISTER################
 @api.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
@@ -186,7 +186,7 @@ def get_users():
     return jsonify(serialized_users), 200
 
 
-############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
+############# PROVIDER REGISTER, GET, POST################
 @api.route("/register-provider", methods=["POST"])
 def register_provider():
     body = request.get_json()
@@ -335,7 +335,7 @@ def open_ai():
     return jsonify(dictionary), 200
 
 
-######### INFOUSER - GET, POST, PUT ###########
+######### INFOUSER - GET, POST, PUT, DELETE ###########
 
 
 @api.route("/info_user", methods=["GET"])
@@ -349,33 +349,34 @@ def get_info_user():
 def create_info_user():
     data = request.get_json()
     new_info_user = InfoUser(
-        date=data["date"],
+        day=data["day"],
+        month=data["month"],
+        year=data["year"],
         gender=data["gender"],
         description=data["description"],
-        phone=data["phone"],
         address=data["address"],
+        phone=data["phone"],
         payment_method=data["payment_method"],
-        is_authenticated=data["is_authenticated"],
     )
     # validaciones
     if data is None:
         raise APIException(
             "You need to specify the request body as json object", status_code=400
         )
-    if "date" not in data:
-        raise APIException("You need to specify the date", status_code=400)
+    if "day" not in data:
+        raise APIException("You need to specify the day", status_code=400)
+    if "month" not in data:
+        raise APIException("You need to specify the month", status_code=400)
+    if "year" not in data:
+        raise APIException("You need to specify the year", status_code=400)
     if "gender" not in data:
         raise APIException("You need to specify the gender", status_code=400)
-    if "pets" not in data:
-        raise APIException("You need to specify the pets", status_code=400)
     if "description" not in data:
         raise APIException("You need to specify the description", status_code=400)
-    if "pet_size" not in data:
-        raise APIException("You need to specify the pet_size", status_code=400)
-    if "phone" not in data:
-        raise APIException("You need to specify the phone", status_code=400)
     if "address" not in data:
         raise APIException("You need to specify the address", status_code=400)
+    if "phone" not in data:
+        raise APIException("You need to specify the phone", status_code=400)
     if "payment_method" not in data:
         raise APIException("You need to specify the payment_method", status_code=400)
     db.session.add(new_info_user)
@@ -390,21 +391,33 @@ def update_info_user(info_user_id):
         return jsonify({"error": "InfoUser not found"}), 404
 
     data = request.get_json()
-    info_user.date = data["date"]
+    info_user.day = data["day"]
+    info_user.month = data["month"]
+    info_user.year = data["data"]
     info_user.gender = data["gender"]
     info_user.description = data["description"]
-    info_user.phone = data["phone"]
     info_user.address = data["address"]
+    info_user.phone = data["phone"]
     info_user.payment_method = data["payment_method"]
-    info_user.is_authenticated = data["is_authenticated"]
     db.session.commit()
     return jsonify(info_user.serialize()), 200
 
 
-######### INFOPROVIDER - GET, POST, PUT ###########
+@api.route("/info_user/<int:info_user_id>", methods=["DELETE"])
+def delete_info_user(info_user_id):
+    info_user = InfoUser.query.filter_by(id=info_user_id).first()
+    if not info_user:
+        return jsonify({"error": "InfoUser not found"}), 404
+
+    db.session.delete(info_user)
+    db.session.commit()
+    return jsonify({"message": "InfoUser deleted"}), 200
 
 
-@api.route("/info_providers", methods=["GET"])
+######### INFOPROVIDER - GET, POST, PUT, DELETE ###########
+
+
+@api.route("/info_provider", methods=["GET"])
 def get_info_provider():
     info_providers = InfoProvider.query.all()
     serialized_info_providers = [
@@ -417,32 +430,29 @@ def get_info_provider():
 def create_info_provider():
     data = request.get_json()
     new_info_provider = InfoProvider(
-        date=data["date"],
+        day=data["day"],
+        month=data["month"],
+        year=data["year"],
         gender=data["gender"],
-        work_time=data["work_time"],
-        service=data["service"],
         number_admitted_pets=data["number_admitted_pets"],
         description=data["description"],
         address=data["address"],
         phone=data["phone"],
         accepted_payment_method=data["accepted_payment_method"],
-        is_authenticated=data["is_authenticated"],
     )
     # validaciones
     if data is None:
         raise APIException(
             "You need to specify the request body as json object", status_code=400
         )
-    if "date" not in data:
-        raise APIException("You need to specify the date", status_code=400)
+    if "day" not in data:
+        raise APIException("You need to specify the day", status_code=400)
+    if "month" not in data:
+        raise APIException("You need to specify the month", status_code=400)
+    if "year" not in data:
+        raise APIException("You need to specify the year", status_code=400)
     if "gender" not in data:
         raise APIException("You need to specify the gender", status_code=400)
-    if "work_time" not in data:
-        raise APIException("You need to specify the work_time", status_code=400)
-    if "service" not in data:
-        raise APIException("You need to specify the service", status_code=400)
-    if "allowed_pets" not in data:
-        raise APIException("You need to specify the allowed_pets", status_code=400)
     if "number_admitted_pets" not in data:
         raise APIException(
             "You need to specify the number_admitted_pets", status_code=400
@@ -470,18 +480,92 @@ def update_info_provider(info_provider_id):
         return jsonify({"error": "InfoProvider not found"}), 404
 
     data = request.get_json()
-    info_provider.date = data["date"]
+    info_provider.day = data["day"]
+    info_provider.month = data["month"]
+    info_provider.year = data["data"]
     info_provider.gender = data["gender"]
-    info_provider.work_time = data["work_time"]
-    info_provider.service = data["service"]
     info_provider.number_admitted_pets = data["number_admitted_pets"]
     info_provider.description = data["description"]
     info_provider.address = data["address"]
     info_provider.phone = data["phone"]
     info_provider.accepted_payment_method = data["accepted_payment_method"]
-    info_provider.is_authenticated = data["is_authenticated"]
     db.session.commit()
     return jsonify(info_provider.serialize()), 200
+
+
+@api.route("/info_provider/<int:info_provider_id>", methods=["DELETE"])
+def delete_info_provider(info_provider_id):
+    info_provider = InfoProvider.query.filter_by(id=info_provider_id).first()
+    if not info_provider:
+        return jsonify({"error": "InfoProvider not found"}), 404
+
+    db.session.delete(info_provider)
+    db.session.commit()
+    return jsonify({"message": "InfoProvider deleted"}), 200
+
+
+######### WORKTIMESERVICES - GET, POST, PUT, DELETE ###########
+
+
+@api.route("/worktimeservices", methods=["GET"])
+def get_worktimeservices():
+    worktimeservices = WorkTimeAndServices.query.all()
+    serialized_worktimeservices = [
+        worktimeservice.serialize() for worktimeservice in worktimeservices
+    ]
+    return jsonify(serialized_worktimeservices), 200
+
+
+@api.route("/worktimeservices", methods=["POST"])
+def create_worktimeservice():
+    data = request.get_json()
+    new_worktimeservice = WorkTimeAndServices(
+        morning=data["morning"],
+        afternoon=data["afternoon"],
+        evening=data["evening"],
+        pet_sitter=data["pet_sitter"],
+        dog_walker=data["dog_walker"],
+        house_sitter=data["house_sitter"],
+        pet_groomer=data["pet_groomer"],
+    )
+    if data is None:
+        raise APIException(
+            "You need to specify the request body as json object", status_code=400
+        )
+
+    db.session.add(new_worktimeservice)
+    db.session.commit()
+    return jsonify(new_worktimeservice.serialize()), 201
+
+
+@api.route("/worktimeservices/<int:worktimeservice_id>", methods=["PUT"])
+def update_worktimeservice(worktimeservice_id):
+    worktimeservice = WorkTimeAndServices.query.filter_by(id=worktimeservice_id).first()
+    if not worktimeservice:
+        return jsonify({"error": "WorkTimeAndServices not found"}), 404
+
+    data = request.get_json()
+    worktimeservice.morning = data["morning"]
+    worktimeservice.afternoon = data["afternoon"]
+    worktimeservice.evening = data["evening"]
+    worktimeservice.pet_sitter = data["pet_sitter"]
+    worktimeservice.dog_walker = data["dog_walker"]
+    worktimeservice.house_sitter = data["house_sitter"]
+    worktimeservice.pet_groomer = data["pet_groomer"]
+
+    db.session.commit()
+    return jsonify(worktimeservice.serialize()), 200
+
+
+@api.route("/worktimeservices/<int:worktimeservice_id>", methods=["DELETE"])
+def delete_worktimeservice(worktimeservice_id):
+    worktimeservice = WorkTimeAndServices.query.filter_by(id=worktimeservice_id).first()
+    if not worktimeservice:
+        return jsonify({"error": "WorkTimeAndServices not found"}), 404
+
+    db.session.delete(worktimeservice)
+    db.session.commit()
+    return jsonify({"message": "WorkTimeAndServices deleted"}), 200
 
 
 #################IMG UPLOAD##############
@@ -516,15 +600,6 @@ def handle_upload():
         tags=["profile_picture"],
     )
 
-    # current_user = get_jwt_identity()
-
-    # if current_user["role"] == "user":
-    #   my_image.user_id = current_user["id"]
-    # elif current_user["role"] == "provider":
-    #   my_image.provider_id = current_user["id"]
-    # else:
-    #    raise APIException("Invalid user role")
-
     my_image.url = result["secure_url"]
     db.session.add(my_image)
     db.session.commit()
@@ -539,3 +614,23 @@ def handle_image_list():
 
     response_body = {"lista": images}
     return jsonify(response_body), 200
+
+
+@api.route("/upload/<int:image_id>", methods=["DELETE"])
+# @jwt_required()
+def delete_image(image_id):
+    image = Image.query.get(image_id)
+    if not image:
+        return jsonify({"error": "Image not found"}), 404
+
+    # Eliminar la imagen de Cloudinary
+    public_id = image.ruta.split("/")[-1].split(".")[
+        0
+    ]  # Obtener el public_id de Cloudinary
+    cloudinary.uploader.destroy(public_id)
+
+    # Eliminar la imagen de la base de datos
+    db.session.delete(image)
+    db.session.commit()
+
+    return jsonify({"message": "Image deleted"}), 200
