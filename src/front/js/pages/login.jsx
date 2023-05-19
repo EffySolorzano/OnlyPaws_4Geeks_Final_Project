@@ -13,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
   const handleLogin = async (e) => {
     console.log('email')
     console.log('password')
@@ -121,7 +122,6 @@ const Login = () => {
             </button>
           </center>
         </form>
-
       </div>
     </div>
       <div>
