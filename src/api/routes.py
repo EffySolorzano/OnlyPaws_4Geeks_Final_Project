@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 import openai
+from sqlalchemy import exc
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import (
     TokenBlockedList,
@@ -11,7 +12,6 @@ from api.models import (
     Provider,
     InfoUser,
     InfoProvider,
-    AvailabilityAndServices,
     Image,
 )
 from api.utils import generate_sitemap, APIException
@@ -222,8 +222,6 @@ def get_user(user_id):
 
 
 ######### INFOUSER-POST
-
-
 @api.route("/info_user", methods=["POST"])
 def create_info_user():
     body = request.get_json()
@@ -376,7 +374,6 @@ def register_provider():
 
 ####GET#####
 
-
 @api.route("/providers", methods=["GET"])
 def get_providers():
     providers = Provider.query.all()
@@ -397,8 +394,6 @@ def get_providers():
 
 
 #########
-
-
 @api.route("/providers/<int:provider_id>", methods=["GET"])
 def get_provider(provider_id):
     provider = Provider.query.get(provider_id)
@@ -417,8 +412,6 @@ def get_provider(provider_id):
 
 
 ####### POST
-
-
 @api.route("/info_provider", methods=["POST"])
 def create_info_provider():
     body = request.get_json()
@@ -437,8 +430,13 @@ def create_info_provider():
     new_info_provider = InfoProvider(
         date=body["date"],
         gender=body["gender"],
-        availability=body["availability"],
-        services=body["services"],
+        morning=body["morning"],
+        afternoon=body["afternoon"],
+        evening=body["evening"],
+        pet_sitter=body["pet_sitter"],
+        dog_walker=body["dog_walker"],
+        house_sitter=body["house_sitter"],
+        pet_groomer=body["pet_groomer"],
         number_of_pets=body["number_of_pets"],
         description=body["description"],
         address=body["address"],
@@ -483,13 +481,14 @@ def update_provider(provider_id):
         # Update the InfoProvider information
         info_provider.date = body.get("date", info_provider.date)
         info_provider.gender = body.get("gender", info_provider.gender)
-        info_provider.services = body.get("services", info_provider.services)
-        info_provider.availability = body.get(
-            "availability", info_provider.availability
-        )
-        info_provider.number_of_pets = body.get(
-            "number_of_pets", info_provider.number_of_pets
-        )
+        info_provider.morning = body.get("morning", info_provider.morning)
+        info_provider.afternoon = body.get("afternoon", info_provider.afternoon)
+        info_provider.evening = body.get("evening", info_provider.evening)
+        info_provider.pet_sitter = body.get("pet_sitter", info_provider.pet_sitter)
+        info_provider.house_sitter = body.get("house_sitter", info_provider.house_sitter)
+        info_provider.dog_walker = body.get("dog_walker", info_provider.dog_walker)
+        info_provider.pet_groomer = body.get("pet_groomer", info_provider.pet_groomer)
+        info_provider.number_of_pets = body.get("number_of_pets", info_provider.number_of_pets)
         info_provider.description = body.get("description", info_provider.description)
         info_provider.address = body.get("address", info_provider.address)
         info_provider.phone = body.get("phone", info_provider.phone)
@@ -528,73 +527,6 @@ def delete_provider(provider_id):
 
     return jsonify({"message": "Provider deleted successfully"}), 200
 
-
-######### AVAILABILITYSERVICES - GET, POST, PUT, DELETE ###########
-
-
-@api.route("/availabilityservices", methods=["GET"])
-def get_worktimeservices():
-    worktimeservices = AvailabilityAndServices.query.all()
-    serialized_worktimeservices = [
-        worktimeservice.serialize() for worktimeservice in worktimeservices
-    ]
-    return jsonify(serialized_worktimeservices), 200
-
-
-@api.route("/availabilityservices", methods=["POST"])
-def create_worktimeservice():
-    data = request.get_json()
-    new_availabilityservice = AvailabilityAndServices(
-        morning=data["morning"],
-        afternoon=data["afternoon"],
-        evening=data["evening"],
-        pet_sitter=data["pet_sitter"],
-        dog_walker=data["dog_walker"],
-        house_sitter=data["house_sitter"],
-        pet_groomer=data["pet_groomer"],
-    )
-    if data is None:
-        raise APIException(
-            "You need to specify the request body as json object", status_code=400
-        )
-
-    db.session.add(new_availabilityservice)
-    db.session.commit()
-    return jsonify(new_availabilityservice.serialize()), 201
-
-
-@api.route("/availabilityservices/<int:availabilityservices_id>", methods=["PUT"])
-def update_worktimeservice(worktimeservice_id):
-    availabilityservices = AvailabilityAndServices.query.filter_by(
-        id=worktimeservice_id
-    ).first()
-    if not availabilityservices:
-        return jsonify({"error": "AvailabilityAndServices not found"}), 404
-
-    data = request.get_json()
-    availabilityservices.morning = data["morning"]
-    availabilityservices.afternoon = data["afternoon"]
-    availabilityservices.evening = data["evening"]
-    availabilityservices.pet_sitter = data["pet_sitter"]
-    availabilityservices.dog_walker = data["dog_walker"]
-    availabilityservices.house_sitter = data["house_sitter"]
-    availabilityservices.pet_groomer = data["pet_groomer"]
-
-    db.session.commit()
-    return jsonify(availabilityservices.serialize()), 200
-
-
-@api.route("/availabilityservices/<int:availabilityservices>", methods=["DELETE"])
-def delete_worktimeservice(availabilityservices_id):
-    availabilityservices = AvailabilityAndServices.query.filter_by(
-        id=availabilityservices_id
-    ).first()
-    if not availabilityservices:
-        return jsonify({"error": "AvailabilityAndServices not found"}), 404
-
-    db.session.delete(availabilityservices)
-    db.session.commit()
-    return jsonify({"message": "AvailabilityAndServices deleted"}), 200
 
 
 ################ LOGIN / LOGOUT ###################
@@ -704,55 +636,59 @@ def open_ai():
 
 
 #################IMG UPLOAD##############
-
-
-@api.route("/upload", methods=["POST"])
-@jwt_required()
+@api.route('/upload', methods=['POST'])
 def handle_upload():
-    current_user = get_jwt_identity()
-    print(current_user)
 
-    if "image" not in request.files:
+    if 'image' not in request.files:
         raise APIException("No image to upload")
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Generate a timestamp
-
+    print("FORMA DEL ARCHIVO: \n",  request.files['image'])
     my_image = Image()
-    my_image[
-        "ruta"
-    ] = f"https://res.cloudinary.com/drljbellv/sample_folder/profile/my-image-name - {timestamp}"
 
     result = cloudinary.uploader.upload(
-        request.files["image"],
-        public_id=f"sample_folder/profile/my-image-name - {timestamp}",
-        crop="limit",
+        request.files['image'],
+        public_id=f'sample_folder/profile/my-image-name',
+        crop='limit',
         width=450,
         height=450,
-        eager=[
-            {
-                "width": 200,
-                "height": 200,
-                "crop": "thumb",
-                "gravity": "face",
-                "radius": 100,
-            },
+        eager=[{
+            'width': 200, 'height': 200,
+            'crop': 'thumb', 'gravity': 'face',
+            'radius': 100
+        },
         ],
-        tags=["profile_picture"],
+        tags=['profile_picture']
     )
 
-    if current_user["role"] == "user":
-        my_image.user_id = current_user["id"]
-    elif current_user["role"] == "provider":
-        my_image.provider_id = current_user["id"]
-    else:
-        raise APIException("Invalid user role")
-
-    my_image.ruta = result["secure_url"]
-    db.session.add(my_image)
+    my_image.ruta = result['secure_url']
+    my_image.user_id = 1 # Aquí debería extraer del token, el id del usuario
+    db.session.add(my_image) 
     db.session.commit()
 
     return jsonify(my_image.serialize()), 200
 
+#### GET IMG - USER ROLE
+
+@api.route('/profile_picture/user/<int:user_id>', methods=['GET'])
+def get_user_profile_picture(user_id):
+    my_image = Image.query.filter_by(user_id=user_id, role="user").first()
+    if not my_image:
+        raise APIException("User profile picture not found", status_code=404)
+
+    return jsonify({"profilePictureUrl": my_image.ruta}), 200
+
+##### GET IMG - PROVIDER ROLE
+
+@api.route('/profile_picture/provider/<int:provider_id>', methods=['GET'])
+def get_provider_profile_picture(provider_id):
+    my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
+    if not my_image:
+        raise APIException("Provider profile picture not found", status_code=404)
+
+    return jsonify({"profilePictureUrl": my_image.ruta}), 200
+
+
+###### IMG LIST
 
 @api.route("/image-list", methods=["GET"])
 def handle_image_list():

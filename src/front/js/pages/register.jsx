@@ -40,6 +40,12 @@ const Register = () => {
                 icon: "success",
                 title: "Registration successful!",
             }).then(() => {
+                // Retrieve the user ID from the response
+                const userId = response.id;
+
+                // Store the user ID in local storage or state
+                localStorage.setItem("userId", userId);
+
                 navigate("/login"); // redirect to login component
             });
         } else {
