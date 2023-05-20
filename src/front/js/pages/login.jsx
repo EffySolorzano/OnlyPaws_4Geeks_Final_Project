@@ -163,7 +163,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-      <div>
+      <div className="container-footer">
         <Footer />
       </div></>
 
