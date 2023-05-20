@@ -42,3 +42,7 @@ deploy="echo 'Please follow this 3 steps to deploy: https://github.com/4GeeksAca
 reset_db_sql="bash ./docs/assets/reset_migrations_sql.bash"
 reset_db_postgre="bash ./docs/assets/reset_migrations_local_postgre.bash"
 reset_db_sql_win="@powershell -noninteractive -nologo -noprofile -executionpolicy bypass './docs/assets/reset_sql.ps1'"
+
+
+branch="git log --all --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+commit="python ./count-commits.py"
