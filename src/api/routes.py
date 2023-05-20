@@ -176,6 +176,15 @@ def register_handle():
     # comitear la sesión
     db.session.add(new_user)  # agregamos el nuevo usuario a la base de datos
     db.session.commit()  # guardamos los cambios en la base de datos
+    
+  
+    # Create a welcome message for the email
+    welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
+
+    # Send the welcome email
+    sendEmail(welcome_message, email, "Welcome to OnlyPaws")
+    
+    
     return jsonify({"mensaje": "User successfully created"}), 201
 
 
@@ -369,6 +378,13 @@ def register_provider():
     )
     db.session.add(new_Provider)
     db.session.commit()
+    
+     # Create a welcome message for the email
+    welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
+
+    # Send the welcome email
+    sendEmail(welcome_message, email, "Welcome to OnlyPaws")
+    
     return jsonify({"mensaje": "Provider successfully created"}), 201
 
 
@@ -646,9 +662,12 @@ def handle_upload():
     print("FORMA DEL ARCHIVO: \n",  request.files['image'])
     my_image = Image()
 
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    public_id = f'sample_folder/profile/my-image-name_{timestamp}'
+    
     result = cloudinary.uploader.upload(
         request.files['image'],
-        public_id=f'sample_folder/profile/my-image-name',
+        public_id= public_id,
         crop='limit',
         width=450,
         height=450,
@@ -670,13 +689,25 @@ def handle_upload():
 
 #### GET IMG - USER ROLE
 
-@api.route('/profile_picture/user/<int:user_id>', methods=['GET'])
-def get_user_profile_picture(user_id):
+@api.route('/profile_picture/user', methods=['GET'])
+@jwt_required()
+def get_user_profile_picture():
+    user_id = get_jwt_identity()
     my_image = Image.query.filter_by(user_id=user_id, role="user").first()
     if not my_image:
         raise APIException("User profile picture not found", status_code=404)
 
-    return jsonify({"profilePictureUrl": my_image.ruta}), 200
+    # Include the user identifier in the response
+    user = User.query.get(user_id)
+    if not user:
+        raise APIException("User not found", status_code=404)
+
+    return jsonify({
+        "userId": user.id,
+        "username": user.username,
+        "profilePictureUrl": my_image.ruta
+    }), 200
+
 
 ##### GET IMG - PROVIDER ROLE
 

@@ -437,14 +437,14 @@ body {
 .appImg {
   position: relative;
   width: 1290px;
-  margin-top: -50px;
+  margin-top: -55px;
   margin-bottom: -400px;
   border-radius: 15px;
 }
 
 .google {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 25rem;
   right: 30rem;
   height: 50px;
@@ -454,7 +454,7 @@ body {
 
 .apple {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 16rem;
   right: 25rem;
   height: 50px;
@@ -464,7 +464,7 @@ body {
 
 .windows {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 7rem;
   right: 18rem;
   height: 50px;
