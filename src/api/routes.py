@@ -637,6 +637,7 @@ def open_ai():
 
 #################IMG UPLOAD##############
 @api.route('/upload', methods=['POST'])
+@jwt_required()
 def handle_upload():
 
     if 'image' not in request.files:
@@ -661,7 +662,7 @@ def handle_upload():
     )
 
     my_image.ruta = result['secure_url']
-    my_image.user_id = 1 # Aquí debería extraer del token, el id del usuario
+    my_image.user_id = get_jwt_identity()
     db.session.add(my_image) 
     db.session.commit()
 

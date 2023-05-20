@@ -148,7 +148,7 @@ const Register = () => {
                     </div>
                 </div>
             </div >
-            <div>
+            <div className="container-footer">
                 <Footer />
             </div>
 

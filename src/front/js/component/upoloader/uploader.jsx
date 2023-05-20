@@ -11,9 +11,13 @@ const Uploader = () => {
         console.log("This are the files", files);
         let body = new FormData();
         body.append("image", files[0]);
+        const token = localStorage.getItem("token")
         const options = {
             body,
-            method: "POST"
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         };
         // you need to have the user_id in the localStorage
         //const currentUserId = localStorage.getItem("user_id"); //Aquí tienen que colocar el token
