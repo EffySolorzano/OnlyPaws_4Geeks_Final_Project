@@ -6,6 +6,9 @@ import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
 import Footer from "./footer.jsx";
+import { GoogleLogin } from "react-google-login";
+
+const clientId = "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com";
 
 const Register = () => {
     const { store, actions } = useContext(Context);
@@ -58,6 +61,30 @@ const Register = () => {
     };
 
     console.log(actions);
+
+    const onSuccess = (res) => {
+        console.log("Register success! Current user: ", res.profileObj);
+    }
+
+    const onFailure = (res) => {
+        console.log("Register failed! res: ", res)
+    }
+
+    const handleGoogleRegister = () => {
+        gapi.load('auth2', () => {
+            gapi.auth2.init({
+                client_id: clientId
+            }).then((auth2) => {
+                // Use the initialized auth2 instance for further operations
+                auth2.signIn().then((googleUser) => {
+                    navigate("/login");
+                }).catch((error) => {
+                    // Handle any errors during Google login
+                });
+            });
+        });
+    };
+
     return (
         <>
             <div className="container bg-light border border-secondary-emphasis d-flex justify-content-center w-25 mt-3">
@@ -74,6 +101,7 @@ const Register = () => {
                                 type="text"
                                 className="form-control mb-3"
                                 placeholder="Enter your name"
+                                autoComplete="current-name"
                                 onChange={(e) => {
                                     setName(e.target.value);
                                 }}
@@ -84,6 +112,7 @@ const Register = () => {
                                 className="form-control mb-3"
                                 id="floatingInput"
                                 placeholder="Enter your surname"
+                                autoComplete="current-surname"
                                 onChange={(e) => {
                                     setSurname(e.target.value);
                                 }}
@@ -93,6 +122,7 @@ const Register = () => {
                                 type="text"
                                 className="form-control mb-3"
                                 placeholder="Enter your username"
+                                autoComplete="current-username"
                                 onChange={(e) => {
                                     setUsername(e.target.value);
                                 }}
@@ -102,12 +132,13 @@ const Register = () => {
                                 type="text"
                                 className="form-control mb-3"
                                 placeholder="Enter your email"
+                                autoComplete="current-email"
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                 }}
                             />
                             <label htmlFor="country">Country:</label>
-                            <select id="country" name="country" className="form-select p-2" onChange={(e) => {
+                            <select id="country" name="country" className="form-select p-2" autoComplete="current-country" onChange={(e) => {
                                 setCountry(e.target.value);
                             }}>
                                 <option>Select your country</option>
@@ -123,6 +154,7 @@ const Register = () => {
                                 type="password"
                                 className="form-control mb-3"
                                 placeholder="Enter your password"
+                                autoComplete="current-password"
                                 onChange={(e) => {
                                     setPassword(e.target.value);
                                 }}
@@ -145,6 +177,17 @@ const Register = () => {
                                 </button>
                             </div></center>
                         </form>
+                        <div id="signInButton">
+                            <GoogleLogin
+                                onClick={handleGoogleRegister}
+                                clientId={clientId}
+                                buttonText="Login"
+                                onSuccess={onSuccess}
+                                onFailure={onFailure}
+                                cookiePolicy={'single_host_origin'}
+                                isSignedIn={true}
+                            />
+                        </div>
                     </div>
                 </div>
             </div >

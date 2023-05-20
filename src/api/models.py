@@ -38,19 +38,18 @@ class User(db.Model):
         }
 
 
-
 class InfoUser(db.Model):
     __tablename__ = "infoUser"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(120), nullable=False)
-    address = db.Column(db.String(120),  nullable=False)
-    phone = db.Column(db.String(120),  nullable=False)
+    address = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(120), nullable=False)
     payment_method = db.Column(db.String(30), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="info_user")
-    
+
     def __repr__(self):
         return f"<InfoUser {self.phone}>"
 
@@ -75,7 +74,9 @@ class Provider(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     is_authenticated = db.Column(db.Boolean, nullable=False)
-    info_provider = db.relationship("InfoProvider", uselist=False, back_populates="provider")
+    info_provider = db.relationship(
+        "InfoProvider", uselist=False, back_populates="provider"
+    )
     images = db.relationship("Image", back_populates="provider", lazy=True)
 
     def __repr__(self):
@@ -90,9 +91,9 @@ class Provider(db.Model):
             "country": self.country,
             "email": self.email,
             "is_authenticated": self.is_authenticated,
-            
         }
         # do not serialize the password, its a security breach
+
 
 class InfoProvider(db.Model):
     __tablename__ = "infoProvider"
@@ -122,19 +123,19 @@ class InfoProvider(db.Model):
             "id": self.id,
             "date": self.date,
             "gender": self.gender,
-             "morning": self.morning,
+            "morning": self.morning,
             "afternoon": self.afternoon,
             "evening": self.evening,
             "pet_sitter": self.pet_sitter,
             "house_sitter": self.house_sitter,
             "dog_walker": self.dog_walker,
             "pet_groomer": self.pet_groomer,
-            "number_of_pets": self. number_of_pets,
+            "number_of_pets": self.number_of_pets,
             "description": self.description,
             "address": self.address,
             "phone": self.phone,
             "payment_method": self.payment_method,
-            "provider_id ": self.provider_id 
+            "provider_id ": self.provider_id,
         }
 
 
@@ -143,8 +144,8 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ruta = db.Column(db.String(300), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))    
-    
+    provider_id = db.Column(db.Integer, db.ForeignKey("provider.id"))
+
     user = db.relationship("User", back_populates="images")
     provider = db.relationship("Provider", back_populates="images")
 
@@ -173,5 +174,3 @@ class TokenBlockedList(db.Model):
             "created_at": self.created_at,
             "email": self.email,
         }
-
-
