@@ -1,5 +1,5 @@
 import React from "react";
-import App from "../../img/app.png";
+import APP from "../../img/App.jpg";
 import Google from "../../img/google.png";
 import Apple from "../../img/apple.png";
 import Windows from "../../img/windows.png";
@@ -11,7 +11,7 @@ function opApp() {
       <div className="row">
         <div className="col-md-6 col-lg-4">
           <div className="appImg">
-            <img src={App} alt="appImg" className="appImg img-fluid" />
+            <img src={APP} alt="appImg" className="appImg img-fluid" />
           </div>
         </div>
         <div className="col-md-6 col-lg-2">
