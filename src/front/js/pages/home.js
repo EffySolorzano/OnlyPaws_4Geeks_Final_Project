@@ -7,7 +7,7 @@ import Home_moreServices from "./home_moreServices.jsx";
 import Findsitter from "./findsitter.jsx";
 import Opapp from "./opapp.jsx";
 import Footer from "./footer.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Location from "../../img/location.png";
 import Calendar from "../../img/calendar.png";
 import Paw from "../../img/paw.png";
@@ -39,22 +39,34 @@ export const Home = () => {
     setSearch(event.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    const searchQuery = search;
-    const location = selectedCountry ? selectedCountry.value : null;
-    const checkin = startDate.toISOString();
-    const checkout = endDate.toISOString();
-    const numberOfPets = parseInt(numberOfPets);
-    const urlSearchParams = new URLSearchParams({
-      searchQuery,
-      location,
-      checkin,
-      checkout,
-      numberOfPets,
-    });
-    const searchResultsUrl = `/providers?${urlSearchParams.toString()}`;
-    window.location.href = searchResultsUrl;
+    if (store.isLoggedIn) {
+      // User is logged in
+      // Perform the search and redirect to search results
+      const searchQuery = search;
+      const location = selectedCountry ? selectedCountry.value : null;
+      const checkin = startDate.toISOString();
+      const checkout = endDate.toISOString();
+      const numberOfPets = parseInt(numberOfPets);
+      const urlSearchParams = new URLSearchParams({
+        searchQuery,
+        location,
+        checkin,
+        checkout,
+        numberOfPets,
+      });
+      const searchResultsUrl = `/providers?${urlSearchParams.toString()}`;
+
+      // Redirect to search results page
+      navigate(searchResultsUrl);
+    } else {
+      // User is not logged in
+      // Redirect to the login page
+      navigate("/login");
+    }
   };
 
   const handleStartDateChange = (date) => {

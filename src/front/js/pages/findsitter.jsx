@@ -1,7 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 function findSitter() {
+  const { store } = useContext(Context);
+  const navigate = useNavigate();
+
+  const handleFindSitterClick = () => {
+    if (store.isLoggedIn) {
+      // User is logged in
+      // Navigate to the pet sitter page
+      navigate("/providers");
+    } else {
+      // User is not logged in
+      // Navigate to the login page
+      navigate("/login");
+    }
+  };
+
+  const handleFindHouseSitClick = () => {
+    if (store.isLoggedIn) {
+      // User is logged in
+      // Navigate to the pet sitter page
+      navigate("/users");
+    } else {
+      // User is not logged in
+      // Navigate to the login page
+      navigate("/login");
+    }
+  };
+
   return (
     <>
       <div className="title-next">
@@ -16,9 +44,16 @@ function findSitter() {
               sitters who will make sure your beloved are safe and happy in the
               comfort of their own home, no matter the season!
             </p>
-            <Link to="/providers">
+            <button className="btn btn-transparent"
+              onClick={handleFindSitterClick}
+              style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+                fontFamily: "Noto Serif Hebrew serif",
+              }}>
               Find a pet sitter
-            </Link>
+            </button>
           </div>
         </div>
         <div className="card" style={{ width: "25rem" }}>
@@ -28,7 +63,13 @@ function findSitter() {
               Come explore our latest house sits with adorable pets all around
               the world!
             </p>
-            <Link to="/users">Find a house sit</Link>
+            <button className="btn btn-transparent"
+              onClick={handleFindHouseSitClick}
+              style={{
+                backgroundColor: "#a659c8",
+                color: "#ffffff",
+                borderRadius: "15px",
+              }}>Find a house sit</button>
           </div>
         </div>
       </div>
