@@ -1,13 +1,55 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png";
 import Footer from "./footer.jsx";
 import Contact from "../../styles/contact.css";
+import Contactform from "../../img/contactform.jpg";
+import { userActions } from "../store/usuario.js"
 
 const ContactUs = () => {
-    const { store, actions } = useContext(Context);
+    const actions = userActions((actions) => actions.userActions);
+    const navigate = useNavigate();
+    const [fullname, setFullname] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [subject, setSubject] = useState("");
+    const [message, setMessage] = useState("");
+
+    const handleSendEmail = async (e) => {
+        e.preventDefault();
+
+        if (!fullname || !email || !phone || !subject || !message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all fields.',
+            });
+            return;
+        }
+
+        try {
+            const response = await actions.sendEmail(
+                fullname,
+                email,
+                phone,
+                subject,
+                message
+            );
+
+            console.log(response);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Email sent successfully',
+            }).then(() => {
+                navigate('/'); // Redirect to the landing page after success msg
+            });
+        } catch (error) {
+            console.error('Failed to send email:', error);
+        }
+    };
 
     return (
         <>
@@ -33,6 +75,9 @@ const ContactUs = () => {
                                         placeholder="Full name"
                                         className="form-control p-2"
                                         type="text"
+                                        onChange={(e) => {
+                                            setFullname(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -52,6 +97,9 @@ const ContactUs = () => {
                                         placeholder="Email"
                                         className="form-control p-2"
                                         type="text"
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -71,6 +119,9 @@ const ContactUs = () => {
                                         placeholder="Phone number"
                                         className="form-control p-2"
                                         type="text"
+                                        onChange={(e) => {
+                                            setPhone(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -90,6 +141,9 @@ const ContactUs = () => {
                                         placeholder="Subject"
                                         className="form-control p-2"
                                         type="text"
+                                        onChange={(e) => {
+                                            setSubject(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -108,6 +162,9 @@ const ContactUs = () => {
                                         className="form-control p-2"
                                         name="message"
                                         placeholder="Message"
+                                        onChange={(e) => {
+                                            setMessage(e.target.value);
+                                        }}
                                     ></textarea>
                                 </div>
                             </div>
@@ -125,7 +182,8 @@ const ContactUs = () => {
                         <div className="form-group">
                             <label className="col-md-12 control-label"></label>
                             <div className="col-md-12 d-flex justify-content-center mb-2">
-                                <button type="submit" className="btn add-sitter text-white">
+                                <button type="submit" className="btn add-sitter text-white"
+                                    onClick={handleSendEmail}>
                                     Send <span className="glyphicon glyphicon-send"></span>
                                 </button>
                                 <Link to="/">
@@ -137,6 +195,9 @@ const ContactUs = () => {
                         </div>
                     </fieldset>
                 </form>
+            </div>
+            <div>
+                <img src={Contactform} alt="contactbottom" className="contactbottom img-fluid" />
             </div>
             <div className="container-footer">
                 <Footer />

@@ -20,6 +20,7 @@ from flask_jwt_extended import get_jwt_identity, get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import generate_password_hash
+from flask_mail import Mail, Message
 from api.ext import jwt, bcrypt
 import smtplib
 import ssl
@@ -59,7 +60,7 @@ PASSWORD = os.environ.get("PASSWORD")
 def sendEmail(message, to, subject):
     smtp_address = "smtp.gmail.com"
     stmp_port = 465  # SLL
-
+    
     print(message, to, subject)
 
     messageMime = MIMEMultipart("alternative")  # JSON, text, application, pdf
@@ -729,3 +730,19 @@ def handle_image_list():
 
     response_body = {"lista": images}
     return jsonify(response_body), 200
+
+###### CONTACT US EMAIL 
+@api.route('/send-email', methods=['POST'])
+def send_contact_email():
+    try:
+        body = request.get_json()
+        fullname = body['fullname']
+        email = body['email']
+        phone = body['phone']
+        subject = body['subject']
+        message = body['message']
+
+        sendEmail(message, 'onlypawscompany@gmail.com', f'Contact Form Submission - {subject}')
+        return jsonify({'message': 'Email sent successfully!'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
