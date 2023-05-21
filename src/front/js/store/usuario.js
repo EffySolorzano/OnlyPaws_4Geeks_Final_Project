@@ -232,5 +232,87 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error; // Rethrow the error for handling in the calling function
       }
     },
+    forgotPassword: async (email) => {
+      const url = "http://127.0.0.1:3001/api/forgot-password";
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const body = JSON.stringify({
+        email: email,
+      });
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers,
+          body,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to send email");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data; // Return the data for handling in the calling function
+      } catch (error) {
+        console.error("Failed to send reset password email:", error);
+        throw error; // Rethrow the error for handling in the calling function
+      }
+    },
+    infoUser: async (email) => {
+      const url = "http://127.0.0.1:3001/api/info_user";
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const body = JSON.stringify({
+        email: email,
+      });
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers,
+          body,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to send email");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data; // Return the data for handling in the calling function
+      } catch (error) {
+        console.error("Failed to send reset password email:", error);
+        throw error; // Rethrow the error for handling in the calling function
+      }
+    },
+    getUserProfilePicture: async (userId) => {
+      const url = `http://127.0.0.1:3001/api/profile_picture/users/${userId}`;
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user profile picture");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data.profilePictureUrl; // Return the profile picture URL for rendering
+      } catch (error) {
+        console.error("Failed to fetch user profile picture:", error);
+        throw error;
+      }
+    },
   };
 };

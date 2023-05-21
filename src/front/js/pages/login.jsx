@@ -45,28 +45,37 @@ const Login = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    Swal.fire({
+  const handleForgotPassword = async () => {
+    const { value: email } = await Swal.fire({
       title: 'Forgot password',
       input: 'email',
       inputAttributes: {
         autocapitalize: 'off',
-        required: 'true'
+        required: true
       },
       showCancelButton: true,
       confirmButtonText: 'Send email',
       showLoaderOnConfirm: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const email = result.value;
-        Swal.fire({
-          title: 'Password Reset',
-          text: `An email with a link to reset your password has been sent to ${email}`,
-          icon: 'success'
-        });
+      preConfirm: async (email) => {
+        try {
+          const response = await actions.forgotPassword(email);
+          Swal.fire({
+            title: 'Password Reset',
+            text: `An email with a link to reset your password has been sent to ${email}`,
+            icon: 'success'
+          });
+        } catch (error) {
+          console.error('Failed to send reset password email:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to send reset password email',
+            icon: 'error'
+          });
+        }
       }
     });
   };
+
 
   return (
     <><div className="log container-fluid mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">

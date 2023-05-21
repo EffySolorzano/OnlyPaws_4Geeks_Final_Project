@@ -2,10 +2,19 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import current_app as app
-from flask_admin import Admin
-from flask import Flask, request, jsonify, url_for, Blueprint, render_template
-from api.models import TokenBlockedList, db, User, Provider, Image
+import openai
+from sqlalchemy import exc
+from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import current_app as app 
+from api.models import (
+    TokenBlockedList,
+    db,
+    User,
+    Provider,
+    InfoUser,
+    InfoProvider,
+    Image,
+)
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity, get_jwt
@@ -21,7 +30,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from datetime import date, time, datetime, timezone, timedelta
-from itsdangerous import URLSafeTimedSerializer
 
 
 import smtplib, ssl
@@ -33,6 +41,9 @@ from email import encoders
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
+from itsdangerous import URLSafeTimedSerializer
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_NAME"),
@@ -683,9 +694,9 @@ def handle_upload():
 
 #### GET IMG - USER ROLE
 
-@api.route('/profile_picture/user', methods=['GET'])
+@api.route('/profile_picture/users/<int:user_id>', methods=['GET'])
 @jwt_required()
-def get_user_profile_picture():
+def get_user_profile_picture(user_id):
     user_id = get_jwt_identity()
     my_image = Image.query.filter_by(user_id=user_id, role="user").first()
     if not my_image:
@@ -705,7 +716,7 @@ def get_user_profile_picture():
 
 ##### GET IMG - PROVIDER ROLE
 
-@api.route('/profile_picture/provider/<int:provider_id>', methods=['GET'])
+@api.route('/profile_picture/providers/<int:provider_id>', methods=['GET'])
 def get_provider_profile_picture(provider_id):
     my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
     if not my_image:
@@ -790,3 +801,4 @@ def send_contact_email():
         return jsonify({'message': 'Email sent successfully!'}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
