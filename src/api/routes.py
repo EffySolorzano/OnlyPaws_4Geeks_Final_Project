@@ -374,6 +374,7 @@ def register_provider():
 
 ####GET#####
 
+
 @api.route("/providers", methods=["GET"])
 def get_providers():
     providers = Provider.query.all()
@@ -485,10 +486,14 @@ def update_provider(provider_id):
         info_provider.afternoon = body.get("afternoon", info_provider.afternoon)
         info_provider.evening = body.get("evening", info_provider.evening)
         info_provider.pet_sitter = body.get("pet_sitter", info_provider.pet_sitter)
-        info_provider.house_sitter = body.get("house_sitter", info_provider.house_sitter)
+        info_provider.house_sitter = body.get(
+            "house_sitter", info_provider.house_sitter
+        )
         info_provider.dog_walker = body.get("dog_walker", info_provider.dog_walker)
         info_provider.pet_groomer = body.get("pet_groomer", info_provider.pet_groomer)
-        info_provider.number_of_pets = body.get("number_of_pets", info_provider.number_of_pets)
+        info_provider.number_of_pets = body.get(
+            "number_of_pets", info_provider.number_of_pets
+        )
         info_provider.description = body.get("description", info_provider.description)
         info_provider.address = body.get("address", info_provider.address)
         info_provider.phone = body.get("phone", info_provider.phone)
@@ -526,7 +531,6 @@ def delete_provider(provider_id):
     db.session.commit()
 
     return jsonify({"message": "Provider deleted successfully"}), 200
-
 
 
 ################ LOGIN / LOGOUT ###################
@@ -636,41 +640,45 @@ def open_ai():
 
 
 #################IMG UPLOAD##############
-@api.route('/upload', methods=['POST'])
+@api.route("/upload", methods=["POST"])
 @jwt_required()
 def handle_upload():
-
-    if 'image' not in request.files:
+    if "image" not in request.files:
         raise APIException("No image to upload")
 
-    print("FORMA DEL ARCHIVO: \n",  request.files['image'])
+    print("FORMA DEL ARCHIVO: \n", request.files["image"])
     my_image = Image()
 
     result = cloudinary.uploader.upload(
-        request.files['image'],
-        public_id=f'sample_folder/profile/my-image-name',
-        crop='limit',
+        request.files["image"],
+        public_id=f"sample_folder/profile/my-image-name",
+        crop="limit",
         width=450,
         height=450,
-        eager=[{
-            'width': 200, 'height': 200,
-            'crop': 'thumb', 'gravity': 'face',
-            'radius': 100
-        },
+        eager=[
+            {
+                "width": 200,
+                "height": 200,
+                "crop": "thumb",
+                "gravity": "face",
+                "radius": 100,
+            },
         ],
-        tags=['profile_picture']
+        tags=["profile_picture"],
     )
 
-    my_image.ruta = result['secure_url']
+    my_image.ruta = result["secure_url"]
     my_image.user_id = get_jwt_identity()
-    db.session.add(my_image) 
+    db.session.add(my_image)
     db.session.commit()
 
     return jsonify(my_image.serialize()), 200
 
+
 #### GET IMG - USER ROLE
 
-@api.route('/profile_picture/user/<int:user_id>', methods=['GET'])
+
+@api.route("/profile_picture/user/<int:user_id>", methods=["GET"])
 def get_user_profile_picture(user_id):
     my_image = Image.query.filter_by(user_id=user_id, role="user").first()
     if not my_image:
@@ -678,9 +686,11 @@ def get_user_profile_picture(user_id):
 
     return jsonify({"profilePictureUrl": my_image.ruta}), 200
 
+
 ##### GET IMG - PROVIDER ROLE
 
-@api.route('/profile_picture/provider/<int:provider_id>', methods=['GET'])
+
+@api.route("/profile_picture/provider/<int:provider_id>", methods=["GET"])
 def get_provider_profile_picture(provider_id):
     my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
     if not my_image:
@@ -690,6 +700,7 @@ def get_provider_profile_picture(provider_id):
 
 
 ###### IMG LIST
+
 
 @api.route("/image-list", methods=["GET"])
 def handle_image_list():

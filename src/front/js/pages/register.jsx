@@ -6,9 +6,8 @@ import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
 import Footer from "./footer.jsx";
-import { GoogleLogin } from "react-google-login";
+import jwt_decode from "jwt-decode";
 
-const clientId = "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com";
 
 const Register = () => {
     const { store, actions } = useContext(Context);
@@ -62,28 +61,97 @@ const Register = () => {
 
     console.log(actions);
 
-    const onSuccess = (res) => {
-        console.log("Register success! Current user: ", res.profileObj);
+    const [user, setUser] = useState({});
+
+    function handleCallbackResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
+        var userObject = jwt_decode(response.credential);
+        console.log(userObject);
+        setUser(userObject);
+        document.getElementById("signInDiv").hidden = true;
+        navigate("/login")
     }
 
-    const onFailure = (res) => {
-        console.log("Register failed! res: ", res)
-    }
+    useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        })
 
-    const handleGoogleRegister = () => {
-        gapi.load('auth2', () => {
-            gapi.auth2.init({
-                client_id: clientId
-            }).then((auth2) => {
-                // Use the initialized auth2 instance for further operations
-                auth2.signIn().then((googleUser) => {
-                    navigate("/login");
-                }).catch((error) => {
-                    // Handle any errors during Google login
-                });
-            });
-        });
-    };
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: "outline", size: "large" }
+        );
+
+        google.accounts.id.prompt();
+    }, []);
+
+    // const clientId = "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com";
+    // const [user, setUser] = useState({});
+
+    // useEffect(() => {
+    //     const start = () => {
+    //         gapi.auth2.init({
+    //             clientId: clientId,
+    //         })
+    //     }
+    //     gapi.load("client: auth2", start)
+    // }, [])
+
+    // const onSuccess = (response) => {
+    //     setUser(response.profileObj);
+    // }
+
+    // const onFailure = () => {
+    //     console.log("Something went wrong")
+    // }
+
+    // const handleGoogleLoginSuccess = async (response) => {
+    //     const idToken = response.tokenId;
+
+
+    //     try {
+    //         // Envía el idToken al backend para su verificación y creación de usuario
+    //         const response = await actions.registerWithGoogle(idToken);
+
+    //         if (response.ok) {
+    //             Swal.fire({
+    //                 icon: "success",
+    //                 title: "Google authentication successful!",
+    //             }).then(() => {
+    //                 const userId = response.id;
+    //                 localStorage.setItem("userId", userId);
+    //                 navigate("/login");
+    //             });
+    //         } else {
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: "Oops...",
+    //                 text: "Google authentication failed. Please try again later.",
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Oops...",
+    //             text: "Google authentication failed. Please try again later.",
+    //         });
+    //     }
+    // };
+
+    // const handleGoogleLoginFailure = (error) => {
+    //     console.error(error);
+
+    //     Swal.fire({
+    //         icon: "error",
+    //         title: "Oops...",
+    //         text: "Google authentication failed. Please try again later.",
+    //     });
+    // };
+
+
 
     return (
         <>
@@ -175,23 +243,20 @@ const Register = () => {
                                 >
                                     Register
                                 </button>
-                            </div></center>
+                            </div>
+                            </center>
                         </form>
-                        <div id="signInButton">
-                            <GoogleLogin
-                                onClick={handleGoogleRegister}
-                                clientId={clientId}
-                                buttonText="Login"
-                                onSuccess={onSuccess}
-                                onFailure={onFailure}
-                                cookiePolicy={'single_host_origin'}
-                                isSignedIn={true}
-                            />
-                        </div>
+                        <div id="signInDiv"></div>
+                        {user &&
+                            <div>
+                                <img src={user.picture} />
+                                <h3>{user.name}</h3>
+                            </div>
+                        }
                     </div>
                 </div>
             </div >
-            <div className="container-footer">
+            <div>
                 <Footer />
             </div>
 
