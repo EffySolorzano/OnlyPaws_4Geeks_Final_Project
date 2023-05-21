@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import OnlyPaws from "../../img/onlypaws.png"
 import Footer from "./footer.jsx";
+import GoogleSignIn from "./googleSignIn.jsx"
 
 const AddPetSitter = () => {
   const { store, actions } = useContext(Context);
@@ -165,13 +166,11 @@ const AddPetSitter = () => {
           >
             Register
           </button>
-          <Link to="/">
-            <button type="button" className="btn btn-secondary ms-3">
-              Go back
-            </button>
-          </Link>
         </div>
       </form>
+      <div>
+        <GoogleSignIn />
+      </div>
     </div>
     <div className="container-footer">
       <Footer />
