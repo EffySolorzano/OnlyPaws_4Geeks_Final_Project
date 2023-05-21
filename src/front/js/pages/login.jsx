@@ -105,31 +105,6 @@ const Login = () => {
 
     google.accounts.id.prompt();
   }, []);
-
-
-  // const onSuccess = (res) => {
-  //   console.log("Login success! Current user: ", res.profileObj);
-  // }
-
-  // const onFailure = (res) => {
-  //   console.log("Login failed! res: ", res)
-  // }
-
-  // const handleGoogleLogin = () => {
-  //   gapi.load('auth2', () => {
-  //     gapi.auth2.init({
-  //       client_id: clientId
-  //     }).then((auth2) => {
-  //       // Use the initialized auth2 instance for further operations
-  //       auth2.signIn().then((googleUser) => {
-  //         navigate("/");
-  //       }).catch((error) => {
-  //         // Handle any errors during Google login
-  //       });
-  //     });
-  //   });
-  // };
-
   return (
     <><div className="log container-fluid mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
