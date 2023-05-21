@@ -34,6 +34,10 @@ export const Navbar = () => {
     setShowModal(true);
   };
 
+  const handleOptionClick = () => {
+    setShowModal(false);
+  };
+
   let navbarItems;
   if (store.isLoggedIn === true) {
     navbarItems = (
@@ -120,26 +124,22 @@ export const Navbar = () => {
           <Modal.Body>
             {/* Modal content */}
             <Link to="/signup">
-              <img src={PetParent} className="w-50" alt="modal-image" />
+              <img
+                src={PetParent}
+                className="w-50"
+                alt="modal-image"
+                onClick={handleOptionClick}
+              />
             </Link>
             <Link to="/add-petsitter">
-              <img src={Sitter2} className="w-50" alt="modal-image" />
+              <img
+                src={Sitter2}
+                className="w-50"
+                alt="modal-image"
+                onClick={handleOptionClick}
+              />
             </Link>
           </Modal.Body>
-          <Modal.Footer>
-            {/* Modal footer */}
-            <button
-              className="btn btn-transparent"
-              style={{
-                backgroundColor: "#a659c8",
-                color: "#ffffff",
-                borderRadius: "15px",
-              }}
-              onClick={handleModalClose}
-            >
-              Close
-            </button>
-          </Modal.Footer>
         </Modal>
       </>
     );

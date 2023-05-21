@@ -437,14 +437,14 @@ body {
 .appImg {
   position: relative;
   width: 1290px;
-  margin-top: -50px;
+  margin-top: -55px;
   margin-bottom: -400px;
   border-radius: 15px;
 }
 
 .google {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 25rem;
   right: 30rem;
   height: 50px;
@@ -454,7 +454,7 @@ body {
 
 .apple {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 16rem;
   right: 25rem;
   height: 50px;
@@ -464,7 +464,7 @@ body {
 
 .windows {
   position: relative;
-  top: 10rem;
+  top: 14rem;
   left: 7rem;
   right: 18rem;
   height: 50px;
@@ -477,4 +477,28 @@ body {
 @media (max-width: 767px) {
   /* styles for screens up to 767px wide */
 
+}
+
+/* Desktop devices */
+@media (min-width: 768px) {
+  /* styles for screens wider than 767px */
+}
+
+@media only screen and (max-device-width: 480px) {
+  /* styles for iPhone screens up to 480px wide */
+}
+
+@media only screen and (max-device-width: 640px) {
+  /* styles for Android screens up to 640px wide */
+}
+
+
+
+
+
+
+/* Styles for screens wider than 1280px (Macintosh desktops) */
+
+@media only screen and (min-device-width: 1280px) {
+  /* styles for Macintosh desktops */
 }

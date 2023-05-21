@@ -173,7 +173,7 @@ const AddPetSitter = () => {
         </div>
       </form>
     </div>
-    <div>
+    <div className="container-footer">
       <Footer />
     </div>
   </>);

@@ -13,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
   const handleLogin = async (e) => {
     console.log('email')
     console.log('password')
@@ -68,7 +69,7 @@ const Login = () => {
   };
 
   return (
-    <><div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
+    <><div className="log container-fluid mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
         <h1 className="fs-1 fw-bold mt-5">
           <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
@@ -123,7 +124,7 @@ const Login = () => {
         </form>
       </div>
     </div>
-      <div>
+      <div className="container-footer">
         <Footer />
       </div></>
 
