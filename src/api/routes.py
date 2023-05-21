@@ -3,7 +3,9 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 import openai
-from flask import Flask, request, jsonify, url_for, Blueprint, current_app
+from flask import current_app as app
+from flask_admin import Admin
+from flask import Flask, request, jsonify, url_for, Blueprint, render_template
 from api.models import TokenBlockedList, db, User, Provider, Image
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
@@ -19,6 +21,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from datetime import date, time, datetime, timezone, timedelta
+from itsdangerous import URLSafeTimedSerializer
 
 
 import smtplib, ssl
@@ -382,3 +385,55 @@ def handle_image_list():
         "lista": images
     }
     return jsonify(response_body), 200
+
+######### FORGOT PASSWORD ###########
+
+
+@api.route("/forgot-password", methods=["POST"])
+def forgot_password():
+    email = request.json.get("email")
+    
+    # Verificar si el correo electrónico existe en la base de datos
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "Email not found"}), 404
+
+    # Generar un token para restablecer la contraseña
+    serializer = URLSafeTimedSerializer(app.secret_key)
+    token = serializer.dumps(email, salt="reset-password")
+
+    # Crear el enlace de restablecimiento de contraseña
+    reset_link = url_for("api.reset_password", token=token, _external=True)
+
+    # Enviar el correo electrónico con el enlace de restablecimiento de contraseña
+    subject = "Reset Your Password"
+    message = f"Please click the following link to reset your password: {reset_link}"
+    sendEmail(message, email, subject)
+
+    return jsonify({"message": "Password reset link sent"}), 200
+
+@api.route("/reset-password", methods=["POST"])
+def reset_password():
+    token = request.json.get("token")
+    password = request.json.get("password")
+
+    serializer = URLSafeTimedSerializer(app.secret_key)
+    try:
+        email = serializer.loads(token, salt="reset-password", max_age=3600)  # El token es válido durante 1 hora
+    except:
+        return jsonify({"message": "Invalid or expired token"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # Actualizar la contraseña del usuario
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    user.password = hashed_password
+    db.session.commit()
+
+    return jsonify({"message": "Password reset successful"}), 200
+
+
+
+
