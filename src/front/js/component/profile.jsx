@@ -81,7 +81,7 @@ const Profile = () => {
       icon: "success",
       title: "Changes saved successfully",
     }).then(() => {
-      navigate("/"); // redirect to login component
+      navigate("/profile"); // redirect to updated profile component
     });
   };
 
@@ -197,7 +197,7 @@ const Profile = () => {
                             id="morning"
                             value="morning"
                             checked={availability.includes("morning")}
-                            onChange={handleAvailabilityChange}
+                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "morning"] : availability.filter((s) => s !== "morning"))}
                           />
                         </div>
                         <div>
@@ -209,7 +209,7 @@ const Profile = () => {
                             id="afternoon"
                             value="afternoon"
                             checked={availability.includes("afternoon")}
-                            onChange={handleAvailabilityChange}
+                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "afternoon"] : availability.filter((s) => s !== "afternoon"))}
                           />
                         </div>
                         <div>
@@ -221,7 +221,7 @@ const Profile = () => {
                             id="evening"
                             value="evening"
                             checked={availability.includes("evening")}
-                            onChange={handleAvailabilityChange}
+                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "evening"] : availability.filter((s) => s !== "evening"))}
                           />
                         </div>
                       </div>

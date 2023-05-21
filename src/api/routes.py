@@ -4,7 +4,8 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import openai
 from sqlalchemy import exc
-from flask import Flask, request, jsonify, url_for, Blueprint, current_app
+from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import current_app as app 
 from api.models import (
     TokenBlockedList,
     db,
@@ -20,6 +21,7 @@ from flask_jwt_extended import get_jwt_identity, get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import generate_password_hash
+from flask_mail import Mail, Message
 from api.ext import jwt, bcrypt
 import smtplib
 import ssl
@@ -28,17 +30,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from datetime import date, time, datetime, timezone, timedelta
-
-
-import smtplib, ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email import encoders
+from itsdangerous import URLSafeTimedSerializer
 
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_NAME"),
@@ -59,7 +56,7 @@ PASSWORD = os.environ.get("PASSWORD")
 def sendEmail(message, to, subject):
     smtp_address = "smtp.gmail.com"
     stmp_port = 465  # SLL
-
+    
     print(message, to, subject)
 
     messageMime = MIMEMultipart("alternative")  # JSON, text, application, pdf
@@ -176,6 +173,15 @@ def register_handle():
     # comitear la sesión
     db.session.add(new_user)  # agregamos el nuevo usuario a la base de datos
     db.session.commit()  # guardamos los cambios en la base de datos
+    
+  
+    # Create a welcome message for the email
+    welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
+
+    # Send the welcome email
+    sendEmail(welcome_message, email, "Welcome to OnlyPaws")
+    
+    
     return jsonify({"mensaje": "User successfully created"}), 201
 
 
@@ -369,6 +375,13 @@ def register_provider():
     )
     db.session.add(new_Provider)
     db.session.commit()
+    
+     # Create a welcome message for the email
+    welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
+
+    # Send the welcome email
+    sendEmail(welcome_message, email, "Welcome to OnlyPaws")
+    
     return jsonify({"mensaje": "Provider successfully created"}), 201
 
 
@@ -649,10 +662,13 @@ def handle_upload():
     print("FORMA DEL ARCHIVO: \n", request.files["image"])
     my_image = Image()
 
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    public_id = f'sample_folder/profile/my-image-name_{timestamp}'
+    
     result = cloudinary.uploader.upload(
-        request.files["image"],
-        public_id=f"sample_folder/profile/my-image-name",
-        crop="limit",
+        request.files['image'],
+        public_id= public_id,
+        crop='limit',
         width=450,
         height=450,
         eager=[
@@ -677,20 +693,30 @@ def handle_upload():
 
 #### GET IMG - USER ROLE
 
-
-@api.route("/profile_picture/user/<int:user_id>", methods=["GET"])
+@api.route('/profile_picture/users/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user_profile_picture(user_id):
+    user_id = get_jwt_identity()
     my_image = Image.query.filter_by(user_id=user_id, role="user").first()
     if not my_image:
         raise APIException("User profile picture not found", status_code=404)
 
-    return jsonify({"profilePictureUrl": my_image.ruta}), 200
+    # Include the user identifier in the response
+    user = User.query.get(user_id)
+    if not user:
+        raise APIException("User not found", status_code=404)
+
+    return jsonify({
+        "userId": user.id,
+        "username": user.username,
+        "profilePictureUrl": my_image.ruta
+    }), 200
+
 
 
 ##### GET IMG - PROVIDER ROLE
 
-
-@api.route("/profile_picture/provider/<int:provider_id>", methods=["GET"])
+@api.route('/profile_picture/providers/<int:provider_id>', methods=['GET'])
 def get_provider_profile_picture(provider_id):
     my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
     if not my_image:
@@ -709,3 +735,76 @@ def handle_image_list():
 
     response_body = {"lista": images}
     return jsonify(response_body), 200
+
+######### FORGOT PASSWORD ###########
+@api.route("/forgot-password", methods=["POST"])
+def forgot_password():
+    email = request.json.get("email")
+    
+    # Check if the email exists in the User table
+    user = User.query.filter_by(email=email).first()
+    if user:
+        # Generate a token for resetting the user's password
+        serializer = URLSafeTimedSerializer(app.secret_key)
+        token = serializer.dumps(email, salt="reset-password")
+        # Send the email with the password reset link
+        subject = "Reset Your Password"
+        reset_link = url_for("api.reset_password", token=token, _external=True)
+        message = f"Please click the following link to reset your password: {reset_link}"
+        sendEmail(message, email, subject)
+        return jsonify({"message": "Password reset link sent"}), 200
+    
+    # Check if the email exists in the Provider table
+    provider = Provider.query.filter_by(email=email).first()
+    if provider:
+        # Generate a token for resetting the provider's password
+        serializer = URLSafeTimedSerializer(app.secret_key)
+        token = serializer.dumps(email, salt="reset-password")
+        # Send the email with the password reset link
+        subject = "Reset Your Password"
+        reset_link = url_for("api.reset_password", token=token, _external=True)
+        message = f"Please click the following link to reset your password: {reset_link}"
+        sendEmail(message, email, subject)
+        return jsonify({"message": "Password reset link sent"}), 200
+    
+    # If the email is not found in either User or Provider table
+    return jsonify({"message": "Email not found"}), 404
+
+################ RESET PASSWORD not in used as of the moment 
+@api.route("/reset-password", methods=["POST"])
+def reset_password():
+    token = request.json.get("token")
+    password = request.json.get("password")
+    serializer = URLSafeTimedSerializer(app.secret_key)
+    try:
+        email = serializer.loads(token, salt="reset-password", max_age=3600)  # El token es válido durante 1 hora
+    except:
+        return jsonify({"message": "Invalid or expired token"}), 400
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    # Actualizar la contraseña del usuario
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    user.password = hashed_password
+    db.session.commit()
+    return jsonify({"message": "Password reset successful"}), 200
+
+
+
+
+###### CONTACT US EMAIL 
+@api.route('/send-email', methods=['POST'])
+def send_contact_email():
+    try:
+        body = request.get_json()
+        fullname = body['fullname']
+        email = body['email']
+        phone = body['phone']
+        subject = body['subject']
+        message = body['message']
+
+        sendEmail(message, 'onlypawscompany@gmail.com', f'Contact Form Submission - {subject}')
+        return jsonify({'message': 'Email sent successfully!'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+

@@ -6,8 +6,6 @@ import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Footer from "./footer.jsx";
 import jwt_decode from "jwt-decode";
-import { GoogleLogin } from 'react-google-login';
-
 
 
 const Login = () => {
@@ -48,25 +46,33 @@ const Login = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    Swal.fire({
+  const handleForgotPassword = async () => {
+    const { value: email } = await Swal.fire({
       title: 'Forgot password',
       input: 'email',
       inputAttributes: {
         autocapitalize: 'off',
-        required: 'true'
+        required: true
       },
       showCancelButton: true,
       confirmButtonText: 'Send email',
       showLoaderOnConfirm: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const email = result.value;
-        Swal.fire({
-          title: 'Password Reset',
-          text: `An email with a link to reset your password has been sent to ${email}`,
-          icon: 'success'
-        });
+      preConfirm: async (email) => {
+        try {
+          const response = await actions.forgotPassword(email);
+          Swal.fire({
+            title: 'Password Reset',
+            text: `An email with a link to reset your password has been sent to ${email}`,
+            icon: 'success'
+          });
+        } catch (error) {
+          console.error('Failed to send reset password email:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to send reset password email',
+            icon: 'error'
+          });
+        }
       }
     });
   };
@@ -125,7 +131,7 @@ const Login = () => {
   // };
 
   return (
-    <><div className="log container mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
+    <><div className="log container-fluid mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
         <h1 className="fs-1 fw-bold mt-5">
           <center><img src={Onlypaws} alt="onlypaws_logo" className="principal img-fluid onlypaws-logo" /></center>
@@ -137,7 +143,6 @@ const Login = () => {
               className="form-control w-100 col-md-12"
               id="floatingInput"
               placeholder="name@example.com"
-              autoComplete="current-email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -149,7 +154,6 @@ const Login = () => {
               className="form-control"
               id="floatingPassword"
               placeholder="Password"
-              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -192,6 +196,8 @@ const Login = () => {
       <div className="container-footer">
         <Footer />
       </div></>
+
+
 
   );
 }
