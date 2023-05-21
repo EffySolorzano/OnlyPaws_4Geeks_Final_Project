@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import Registerr from "../../styles/registerr.css";
 import { Link } from "react-router-dom";
 import Footer from "./footer.jsx";
+import jwt_decode from "jwt-decode";
+
 
 const Register = () => {
     const { store, actions } = useContext(Context);
@@ -58,6 +60,99 @@ const Register = () => {
     };
 
     console.log(actions);
+
+    const [user, setUser] = useState({});
+
+    function handleCallbackResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
+        var userObject = jwt_decode(response.credential);
+        console.log(userObject);
+        setUser(userObject);
+        document.getElementById("signInDiv").hidden = true;
+        navigate("/login")
+    }
+
+    useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        })
+
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: "outline", size: "large" }
+        );
+
+        google.accounts.id.prompt();
+    }, []);
+
+    // const clientId = "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com";
+    // const [user, setUser] = useState({});
+
+    // useEffect(() => {
+    //     const start = () => {
+    //         gapi.auth2.init({
+    //             clientId: clientId,
+    //         })
+    //     }
+    //     gapi.load("client: auth2", start)
+    // }, [])
+
+    // const onSuccess = (response) => {
+    //     setUser(response.profileObj);
+    // }
+
+    // const onFailure = () => {
+    //     console.log("Something went wrong")
+    // }
+
+    // const handleGoogleLoginSuccess = async (response) => {
+    //     const idToken = response.tokenId;
+
+
+    //     try {
+    //         // Envía el idToken al backend para su verificación y creación de usuario
+    //         const response = await actions.registerWithGoogle(idToken);
+
+    //         if (response.ok) {
+    //             Swal.fire({
+    //                 icon: "success",
+    //                 title: "Google authentication successful!",
+    //             }).then(() => {
+    //                 const userId = response.id;
+    //                 localStorage.setItem("userId", userId);
+    //                 navigate("/login");
+    //             });
+    //         } else {
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: "Oops...",
+    //                 text: "Google authentication failed. Please try again later.",
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Oops...",
+    //             text: "Google authentication failed. Please try again later.",
+    //         });
+    //     }
+    // };
+
+    // const handleGoogleLoginFailure = (error) => {
+    //     console.error(error);
+
+    //     Swal.fire({
+    //         icon: "error",
+    //         title: "Oops...",
+    //         text: "Google authentication failed. Please try again later.",
+    //     });
+    // };
+
+
+
     return (
         <>
             <div className="container bg-light border border-secondary-emphasis d-flex justify-content-center w-25 mt-3">
@@ -143,8 +238,16 @@ const Register = () => {
                                 >
                                     Register
                                 </button>
-                            </div></center>
+                            </div>
+                            </center>
                         </form>
+                        <div id="signInDiv"></div>
+                        {user &&
+                            <div>
+                                <img src={user.picture} />
+                                <h3>{user.name}</h3>
+                            </div>
+                        }
                     </div>
                 </div>
             </div >

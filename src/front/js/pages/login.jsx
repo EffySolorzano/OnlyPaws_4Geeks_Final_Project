@@ -5,6 +5,7 @@ import Loginn from "../../styles/Loginn.css";
 import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Footer from "./footer.jsx";
+import jwt_decode from "jwt-decode";
 
 
 const Login = () => {
@@ -77,6 +78,58 @@ const Login = () => {
   };
 
 
+  console.log(actions);
+
+  const [user, setUser] = useState({});
+
+  function handleCallbackResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    var userObject = jwt_decode(response.credential);
+    console.log(userObject);
+    setUser(userObject);
+    document.getElementById("signInDiv").hidden = true;
+    navigate("/")
+  }
+
+
+  useEffect(() => {
+    google.accounts.id.initialize({
+      client_id: "331353560025-vremdlrldn6kgqj9d6csujq1j3abqoq5.apps.googleusercontent.com",
+      callback: handleCallbackResponse
+    })
+
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      { theme: "outline", size: "large" }
+    );
+
+    google.accounts.id.prompt();
+  }, []);
+
+
+  // const onSuccess = (res) => {
+  //   console.log("Login success! Current user: ", res.profileObj);
+  // }
+
+  // const onFailure = (res) => {
+  //   console.log("Login failed! res: ", res)
+  // }
+
+  // const handleGoogleLogin = () => {
+  //   gapi.load('auth2', () => {
+  //     gapi.auth2.init({
+  //       client_id: clientId
+  //     }).then((auth2) => {
+  //       // Use the initialized auth2 instance for further operations
+  //       auth2.signIn().then((googleUser) => {
+  //         navigate("/");
+  //       }).catch((error) => {
+  //         // Handle any errors during Google login
+  //       });
+  //     });
+  //   });
+  // };
+
   return (
     <><div className="log container-fluid mt-5 col-md-12 bg-light border border-secondary-emphasis w-25">
       <div className="login-form">
@@ -131,6 +184,13 @@ const Login = () => {
             </button>
           </center>
         </form>
+        <div id="signInDiv"></div>
+        {user &&
+          <div>
+            <img src={user.picture} />
+            <h3>{user.name}</h3>
+          </div>
+        }
       </div>
     </div>
       <div className="container-footer">
@@ -142,5 +202,5 @@ const Login = () => {
   );
 }
 
-export default Login;
 
+export default Login;
