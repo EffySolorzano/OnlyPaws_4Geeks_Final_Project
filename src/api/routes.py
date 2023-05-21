@@ -4,7 +4,8 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import openai
 from sqlalchemy import exc
-from flask import Flask, request, jsonify, url_for, Blueprint, current_app
+from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import current_app as app 
 from api.models import (
     TokenBlockedList,
     db,
@@ -40,6 +41,9 @@ from email import encoders
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
+from itsdangerous import URLSafeTimedSerializer
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_NAME"),
@@ -690,9 +694,9 @@ def handle_upload():
 
 #### GET IMG - USER ROLE
 
-@api.route('/profile_picture/user', methods=['GET'])
+@api.route('/profile_picture/users/<int:user_id>', methods=['GET'])
 @jwt_required()
-def get_user_profile_picture():
+def get_user_profile_picture(user_id):
     user_id = get_jwt_identity()
     my_image = Image.query.filter_by(user_id=user_id, role="user").first()
     if not my_image:
@@ -712,7 +716,7 @@ def get_user_profile_picture():
 
 ##### GET IMG - PROVIDER ROLE
 
-@api.route('/profile_picture/provider/<int:provider_id>', methods=['GET'])
+@api.route('/profile_picture/providers/<int:provider_id>', methods=['GET'])
 def get_provider_profile_picture(provider_id):
     my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
     if not my_image:
@@ -746,3 +750,4 @@ def send_contact_email():
         return jsonify({'message': 'Email sent successfully!'}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
