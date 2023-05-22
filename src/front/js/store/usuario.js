@@ -329,6 +329,92 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
+    getInfoUser: async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://127.0.0.1:3001/api/info_user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        console.log(data); // Log the response data
+        const infoUser = data; // Assuming the response contains the InfoUser data
+        setStore({ infoUser, error: null }); // Update the store with infoUser
+        return infoUser;
+      } catch (error) {
+        const message = error.message || "Something went wrong";
+        setStore({ infoUser: null, error: message }); // Update the store with infoUser as null
+        throw error;
+      }
+    },
+
+    getInfoProvider: async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          "http://127.0.0.1:3001/api/info_provider",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(data); // Log the response data
+        const infoProvider = data; // Assuming the response contains the InfoProvider data
+        setStore({ infoProvider, error: null }); // Update the store with infoProvider
+        return infoProvider;
+      } catch (error) {
+        const message = error.message || "Something went wrong";
+        setStore({ infoProvider: null, error: message }); // Update the store with infoProvider as null
+        throw error;
+      }
+    },
+    updateUser: async (userData) => {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://127.0.0.1:3001/api/info_user-edit`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user profile");
+      }
+
+      const data = await response.json();
+      return { status: response.status, data: data };
+    },
+
+    updateProvider: async (providerData) => {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://127.0.0.1:3001/api/info_provider-edit`, // Remove providerId from the URL
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(providerData), // Remove providerId from the request body
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update provider profile");
+      }
+
+      const data = await response.json();
+      return { status: response.status, data: data };
+    },
 
     getUserProfilePicture: async (userId) => {
       const url = `http://127.0.0.1:3001/api/profile_picture/users/${userId}`;

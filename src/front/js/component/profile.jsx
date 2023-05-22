@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Uploader from "../component/upoloader/uploader.jsx";
@@ -7,7 +7,7 @@ import Profilebottom from "../../img/profilebottom.png";
 import Swal from "sweetalert2";
 import { userActions } from "../store/usuario.js";
 
-const Profile = ({ userId: propUserId }) => {
+const Profile = () => {
   const [role, setRole] = useState("");
   const [gender, setGender] = useState("");
   const [day, setDay] = useState("");
@@ -47,6 +47,141 @@ const Profile = ({ userId: propUserId }) => {
     setProfilePictureUrl(newUrl);
   };
 
+  const handleUpdateProfile = async () => {
+    try {
+      if (role === "user") {
+        const userData = {
+          gender,
+          day: parseInt(day),
+          month: parseInt(month),
+          year: parseInt(year),
+          description,
+          address,
+          phone,
+          paymentMethod,
+        };
+        const response = await userActions().updateUser(userData);
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Profile updated successfully",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Failed to update profile",
+            text: response.data.error || "Something went wrong",
+          });
+        }
+      } else if (role === "provider") {
+        const profileData = JSON.parse(localStorage.getItem("profileData"));
+        const providerId = profileData.providerId;
+        const providerData = {
+          gender,
+          day: parseInt(day),
+          month: parseInt(month),
+          year: parseInt(year),
+          morning,
+          afternoon,
+          evening,
+          pet_sitter: petSitter,
+          dog_walker: dogWalker,
+          house_sitter: houseSitter,
+          pet_groomer: petGroomer,
+          number_of_pets: numberOfPets,
+          description,
+          address,
+          phone,
+          paymentMethod,
+        };
+        const response = await userActions().updateProvider(providerData, providerId);
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Profile updated successfully",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Failed to update profile",
+            text: response.data.error || "Something went wrong",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to update profile",
+        text: error.message || "Something went wrong",
+      });
+    }
+  };
+
+
+  useEffect(() => {
+    const storedProfileData = localStorage.getItem("profileData");
+    if (storedProfileData) {
+      const profileData = JSON.parse(storedProfileData);
+      setGender(profileData.gender);
+      setDay(profileData.day);
+      setMonth(profileData.month);
+      setYear(profileData.year);
+      setMorning(profileData.morning);
+      setAfternoon(profileData.afternoon);
+      setEvening(profileData.evening);
+      setPetSitter(profileData.petSitter);
+      setDogWalker(profileData.dogWalker);
+      setHouseSitter(profileData.houseSitter);
+      setPetGroomer(profileData.petGroomer);
+      setPets(profileData.numberOfPets);
+      setDescription(profileData.description);
+      setAddress(profileData.address);
+      setPhone(profileData.phone);
+      setPaymentMethod(profileData.paymentMethod);
+    } else {
+      fetchProfileData();
+    }
+  }, []);
+
+  const fetchProfileData = async () => {
+    try {
+      if (role === "user") {
+        const infoUser = await userActions().getInfoUser();
+        setGender(infoUser.gender);
+        setDay(infoUser.day);
+        setMonth(infoUser.month);
+        setYear(infoUser.year);
+        setDescription(infoUser.description);
+        setAddress(infoUser.address);
+        setPhone(infoUser.phone);
+        setPaymentMethod(infoUser.paymentMethod);
+        localStorage.setItem("profileData", JSON.stringify(infoUser));
+      } else if (role === "provider") {
+        const infoProvider = await userActions().getInfoProvider();
+        setGender(infoProvider.gender);
+        setDay(infoProvider.day);
+        setMonth(infoProvider.month);
+        setYear(infoProvider.year);
+        setMorning(infoProvider.morning);
+        setAfternoon(infoProvider.afternoon);
+        setEvening(infoProvider.evening);
+        setPetSitter(infoProvider.petSitter);
+        setDogWalker(infoProvider.dogWalker);
+        setHouseSitter(infoProvider.houseSitter);
+        setPetGroomer(infoProvider.petGroomer);
+        setPets(infoProvider.numberOfPets);
+        setDescription(infoProvider.description);
+        setAddress(infoProvider.address);
+        setPhone(infoProvider.phone);
+        setPaymentMethod(infoProvider.paymentMethod);
+        localStorage.setItem("profileData", JSON.stringify(infoProvider));
+      }
+    } catch (error) {
+      console.error("Failed to fetch profile data:", error);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (role === "provider") {
@@ -58,11 +193,11 @@ const Profile = ({ userId: propUserId }) => {
         morning,
         afternoon,
         evening,
-        petSitter,
-        dogWalker,
-        houseSitter,
-        petGroomer,
-        numberOfPets,
+        pet_sitter: petSitter,
+        dog_walker: dogWalker,
+        house_sitter: houseSitter,
+        pet_groomer: petGroomer,
+        number_of_pets: numberOfPets,
         description,
         address,
         phone,
@@ -73,6 +208,7 @@ const Profile = ({ userId: propUserId }) => {
         const token = localStorage.getItem("token");
         const response = await userActions().infoProvider(providerData);
         console.log(response);
+        localStorage.setItem("profileData", JSON.stringify(providerData));
       } catch (error) {
         console.error("Failed to save provider profile information:", error);
       }
@@ -93,6 +229,7 @@ const Profile = ({ userId: propUserId }) => {
         const token = localStorage.getItem("token");
         const response = await userActions().infoUser(userData);
         console.log(response);
+        localStorage.setItem("profileData", JSON.stringify(userData));
       } catch (error) {
         console.error("Failed to save profile information:", error);
       }
@@ -332,6 +469,7 @@ const Profile = ({ userId: propUserId }) => {
                 </div>
               </>
             )}
+            <i className="fa fa-pencil" onClick={handleUpdateProfile}></i>
 
             <button
               type="submit"
