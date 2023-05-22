@@ -41,7 +41,9 @@ class User(db.Model):
 class InfoUser(db.Model):
     __tablename__ = "infoUser"
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
+    day = db.Column(db.String(10), nullable=False)
+    month = db.Column(db.String(10), nullable=False)
+    year = db.Column(db.String(10), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(120), nullable=False)
     address = db.Column(db.String(120), nullable=False)
@@ -57,12 +59,15 @@ class InfoUser(db.Model):
         return {
             "id": self.id,
             "gender": self.gender,
-            "date": self.date,
+            "day": self.day,
+            "month": self.month,
+            "year": self.year,
             "description": self.description,
             "phone": self.phone,
             "address": self.address,
             "payment_method": self.payment_method,
         }
+
 
 
 class Provider(db.Model):
@@ -98,7 +103,9 @@ class Provider(db.Model):
 class InfoProvider(db.Model):
     __tablename__ = "infoProvider"
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
+    day = db.Column(db.String(10), nullable=False)
+    month = db.Column(db.String(10), nullable=False)
+    year = db.Column(db.String(10), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     morning = db.Column(db.Boolean, nullable=False, default=False)
     afternoon = db.Column(db.Boolean, nullable=False, default=False)
@@ -121,7 +128,9 @@ class InfoProvider(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "date": self.date,
+            "day": self.day,
+            "month": self.month,
+            "year": self.year,
             "gender": self.gender,
             "morning": self.morning,
             "afternoon": self.afternoon,

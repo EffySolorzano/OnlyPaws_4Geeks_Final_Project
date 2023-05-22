@@ -5,15 +5,21 @@ import Uploader from "../component/upoloader/uploader.jsx";
 import Profiless from "../../styles/profiless.css";
 import Profilebottom from "../../img/profilebottom.png";
 import Swal from "sweetalert2";
+import { userActions } from "../store/usuario.js";
 
-const Profile = () => {
+const Profile = ({ userId: propUserId }) => {
   const [role, setRole] = useState("");
   const [gender, setGender] = useState("");
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const [availability, setAvailability] = useState("");
-  const [service, setService] = useState("");
+  const [morning, setMorning] = useState(false);
+  const [afternoon, setAfternoon] = useState(false);
+  const [evening, setEvening] = useState(false);
+  const [petSitter, setPetSitter] = useState(false);
+  const [dogWalker, setDogWalker] = useState(false);
+  const [houseSitter, setHouseSitter] = useState(false);
+  const [petGroomer, setPetGroomer] = useState(false);
   const [numberOfPets, setPets] = useState(0);
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
@@ -23,6 +29,7 @@ const Profile = () => {
     "https://via.placeholder.com/150"
   );
   const navigate = useNavigate();
+
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
@@ -40,42 +47,55 @@ const Profile = () => {
     setProfilePictureUrl(newUrl);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Perform form submission logic based on the selected role
     if (role === "provider") {
-      // Submit form for provider role
-      // You can access the provider-specific form data here
       const providerData = {
         gender,
-        day,
-        month,
-        year,
-        availability,
-        service,
+        day: parseInt(day),
+        month: parseInt(month),
+        year: parseInt(year),
+        morning,
+        afternoon,
+        evening,
+        petSitter,
+        dogWalker,
+        houseSitter,
+        petGroomer,
         numberOfPets,
         description,
         address,
         phone,
         paymentMethod,
-        profilePictureUrl,
       };
       console.log(providerData);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await userActions().infoProvider(providerData);
+        console.log(response);
+      } catch (error) {
+        console.error("Failed to save provider profile information:", error);
+      }
     } else if (role === "user") {
-      // Submit form for user role
-      // You can access the user-specific form data here
       const userData = {
         gender,
-        day,
-        month,
-        year,
+        day: parseInt(day),
+        month: parseInt(month),
+        year: parseInt(year),
         description,
         address,
         phone,
         paymentMethod,
-        profilePictureUrl,
       };
       console.log(userData);
+      console.log("Month value:", month);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await userActions().infoUser(userData);
+        console.log(response);
+      } catch (error) {
+        console.error("Failed to save profile information:", error);
+      }
     }
     Swal.fire({
       icon: "success",
@@ -84,6 +104,7 @@ const Profile = () => {
       navigate("/profile"); // redirect to updated profile component
     });
   };
+
 
   return (
     <>
@@ -130,17 +151,19 @@ const Profile = () => {
                         <label htmlFor="dob">
                           <i className="fa-solid fa-calendar" style={{ color: '#a659c8' }}></i> Date of Birth:
                         </label>
-                        <select id="day" value={day} onChange={(e) => setDay(e.target.value)}>
+                        <select id="day" value={day} onChange={(e) => setDay(parseInt(e.target.value))}>
                           {[...Array(31).keys()].map((d, i) => (
                             <option value={i + 1} key={i}>{i + 1}</option>
                           ))}
                         </select>
-                        <select id="month" value={month} onChange={(e) => setMonth(e.target.value)}>
+
+                        <select id="month" value={month} onChange={(e) => setMonth(parseInt(e.target.value))}>
                           {[...Array(12).keys()].map((m, i) => (
                             <option value={i + 1} key={i}>{i + 1}</option>
                           ))}
                         </select>
-                        <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
+
+                        <select id="year" value={year} onChange={(e) => setYear(parseInt(e.target.value))}>
                           {[...Array(101).keys()].map((y, i) => (
                             <option value={2023 - i} key={i}>{2023 - i}</option>
                           ))}
@@ -158,10 +181,10 @@ const Profile = () => {
                       </div>
                       <div className="col-12 col-md-4">
                         <label htmlFor="paymentMethod">Payment Method:</label>
-                        <div onChange={(e) => setPaymentMethod(e.target.value)}>
-                          <input type="radio" value="Credit Card" name="payment" /> <i className="fa-brands fa-cc-visa" style={{ color: '#a659c8' }}></i>
-                          <input type="radio" value="Debit Card" name="payment" /> <i className="fa-brands fa-cc-mastercard" style={{ color: '#a659c8' }}></i>
-                          <input type="radio" value="Paypal" name="payment" /> <i className="fa-brands fa-paypal" style={{ color: '#a659c8' }}></i>
+                        <div>
+                          <input type="radio" value="Visa" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-visa" style={{ color: '#a659c8' }}></i>
+                          <input type="radio" value="Mastercard" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-mastercard" style={{ color: '#a659c8' }}></i>
+                          <input type="radio" value="Paypal" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-paypal" style={{ color: '#a659c8' }}></i>
                         </div>
                       </div>
                     </div>
@@ -196,8 +219,8 @@ const Profile = () => {
                             type="checkbox"
                             id="morning"
                             value="morning"
-                            checked={availability.includes("morning")}
-                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "morning"] : availability.filter((s) => s !== "morning"))}
+                            checked={morning}
+                            onChange={(e) => setMorning(e.target.checked)}
                           />
                         </div>
                         <div>
@@ -208,8 +231,8 @@ const Profile = () => {
                             type="checkbox"
                             id="afternoon"
                             value="afternoon"
-                            checked={availability.includes("afternoon")}
-                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "afternoon"] : availability.filter((s) => s !== "afternoon"))}
+                            checked={afternoon}
+                            onChange={(e) => setAfternoon(e.target.checked)}
                           />
                         </div>
                         <div>
@@ -220,8 +243,8 @@ const Profile = () => {
                             type="checkbox"
                             id="evening"
                             value="evening"
-                            checked={availability.includes("evening")}
-                            onChange={(e) => setAvailability(e.target.checked ? [...availability, "evening"] : availability.filter((s) => s !== "evening"))}
+                            checked={evening}
+                            onChange={(e) => setEvening(e.target.checked)}
                           />
                         </div>
                       </div>
@@ -242,8 +265,8 @@ const Profile = () => {
                             type="checkbox"
                             id="petsitter"
                             value="petsitter"
-                            checked={service.includes("petsitter")}
-                            onChange={(e) => setService(e.target.checked ? [...service, "petsitter"] : service.filter((s) => s !== "petsitter"))}
+                            checked={petSitter}
+                            onChange={(e) => setPetSitter(e.target.checked)}
                           />
                         </div>
                         <div>
@@ -254,8 +277,8 @@ const Profile = () => {
                             type="checkbox"
                             id="dogwalker"
                             value="dogwalker"
-                            checked={service.includes("dogwalker")}
-                            onChange={(e) => setService(e.target.checked ? [...service, "dogwalker"] : service.filter((s) => s !== "dogwalker"))}
+                            checked={dogWalker}
+                            onChange={(e) => setDogWalker(e.target.checked)}
                           />
                         </div>
                         <div>
@@ -266,8 +289,8 @@ const Profile = () => {
                             type="checkbox"
                             id="housesitter"
                             value="housesitter"
-                            checked={service.includes("housesitter")}
-                            onChange={(e) => setService(e.target.checked ? [...service, "housesitter"] : service.filter((s) => s !== "housesitter"))}
+                            checked={houseSitter}
+                            onChange={(e) => setHouseSitter(e.target.checked)}
                           />
                         </div>
                         <div>
@@ -278,10 +301,11 @@ const Profile = () => {
                             type="checkbox"
                             id="petgrooming"
                             value="petgrooming"
-                            checked={service.includes("petgrooming")}
-                            onChange={(e) => setService(e.target.checked ? [...service, "petgrooming"] : service.filter((s) => s !== "petgrooming"))}
+                            checked={petGroomer}
+                            onChange={(e) => setPetGroomer(e.target.checked)}
                           />
                         </div>
+
                       </div>
                     </div>
                   </div>
