@@ -159,7 +159,7 @@ const Login = () => {
             </button>
           </center>
         </form>
-        <div id="signInDiv"></div>
+        <div id="signInDiv" className="google-login"></div>
         {user &&
           <div>
             <img src={user.picture} />

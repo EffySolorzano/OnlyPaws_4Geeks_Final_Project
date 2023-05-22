@@ -151,7 +151,7 @@ const Register = () => {
                             </center>
                         </form>
                     </div>
-                    <div>
+                    <div className="third-party-login">
                         <GoogleSignIn />
                     </div>
                 </div>
