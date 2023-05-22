@@ -226,6 +226,33 @@ def get_user(user_id):
 
     return jsonify(serialized_user), 200
 
+#######INFOUSER-GET
+@api.route("/info_user", methods=["GET"])
+@jwt_required()
+def get_info_user():
+    current_user_id = get_jwt_identity()
+
+    # Validate and retrieve the user_id from the current user
+    user_id = current_user_id
+    if user_id is None:
+        return jsonify({"error": "Missing user ID"}), 400
+
+    # Fetch the user based on the provided user_id
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Fetch the corresponding InfoUser data for the user
+    info_user = InfoUser.query.filter_by(user_id=user_id).first()
+    if not info_user:
+        return jsonify({"error": "InfoUser data not found"}), 404
+
+    try:
+        # Return the serialized InfoUser data
+        return jsonify(info_user.serialize()), 200
+    except exc.SQLAlchemyError:
+        return jsonify({"error": "Failed to fetch InfoUser data"}), 500
+
 
 ######### INFOUSER-POST
 @api.route("/info_user", methods=["POST"])
@@ -268,11 +295,11 @@ def create_info_user():
         return jsonify({"error": "Failed to create info user"}), 500
 
 ########### PUT
-
-
-@api.route("/users/<int:user_id>", methods=["PUT"])
-def update_user(user_id):
-    user = User.query.filter_by(id=user_id).first()
+@api.route("/info_user-edit", methods=["PUT"])
+@jwt_required()
+def update_user():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(id=current_user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -291,7 +318,9 @@ def update_user(user_id):
     info_user = InfoUser.query.filter_by(user_id=user.id).first()
     if info_user:
         # Update the InfoUser information
-        info_user.date = body.get("date", info_user.date)
+        info_user.day = body.get("day", info_user.day)
+        info_user.month = body.get("month", info_user.month)
+        info_user.year = body.get("year", info_user.year)
         info_user.gender = body.get("gender", info_user.gender)
         info_user.description = body.get("description", info_user.description)
         info_user.phone = body.get("phone", info_user.phone)
@@ -307,9 +336,8 @@ def update_user(user_id):
     return jsonify(serialized_user), 200
 
 
+
 ######### DELETE
-
-
 @api.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -431,6 +459,34 @@ def get_provider(provider_id):
 
     return jsonify(serialized_provider), 200
 
+######INFOPROVIDER-GET
+@api.route("/info_provider", methods=["GET"])
+@jwt_required()
+def get_info_provider():
+    current_provider_id = get_jwt_identity()
+
+    # Validate and retrieve the provider_id
+    provider_id = current_provider_id
+    if provider_id is None:
+        return jsonify({"error": "Missing provider ID"}), 400
+
+    # Fetch the provider based on the provided provider_id
+    provider = Provider.query.filter_by(id=provider_id).first()
+    if not provider:
+        return jsonify({"error": "Provider not found"}), 404
+
+    # Fetch the corresponding InfoProvider data for the provider
+    info_provider = InfoProvider.query.filter_by(provider_id=provider_id).first()
+    if not info_provider:
+        return jsonify({"error": "InfoProvider data not found"}), 404
+
+    try:
+        # Return the serialized InfoProvider data
+        return jsonify(info_provider.serialize()), 200
+    except exc.SQLAlchemyError:
+        return jsonify({"error": "Failed to fetch InfoProvider data"}), 500
+
+
 
 ####### POST
 @api.route("/info_provider", methods=["POST"])
@@ -452,25 +508,25 @@ def create_info_provider():
 
     # Create a new InfoProvider instance
     new_info_provider = InfoProvider(
-        day=body["day"],
-        month=body["month"],
-        year=body["year"],
-        gender=body["gender"],
-        morning=body["morning"],
-        afternoon=body["afternoon"],
-        evening=body["evening"],
-        pet_sitter=body["petSitter"],
-        dog_walker=body["dogWalker"],
-        house_sitter=body["houseSitter"],
-        pet_groomer=body["petGroomer"],
-        number_of_pets=body["numberOfPets"],
-        description=body["description"],
-        address=body["address"],
-        phone=body["phone"],
-        payment_method=body["paymentMethod"],
+        gender=body.get("gender"),
+        day=body.get("day"),
+        month=body.get("month"),
+        year=body.get("year"),
+        morning=body.get("morning"),
+        afternoon=body.get("afternoon"),
+        evening=body.get("evening"),
+        pet_sitter=body.get("pet_sitter"),
+        dog_walker=body.get("dog_walker"),
+        house_sitter=body.get("house_sitter"),
+        pet_groomer=body.get("pet_groomer"),
+        number_of_pets=body.get("number_of_pets"),
+        description=body.get("description"),
+        address=body.get("address"),
+        phone=body.get("phone"),
+        payment_method=body.get("paymentMethod"),
         provider_id=provider_id,
     )
-
+       
     try:
         # Save the new InfoProvider instance to the database
         db.session.add(new_info_provider)
@@ -482,11 +538,11 @@ def create_info_provider():
 
 
 ######## PUT
-
-
-@api.route("/providers/<int:provider_id>", methods=["PUT"])
-def update_provider(provider_id):
-    provider = Provider.query.filter_by(id=provider_id).first()
+@api.route("/info_provider-edit", methods=["PUT"])
+@jwt_required()
+def update_provider():
+    current_provider_id = get_jwt_identity()
+    provider = Provider.query.filter_by(id=current_provider_id).first()
     if not provider:
         return jsonify({"error": "Provider not found"}), 404
 
@@ -505,27 +561,25 @@ def update_provider(provider_id):
     info_provider = InfoProvider.query.filter_by(provider_id=provider.id).first()
     if info_provider:
         # Update the InfoProvider information
-        info_provider.date = body.get("date", info_provider.date)
-        info_provider.gender = body.get("gender", info_provider.gender)
-        info_provider.morning = body.get("morning", info_provider.morning)
-        info_provider.afternoon = body.get("afternoon", info_provider.afternoon)
-        info_provider.evening = body.get("evening", info_provider.evening)
-        info_provider.pet_sitter = body.get("pet_sitter", info_provider.pet_sitter)
-        info_provider.house_sitter = body.get(
-            "house_sitter", info_provider.house_sitter
-        )
-        info_provider.dog_walker = body.get("dog_walker", info_provider.dog_walker)
-        info_provider.pet_groomer = body.get("pet_groomer", info_provider.pet_groomer)
-        info_provider.number_of_pets = body.get(
-            "number_of_pets", info_provider.number_of_pets
-        )
-        info_provider.description = body.get("description", info_provider.description)
-        info_provider.address = body.get("address", info_provider.address)
-        info_provider.phone = body.get("phone", info_provider.phone)
-        info_provider.payment_method = body.get(
-            "payment_method", info_provider.payment_method
-        )
-        db.session.commit()
+        # Update the InfoProvider information
+       info_provider.day = body.get("day", info_provider.day)
+       info_provider.month = body.get("month", info_provider.month)
+       info_provider.year = body.get("year", info_provider.year)
+       info_provider.gender = body.get("gender", info_provider.gender)
+       info_provider.morning = body.get("morning", info_provider.morning)
+       info_provider.afternoon = body.get("afternoon", info_provider.afternoon)
+       info_provider.evening = body.get("evening", info_provider.evening)
+       info_provider.pet_sitter = body.get("pet_sitter", info_provider.pet_sitter)
+       info_provider.house_sitter = body.get("house_sitter", info_provider.house_sitter)
+       info_provider.dog_walker = body.get("dog_walker", info_provider.dog_walker)
+       info_provider.pet_groomer = body.get("pet_groomer", info_provider.pet_groomer)
+       info_provider.number_of_pets = body.get("number_of_pets", info_provider.number_of_pets)
+       info_provider.description = body.get("description", info_provider.description)
+       info_provider.address = body.get("address", info_provider.address)
+       info_provider.phone = body.get("phone", info_provider.phone)
+       info_provider.payment_method = body.get("paymentMethod", info_provider.payment_method)
+       db.session.commit()
+
 
     # Serialize the updated Provider object along with associated InfoProvider information
     serialized_provider = provider.serialize()
@@ -533,6 +587,9 @@ def update_provider(provider_id):
         serialized_provider["info_provider"] = info_provider.serialize()
 
     return jsonify(serialized_provider), 200
+
+
+
 
 
 ######## DELETE
