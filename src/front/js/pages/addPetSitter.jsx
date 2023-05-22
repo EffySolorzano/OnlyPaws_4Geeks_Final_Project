@@ -168,7 +168,7 @@ const AddPetSitter = () => {
         <div className="col-md-12 d-flex align-items-end justify-content-center mt-1">
           <button
             type="button"
-            className="add-sitter btn text-light"
+            className="add-sitter btn text-light mb-5"
             onClick={handleAddPetSitter}
           >
             Register
@@ -176,6 +176,8 @@ const AddPetSitter = () => {
         </div>
       </form>
       <div>
+      </div>
+      <div className="third-party-login">
         <GoogleSignIn />
       </div>
     </div>
