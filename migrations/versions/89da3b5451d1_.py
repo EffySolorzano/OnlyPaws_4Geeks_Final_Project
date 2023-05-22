@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:migrations/versions/07ad86e06891_.py
-Revision ID: 07ad86e06891
+Revision ID: 89da3b5451d1
 Revises: 
-Create Date: 2023-05-21 01:42:48.905211
-========
-Revision ID: 48cdb2c8ab4f
-Revises: 
-Create Date: 2023-05-20 02:07:44.781304
->>>>>>>> main:migrations/versions/48cdb2c8ab4f_.py
+Create Date: 2023-05-22 03:29:58.897248
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:migrations/versions/07ad86e06891_.py
-revision = '07ad86e06891'
-========
-revision = '48cdb2c8ab4f'
->>>>>>>> main:migrations/versions/48cdb2c8ab4f_.py
+revision = '89da3b5451d1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -74,7 +64,9 @@ def upgrade():
     )
     op.create_table('infoProvider',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('day', sa.String(length=10), nullable=False),
+    sa.Column('month', sa.String(length=10), nullable=False),
+    sa.Column('year', sa.String(length=10), nullable=False),
     sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('morning', sa.Boolean(), nullable=False),
     sa.Column('afternoon', sa.Boolean(), nullable=False),
@@ -94,7 +86,9 @@ def upgrade():
     )
     op.create_table('infoUser',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('day', sa.String(length=10), nullable=False),
+    sa.Column('month', sa.String(length=10), nullable=False),
+    sa.Column('year', sa.String(length=10), nullable=False),
     sa.Column('gender', sa.String(length=10), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('address', sa.String(length=120), nullable=False),

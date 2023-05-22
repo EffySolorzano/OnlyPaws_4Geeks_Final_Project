@@ -8,6 +8,10 @@ export const userStore = {
   usersData: [],
   favoritos: [],
   chatbotResponse: "",
+  providerList: [],
+  provider: null,
+  currentProvider: null,
+  providersData: [],
 };
 
 export const userActions = (getStore, getActions, setStore) => {
@@ -190,16 +194,24 @@ export const userActions = (getStore, getActions, setStore) => {
           }
         );
         const data = await response.json();
-        const user = data.user;
-        localStorage.setItem("token", data.token);
-        setStore({ user, error: null });
-        return { ok: true, user };
+
+        if (response.ok) {
+          const provider = data.provider;
+          const provider_id = data.provider_id; // Access the provider ID from the response
+          localStorage.setItem("token", data.token);
+          setStore({ provider, error: null });
+          console.log("Provider ID:", provider_id);
+          return { ok: true, provider };
+        } else {
+          throw new Error(data.error || "Something went wrong");
+        }
       } catch (error) {
         const message = error.message || "Something went wrong";
-        setStore({ user: null, error: "Something went wrong" });
+        setStore({ provider: null, error: message });
         return { ok: false, message };
       }
     },
+
     sendEmail: async (fullname, email, phone, subject, message) => {
       const url = "http://127.0.0.1:3001/api/send-email";
       const headers = {
@@ -260,14 +272,14 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error; // Rethrow the error for handling in the calling function
       }
     },
-    infoUser: async (email) => {
+    infoUser: async (userData) => {
       const url = "http://127.0.0.1:3001/api/info_user";
+      const token = localStorage.getItem("token");
       const headers = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       };
-      const body = JSON.stringify({
-        email: email,
-      });
+      const body = JSON.stringify(userData);
 
       try {
         const response = await fetch(url, {
@@ -277,17 +289,47 @@ export const userActions = (getStore, getActions, setStore) => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to send email");
+          throw new Error("Failed to save changes");
         }
 
         const data = await response.json();
         console.log(data);
-        return data; // Return the data for handling in the calling function
+        return data;
       } catch (error) {
-        console.error("Failed to send reset password email:", error);
-        throw error; // Rethrow the error for handling in the calling function
+        console.error("Failed to save changes:", error);
+        throw error;
       }
     },
+
+    infoProvider: async (userData) => {
+      const url = "http://127.0.0.1:3001/api/info_provider";
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const body = JSON.stringify(userData);
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers,
+          body,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save provider changes");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+      } catch (error) {
+        console.error("Failed to save provider changes:", error);
+        throw error;
+      }
+    },
+
     getUserProfilePicture: async (userId) => {
       const url = `http://127.0.0.1:3001/api/profile_picture/users/${userId}`;
       const token = localStorage.getItem("token");

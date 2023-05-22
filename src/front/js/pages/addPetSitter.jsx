@@ -34,13 +34,19 @@ const AddPetSitter = () => {
       email,
       password,
       isAuthenticated
-    ); // call register action
+    ); // call signup action
     console.log(response);
     if (response.ok) {
       Swal.fire({
         icon: "success",
         title: "Registration successful!",
       }).then(() => {
+        // Retrieve the provider ID from the response
+        const providerId = response.provider_id;
+
+        // Store the provider ID in local storage or state
+        localStorage.setItem("providerId", providerId);
+
         navigate("/login"); // redirect to login component
       });
     } else {
@@ -51,6 +57,7 @@ const AddPetSitter = () => {
       });
     }
   };
+
 
   console.log(actions);
 

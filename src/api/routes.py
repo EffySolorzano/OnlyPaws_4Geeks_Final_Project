@@ -229,11 +229,14 @@ def get_user(user_id):
 
 ######### INFOUSER-POST
 @api.route("/info_user", methods=["POST"])
+@jwt_required()
 def create_info_user():
+    current_user_id = get_jwt_identity()
+
     body = request.get_json()
 
-    # Validate and retrieve the user_id
-    user_id = body.get("user_id")
+    # Validate and retrieve the user_id from the current user
+    user_id = current_user_id
     if user_id is None:
         return jsonify({"error": "Missing user ID"}), 400
 
@@ -244,12 +247,14 @@ def create_info_user():
 
     # Create a new InfoUser instance
     new_info_user = InfoUser(
-        date=body["date"],
+        day=body["day"],
+        month=body["month"],
+        year=body["year"],
         gender=body["gender"],
         description=body["description"],
         address=body["address"],
         phone=body["phone"],
-        payment_method=body["payment_method"],
+        payment_method=body["paymentMethod"],
         user_id=user_id,
     )
 
@@ -261,7 +266,6 @@ def create_info_user():
     except exc.SQLAlchemyError:
         db.session.rollback()
         return jsonify({"error": "Failed to create info user"}), 500
-
 
 ########### PUT
 
@@ -346,22 +350,22 @@ def register_provider():
         return jsonify({"error": "Username or email already exists"}), 400
     if body is None:
         raise APIException(
-            "You need to specify the request body as json object", status_code=400
+            "You need to specify the request body as a JSON object", status_code=400
         )
     if "email" not in body:
         raise APIException("You need to specify the email", status_code=400)
-    if "name" not in body:  # add this check for the 'fullname' key
+    if "name" not in body:
         raise APIException("You need to specify the name", status_code=400)
-    if "surname" not in body:  # add this check for the 'fullname' key
-        raise APIException("You need to specify the suname", status_code=400)
-    if "username" not in body:  # add this check for the 'username' key
+    if "surname" not in body:
+        raise APIException("You need to specify the surname", status_code=400)
+    if "username" not in body:
         raise APIException("You need to specify the username", status_code=400)
-    if "password" not in body:  # add this check for the 'password' key
+    if "password" not in body:
         raise APIException("You need to specify the password", status_code=400)
-    if "country" not in body:  # add this check for the 'password' key
+    if "country" not in body:
         raise APIException("You need to specify the country", status_code=400)
 
-    # hashing the password
+    # Hashing the password
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     new_Provider = Provider(
@@ -375,14 +379,17 @@ def register_provider():
     )
     db.session.add(new_Provider)
     db.session.commit()
-    
-     # Create a welcome message for the email
+
+    provider_id = new_Provider.id
+
+    # Create a welcome message for the email
     welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
 
     # Send the welcome email
     sendEmail(welcome_message, email, "Welcome to OnlyPaws")
-    
-    return jsonify({"mensaje": "Provider successfully created"}), 201
+
+    return jsonify({"mensaje": "Provider successfully created", "provider_id": provider_id}), 201
+
 
 
 ####GET#####
@@ -427,11 +434,14 @@ def get_provider(provider_id):
 
 ####### POST
 @api.route("/info_provider", methods=["POST"])
+@jwt_required()
 def create_info_provider():
+    current_provider_id = get_jwt_identity()
+    
     body = request.get_json()
 
     # Validate and retrieve the provider_id
-    provider_id = body.get("provider_id")
+    provider_id = current_provider_id
     if provider_id is None:
         return jsonify({"error": "Missing provider ID"}), 400
 
@@ -442,20 +452,22 @@ def create_info_provider():
 
     # Create a new InfoProvider instance
     new_info_provider = InfoProvider(
-        date=body["date"],
+        day=body["day"],
+        month=body["month"],
+        year=body["year"],
         gender=body["gender"],
         morning=body["morning"],
         afternoon=body["afternoon"],
         evening=body["evening"],
-        pet_sitter=body["pet_sitter"],
-        dog_walker=body["dog_walker"],
-        house_sitter=body["house_sitter"],
-        pet_groomer=body["pet_groomer"],
-        number_of_pets=body["number_of_pets"],
+        pet_sitter=body["petSitter"],
+        dog_walker=body["dogWalker"],
+        house_sitter=body["houseSitter"],
+        pet_groomer=body["petGroomer"],
+        number_of_pets=body["numberOfPets"],
         description=body["description"],
         address=body["address"],
         phone=body["phone"],
-        payment_method=body["payment_method"],
+        payment_method=body["paymentMethod"],
         provider_id=provider_id,
     )
 
@@ -609,7 +621,7 @@ def login():
             200,
         )
 
-
+########## LOGOUT
 @api.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
@@ -617,7 +629,7 @@ def logout():
     blacklist.add(jti)
     return jsonify({"message": "Log out successfully"}), 200
 
-
+#########PROTECTED 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
