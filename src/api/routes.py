@@ -246,7 +246,7 @@ def get_info_user():
     info_user = InfoUser.query.filter_by(user_id=user_id).first()
     if not info_user:
         return jsonify({"error": "InfoUser data not found"}), 404
-
+     
     try:
         # Return the serialized InfoUser data
         return jsonify(info_user.serialize()), 200
@@ -479,7 +479,7 @@ def get_info_provider():
     info_provider = InfoProvider.query.filter_by(provider_id=provider_id).first()
     if not info_provider:
         return jsonify({"error": "InfoProvider data not found"}), 404
-
+    
     try:
         # Return the serialized InfoProvider data
         return jsonify(info_provider.serialize()), 200
@@ -728,45 +728,54 @@ def handle_upload():
     if "image" not in request.files:
         raise APIException("No image to upload")
 
-    print("FORMA DEL ARCHIVO: \n", request.files["image"])
-    my_image = Image()
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    if not user:
+        raise APIException("User not found", status_code=404)
+
+    image_file = request.files["image"]
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     public_id = f'sample_folder/profile/my-image-name_{timestamp}'
-    
-    result = cloudinary.uploader.upload(
-        request.files['image'],
-        public_id= public_id,
-        crop='limit',
-        width=450,
-        height=450,
-        eager=[
-            {
-                "width": 200,
-                "height": 200,
-                "crop": "thumb",
-                "gravity": "face",
-                "radius": 100,
-            },
-        ],
-        tags=["profile_picture"],
-    )
 
-    my_image.ruta = result["secure_url"]
-    my_image.user_id = get_jwt_identity()
-    db.session.add(my_image)
-    db.session.commit()
+    try:
+        # Upload image to Cloudinary
+        result = cloudinary.uploader.upload(
+            image_file,
+            public_id=public_id,
+            crop="limit",
+            width=450,
+            height=450,
+            eager=[
+                {
+                    "width": 200,
+                    "height": 200,
+                    "crop": "thumb",
+                    "gravity": "face",
+                    "radius": 100,
+                },
+            ],
+            tags=["profile_picture"],
+        )
 
-    return jsonify(my_image.serialize()), 200
+        # Create a new Image record in the database
+        my_image = Image(ruta=result["secure_url"], user=user)
+        db.session.add(my_image)
+        db.session.commit()
+
+        return jsonify(my_image.serialize()), 200
+
+    except Exception as e:
+        raise APIException(f"Failed to upload image: {str(e)}", status_code=500)
+
 
 
 #### GET IMG - USER ROLE
-
-@api.route('/profile_picture/users/<int:user_id>', methods=['GET'])
+@api.route('/profile_picture/users', methods=['GET'])
 @jwt_required()
-def get_user_profile_picture(user_id):
+def get_user_profile_picture():
     user_id = get_jwt_identity()
-    my_image = Image.query.filter_by(user_id=user_id, role="user").first()
+    my_image = Image.query.filter_by(user_id=user_id).first()
     if not my_image:
         raise APIException("User profile picture not found", status_code=404)
 
@@ -783,10 +792,13 @@ def get_user_profile_picture(user_id):
 
 
 
+
 ##### GET IMG - PROVIDER ROLE
 
-@api.route('/profile_picture/providers/<int:provider_id>', methods=['GET'])
-def get_provider_profile_picture(provider_id):
+@api.route('/profile_picture/providers', methods=['GET'])
+@jwt_required()
+def get_provider_profile_picture():
+    provider_id = get_jwt_identity()
     my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
     if not my_image:
         raise APIException("Provider profile picture not found", status_code=404)

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OnlyPaws from "../../img/onlypaws.png";
 import { Modal } from "react-bootstrap";
 import PetParent from "../../img/petParent.jpg";
@@ -11,11 +11,13 @@ export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const { store, actions } = useContext(Context); // Wrap Navbar component with Context component
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await actions.logout();
     localStorage.removeItem("token");
     window.location.reload();
+    navigate("/");
   };
 
   useEffect(() => {

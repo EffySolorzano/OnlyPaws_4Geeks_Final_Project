@@ -416,8 +416,8 @@ export const userActions = (getStore, getActions, setStore) => {
       return { status: response.status, data: data };
     },
 
-    getUserProfilePicture: async (userId) => {
-      const url = `http://127.0.0.1:3001/api/profile_picture/users/${userId}`;
+    getUserProfilePicture: async () => {
+      const url = "http://127.0.0.1:3001/api/profile_picture/users";
       const token = localStorage.getItem("token");
       const headers = {
         "Content-Type": "application/json",
@@ -439,6 +439,33 @@ export const userActions = (getStore, getActions, setStore) => {
         return data.profilePictureUrl; // Return the profile picture URL for rendering
       } catch (error) {
         console.error("Failed to fetch user profile picture:", error);
+        throw error;
+      }
+    },
+
+    getProviderProfilePicture: async () => {
+      const url = "http://127.0.0.1:3001/api/profile_picture/providers";
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch provider profile picture");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data.profilePictureUrl; // Return the profile picture URL for rendering
+      } catch (error) {
+        console.error("Failed to fetch provider profile picture:", error);
         throw error;
       }
     },

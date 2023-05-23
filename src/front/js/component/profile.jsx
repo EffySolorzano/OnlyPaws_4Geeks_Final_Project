@@ -39,13 +39,40 @@ const Profile = () => {
     setGender(event.target.value);
   };
 
-  const handleAvailabilityChange = (event) => {
-    setAvailability(event.target.value);
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const response = await userActions().getUserProfilePicture();
+        setProfilePictureUrl(response.ruta);
+      } catch (error) {
+        console.error("Failed to fetch profile picture:", error);
+      }
+    };
+
+    fetchProfilePicture();
+  }, []);
+
+  const fetchProfilePicture = async () => {
+    try {
+      const response = await userActions().getUserProfilePicture();
+      setProfilePictureUrl(response);
+    } catch (error) {
+      console.error("Failed to fetch profile picture:", error);
+    }
   };
 
-  const handleUpload = (newUrl) => {
-    setProfilePictureUrl(newUrl);
-  };
+  useEffect(() => {
+    fetchProfilePicture();
+  }, []);
+
+  // Add this code to fetch the profile picture URL from localStorage if available
+  useEffect(() => {
+    const storedProfilePictureUrl = localStorage.getItem("profilePictureUrl");
+    if (storedProfilePictureUrl) {
+      setProfilePictureUrl(storedProfilePictureUrl);
+    }
+  }, []);
+
 
   const handleUpdateProfile = async () => {
     try {
@@ -123,6 +150,7 @@ const Profile = () => {
     const storedProfileData = localStorage.getItem("profileData");
     if (storedProfileData) {
       const profileData = JSON.parse(storedProfileData);
+      console.log(profileData);
       setGender(profileData.gender);
       setDay(profileData.day);
       setMonth(profileData.month);
@@ -261,9 +289,14 @@ const Profile = () => {
                 <div className="card mb-6">
                   <div className="card-body text-center">
                     <figure>
-                      <img src={profilePictureUrl} className="rounded-circle img-fluid" alt="profile" style={{ width: "150px", height: "150px" }} />
+                      <img
+                        src={profilePictureUrl}
+                        className="rounded-circle img-fluid"
+                        alt="profile"
+                        style={{ width: "150px", height: "150px" }}
+                      />
                     </figure>
-                    <Uploader />
+                    <Uploader setProfilePictureUrl={setProfilePictureUrl} />
                   </div>
                 </div>
               </div>
