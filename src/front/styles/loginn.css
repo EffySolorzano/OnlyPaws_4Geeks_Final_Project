@@ -23,7 +23,13 @@
 }
 
 .google-login {
-  margin-left: 40px !important;
-  margin-bottom: 0 !important;
+  margin-left: 35px !important;
+  margin-bottom: 10px !important;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+#signInDiv {
+  margin-left: -25px !important;
+  margin-bottom: 10px !important;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }

@@ -84,3 +84,9 @@
   margin-right: -90px;
   margin-left: 90px;
 }
+
+.pic-card {
+  max-height: 400px;
+  margin-bottom: -280px;
+
+}

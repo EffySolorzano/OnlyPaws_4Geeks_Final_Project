@@ -36,10 +36,12 @@ export const userActions = (getStore, getActions, setStore) => {
           localStorage.setItem("token", token); // Store the token in localStorage
           console.log("Token stored in localStorage:", token);
           setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
+          localStorage.setItem("isLoggedIn", "true"); // Set the isLoggedIn indicator in localStorage
         } else {
           console.log("Login failed");
           localStorage.removeItem("token"); // Remove token from localStorage
           setStore({ ...getStore(), isLoggedIn: false }); // Set the isLoggedIn state to false
+          localStorage.removeItem("isLoggedIn"); // Remove the isLoggedIn indicator from localStorage
         }
 
         return response;
