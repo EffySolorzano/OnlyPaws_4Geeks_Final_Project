@@ -6,6 +6,7 @@ import Onlypaws from "../../img/onlypaws.png";
 import Swal from "sweetalert2";
 import Footer from "./footer.jsx";
 import jwt_decode from "jwt-decode";
+import GoogleSignIn from "./googleSignIn.jsx"
 
 
 const Login = () => {
@@ -166,6 +167,7 @@ const Login = () => {
             <h3>{user.name}</h3>
           </div>
         }
+
       </div>
     </div>
       <div className="container-footer">

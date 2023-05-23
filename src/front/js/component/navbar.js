@@ -11,18 +11,19 @@ export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const { store, actions } = useContext(Context); // Wrap Navbar component with Context component
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await actions.logout();
     localStorage.removeItem("token");
-    window.location.reload();
     navigate("/");
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setIsLoggedIn(true); // Set the login status to true
       actions.login();
     }
     setLoading(false);
@@ -151,7 +152,7 @@ export const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-white bg-white sticky-top">
       <div className="container-fluid">
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -159,9 +160,9 @@ export const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <Link to="/">
             <img
               className="logo img-fluid"

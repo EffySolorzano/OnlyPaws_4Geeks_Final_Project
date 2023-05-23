@@ -31,6 +31,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
 
+
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
@@ -72,6 +73,7 @@ const Profile = () => {
       setProfilePictureUrl(storedProfilePictureUrl);
     }
   }, []);
+
 
 
   const handleUpdateProfile = async () => {
@@ -297,6 +299,7 @@ const Profile = () => {
                       />
                     </figure>
                     <Uploader setProfilePictureUrl={setProfilePictureUrl} />
+
                   </div>
                 </div>
               </div>
@@ -502,25 +505,42 @@ const Profile = () => {
                 </div>
               </>
             )}
-            <i className="fa fa-pencil" onClick={handleUpdateProfile}></i>
-
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="btn btn-transparent"
-              style={{
-                backgroundColor: "#a659c8",
-                color: "#ffffff",
-                borderRadius: "15px",
-                fontFamily: "Noto Serif Hebrew, serif",
-                fontSize: "20px",
-                width: "10%",
-                marginTop: "80px",
-                textAlign: "center",
-              }}
-            >
-              Save
-            </button>
+            <div>
+              <button type="submit"
+                onClick={handleUpdateProfile}
+                className="btn btn-transparent"
+                style={{
+                  backgroundColor: "#a659c8",
+                  color: "#ffffff",
+                  borderRadius: "15px",
+                  fontFamily: "Noto Serif Hebrew, serif",
+                  fontSize: "20px",
+                  width: "3%",
+                  marginLeft: "500px",
+                }}>
+                <i className="fa solid fa-pencil"></i>
+              </button>
+            </div>
+            <div>
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn btn-transparent"
+                style={{
+                  backgroundColor: "#a659c8",
+                  color: "#ffffff",
+                  borderRadius: "15px",
+                  fontFamily: "Noto Serif Hebrew, serif",
+                  fontSize: "20px",
+                  width: "10%",
+                  marginTop: "-105px",
+                  textAlign: "center",
+                  marginLeft: "600px",
+                }}
+              >
+                Save
+              </button>
+            </div>
           </>
         )}
       </div>

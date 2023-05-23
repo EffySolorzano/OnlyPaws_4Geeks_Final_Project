@@ -421,8 +421,6 @@ def register_provider():
 
 
 ####GET#####
-
-
 @api.route("/providers", methods=["GET"])
 def get_providers():
     providers = Provider.query.all()
@@ -768,8 +766,6 @@ def handle_upload():
     except Exception as e:
         raise APIException(f"Failed to upload image: {str(e)}", status_code=500)
 
-
-
 #### GET IMG - USER ROLE
 @api.route('/profile_picture/users', methods=['GET'])
 @jwt_required()
@@ -799,11 +795,20 @@ def get_user_profile_picture():
 @jwt_required()
 def get_provider_profile_picture():
     provider_id = get_jwt_identity()
-    my_image = Image.query.filter_by(user_id=provider_id, role="provider").first()
+    my_image = Image.query.filter_by(provider_id=provider_id).first()
     if not my_image:
         raise APIException("Provider profile picture not found", status_code=404)
+    
+    provider = Provider.query.get(provider_id)
+    if not provider:
+        raise APIException("Provider not found", status_code=404)
 
-    return jsonify({"profilePictureUrl": my_image.ruta}), 200
+    return jsonify({
+        "providerID": provider.id,
+        "username": provider.username,
+        "providerProfilePictureUrl": my_image.ruta
+    }), 200
+
 
 
 ###### IMG LIST
