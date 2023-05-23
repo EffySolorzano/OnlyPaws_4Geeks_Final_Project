@@ -1,31 +1,44 @@
 import React, { useState, useContext } from "react";
 import { Context } from "react";
 
-const Uploader = () => {
-
+const Uploader = ({ setProfilePictureUrl }) => {
+    const [latestProfilePicture, setLatestProfilePicture] = useState("");
     const [files, setFiles] = useState(null);
 
     const uploadImage = evt => {
         evt.preventDefault();
-        // we are about to send this to the backend.
-        console.log("This are the files", files);
-        let body = new FormData();
-        body.append("image", files[0]);
-        const token = localStorage.getItem("token")
-        const options = {
-            body,
+        if (!files || files.length === 0) {
+            console.error("No image selected");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("image", files[0]);
+
+        fetch(`${process.env.BACKEND_URL}/api/upload`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        };
-        // you need to have the user_id in the localStorage
-        //const currentUserId = localStorage.getItem("token"); //Aquí tienen que colocar el token
-        fetch(`${process.env.BACKEND_URL}/api/upload`, options)
-            .then(resp => resp.json())
-            .then(data => console.log("Success!!!!", data))
-            .catch(error => console.error("ERRORRRRRR!!!", error));
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to upload image");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Success!!!!", data);
+                // Update the profile picture URL
+                setProfilePictureUrl(data.ruta);
+            })
+            .catch((error) => {
+                console.error("ERRORRRRRR!!!", error);
+            });
     };
+
 
     return (
         <div className="jumbotron">
