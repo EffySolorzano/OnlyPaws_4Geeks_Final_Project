@@ -7,14 +7,29 @@ import Swal from "sweetalert2";
 import Footer from "./footer.jsx";
 import jwt_decode from "jwt-decode";
 import GoogleSignIn from "./googleSignIn.jsx"
-
+import { userActions } from "../store/usuario.js"
 
 const Login = () => {
   const { actions } = useContext(Context);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const [gender, setGender] = useState("");
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [morning, setMorning] = useState(false);
+  const [afternoon, setAfternoon] = useState(false);
+  const [evening, setEvening] = useState(false);
+  const [petSitter, setPetSitter] = useState(false);
+  const [dogWalker, setDogWalker] = useState(false);
+  const [houseSitter, setHouseSitter] = useState(false);
+  const [petGroomer, setPetGroomer] = useState(false);
+  const [numberOfPets, setNumberOfPets] = useState(0);
 
   const handleLogin = async (e) => {
     console.log('email')
@@ -30,6 +45,8 @@ const Login = () => {
     }
     let response = await actions.login(email, password);
     if (response.ok) {
+      await actions.getUserInfo();
+      await actions.getInfoProvider();
       //actions.initialFetchUsersData();
       //actions.getUserFavorites();
       Swal.fire({
@@ -46,6 +63,58 @@ const Login = () => {
       });
     }
   };
+
+  const populateProfile = async () => {
+    const response = await actions.getUserInfo();
+    if (response.ok) {
+      const data = await response.json();
+
+      setGender(data.gender);
+      setDay(data.day);
+      setMonth(data.month);
+      setYear(data.year);
+      setDescription(data.description);
+      setAddress(data.address);
+      setPhone(data.phone);
+      setPaymentMethod(data.paymentMethod);
+
+    } else {
+      console.log("Failed to fetch user info. Please try again.");
+    }
+  };
+
+  const populateProviderProfile = async () => {
+    const response = await actions.getInfoProvider();
+    if (response.ok) {
+      const data = await response.json();
+
+      // Populate your state variables here with the data returned
+      setGender(data.gender);
+      setDay(parseInt(data.day));
+      setMonth(parseInt(data.month));
+      setYear(parseInt(data.year));
+      setMorning(data.morning);
+      setAfternoon(data.afternoon);
+      setEvening(data.evening);
+      setPetSitter(data.pet_sitter);
+      setDogWalker(data.dog_walker);
+      setHouseSitter(data.house_sitter);
+      setPetGroomer(data.pet_groomer);
+      setNumberOfPets(data.number_of_pets);
+      setDescription(data.description);
+      setAddress(data.address);
+      setPhone(data.phone);
+      setPaymentMethod(data.paymentMethod);
+
+    } else {
+      console.log("Failed to fetch provider info. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    populateProviderProfile();
+    populateProfile();
+  }, []);
 
   const handleForgotPassword = async () => {
     const { value: email } = await Swal.fire({

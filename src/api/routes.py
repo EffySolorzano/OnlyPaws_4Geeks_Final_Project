@@ -208,8 +208,6 @@ def get_users():
 
 
 ###################
-
-
 @api.route("/users/<int:user_id>", methods=["GET"])
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -338,24 +336,27 @@ def update_user():
 
 
 ######### DELETE
-@api.route("/users/<int:user_id>", methods=["DELETE"])
-def delete_user(user_id):
-    user = User.query.filter_by(id=user_id).first()
+@api.route("/info_user", methods=["DELETE"])
+@jwt_required()
+def delete_user():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(id=current_user_id).first()
     if not user:
-        return jsonify({"error": "User not found"}), 404
+        return jsonify({"error": "Provider not found"}), 404
 
-    # Check if the User has an associated InfoUser
+    # Check if the Provider has an associated InfoProvider
     info_user = InfoUser.query.filter_by(user_id=user.id).first()
 
-    # Delete the InfoUser if it exists
+    # Delete the InfoProvider if it exists
     if info_user:
         db.session.delete(info_user)
 
-    # Delete the User
+    # Delete the Provider
     db.session.delete(user)
     db.session.commit()
 
-    return jsonify({"message": "User deleted successfully"}), 200
+    return jsonify({"message": "Provider deleted successfully"}), 200
+
 
 
 ############# PROVIDER REGISTER, GET, POST, PUT, DELETE################
@@ -591,11 +592,11 @@ def update_provider():
 
 
 ######## DELETE
-
-
-@api.route("/providers/<int:provider_id>", methods=["DELETE"])
-def delete_provider(provider_id):
-    provider = Provider.query.filter_by(id=provider_id).first()
+@api.route("/info_provider", methods=["DELETE"])
+@jwt_required()
+def delete_provider():
+    current_provider_id = get_jwt_identity()
+    provider = Provider.query.filter_by(id=current_provider_id).first()
     if not provider:
         return jsonify({"error": "Provider not found"}), 404
 
@@ -613,6 +614,7 @@ def delete_provider(provider_id):
     return jsonify({"message": "Provider deleted successfully"}), 200
 
 
+
 ################ LOGIN / LOGOUT ###################
 def verificacionToken(jti):
     jti  # Identificador del JWT (es más corto)
@@ -626,8 +628,6 @@ def verificacionToken(jti):
 blacklist = set()
 
 ####LOGIN
-
-
 @api.route("/login", methods=["POST"])
 def login():
     email = request.json.get("email", None)
@@ -670,7 +670,7 @@ def login():
                 {
                     "message": "Logged in successfully",
                     "access_token": access_token,
-                    "id": provider_id,
+                    "provider_id": provider_id,
                 }
             ),
             200,
@@ -728,8 +728,10 @@ def handle_upload():
 
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    if not user:
-        raise APIException("User not found", status_code=404)
+    provider = Provider.query.get(current_user_id)  # Retrieve the provider based on the current user ID
+
+    if not user and not provider:
+        raise APIException("User or provider not found", status_code=404)
 
     image_file = request.files["image"]
 
@@ -756,8 +758,13 @@ def handle_upload():
             tags=["profile_picture"],
         )
 
-        # Create a new Image record in the database
-        my_image = Image(ruta=result["secure_url"], user=user)
+        if user:
+            # Create a new Image record associated with the user in the database
+            my_image = Image(ruta=result["secure_url"], user=user)
+        else:
+            # Create a new Image record associated with the provider in the database
+            my_image = Image(ruta=result["secure_url"], provider=provider)
+
         db.session.add(my_image)
         db.session.commit()
 
