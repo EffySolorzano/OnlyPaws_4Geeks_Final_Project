@@ -21,13 +21,9 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setIsLoggedIn(true); // Set the login status to true
-      actions.login();
-    }
+    setIsLoggedIn(store.isLoggedIn);
     setLoading(false);
-  }, []);
+  }, [store.isLoggedIn]);
 
   const handleModalClose = () => {
     setShowModal(false);

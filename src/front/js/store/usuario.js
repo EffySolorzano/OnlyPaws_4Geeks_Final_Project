@@ -4,7 +4,7 @@ export const userStore = {
     msg: "I'm an object",
   },
   currentUser: "",
-  isLoggedIn: false,
+  isLoggedIn: true,
   usersData: [],
   favoritos: [],
   chatbotResponse: "",
