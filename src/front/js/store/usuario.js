@@ -19,6 +19,8 @@ export const userActions = (getStore, getActions, setStore) => {
     login: async (email, password) => {
       try {
         const store = getStore();
+        // let userActions = await getActions().getUserInfo();
+        //let actions = await getActions().getInfoProvider();
         const response = await fetch("http://127.0.0.1:3001/api/login", {
           method: "POST",
           headers: {
@@ -57,6 +59,13 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
+
+    checkLoggedIn: () => {
+      const token = localStorage.getItem("token");
+      const isLoggedIn = token !== null;
+      setStore({ isLoggedIn });
+    },
+
     logout: async () => {
       const store = getStore();
       const token = localStorage.getItem("token");
@@ -339,7 +348,6 @@ export const userActions = (getStore, getActions, setStore) => {
     },
     getUserInfo: async () => {
       try {
-        const store = getStore();
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -355,24 +363,18 @@ export const userActions = (getStore, getActions, setStore) => {
           },
         });
 
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log("User Info: ", data);
-
-          // Do something with the data, like updating the state
-          setStore({
-            ...getStore(),
-            userInfo: data,
-          });
-        } else {
-          console.log("Failed to fetch user info: ", data.error);
+        if (!response.ok) {
+          console.log("Failed to fetch user info");
+          throw new Error("Failed to fetch user info");
         }
 
-        return response;
+        const data = await response.json();
+        console.log("User Info: ", data);
+
+        // Do something with the data, like returning it
+        return data;
       } catch (error) {
-        const message = error.message || "Something went wrong";
-        setStore({ user: null, error: message });
+        console.log("Error fetching user info", error);
         throw error;
       }
     },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../pages/footer.jsx";
 import Uploader from "../component/upoloader/uploader.jsx";
@@ -6,13 +6,21 @@ import Profiless from "../../styles/profiless.css";
 import Profilebottom from "../../img/profilebottom.png";
 import Swal from "sweetalert2";
 import { userActions } from "../store/usuario.js";
+import { Context } from "../store/appContext";
 
 const Profile = () => {
+  const { actions } = useContext(Context);
+  const [userInfo, setUserInfo] = useState(null);
+  const [infoProvider, setInfoProvider] = useState(null);
   const [role, setRole] = useState("");
   const [gender, setGender] = useState("");
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [providerGender, setProviderGender] = useState("");
+  const [providerDay, setProviderDay] = useState("");
+  const [providerMonth, setProviderMonth] = useState("");
+  const [providerYear, setProviderYear] = useState("");
   const [morning, setMorning] = useState(false);
   const [afternoon, setAfternoon] = useState(false);
   const [evening, setEvening] = useState(false);
@@ -21,6 +29,10 @@ const Profile = () => {
   const [houseSitter, setHouseSitter] = useState(false);
   const [petGroomer, setPetGroomer] = useState(false);
   const [numberOfPets, setPets] = useState(0);
+  const [providerDescription, setProviderDescription] = useState("");
+  const [providerAddress, setProviderAddress] = useState("");
+  const [providerPhone, setProviderPhone] = useState("");
+  const [providerPaymentMethod, setProviderPaymentMethod] = useState("");
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -30,15 +42,79 @@ const Profile = () => {
   );
   const navigate = useNavigate();
 
-
-
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
 
   const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
+    const selectedGender = event.target.value;
+
+    if (role === 'provider') {
+      setProviderGender(selectedGender);
+    } else {
+      setGender(selectedGender);
+    }
+  }
+
+  const handleDescriptionChange = (event) => {
+    const description = event.target.value;
+
+    if (role === 'provider') {
+      setProviderDescription(description);
+    } else {
+      setDescription(description);
+    }
+  }
+
+  const handleProviderDay = (event) => {
+    const providerDay = event.target.value;
+
+    if (role === 'provider') {
+      setProviderDay(parseInt(providerDay));
+    } else {
+      setDay(parseInt(providerDay));
+    }
+  }
+
+  const handleProviderMonth = (event) => {
+    const providerMonth = event.target.value;
+
+    if (role === 'provider') {
+      setProviderMonth(parseInt(providerMonth));
+    } else {
+      setMonth(parseInt(providerMonth));
+    }
+  }
+
+  const handleProviderYear = (event) => {
+    const providerYear = event.target.value;
+
+    if (role === 'provider') {
+      setProviderYear(parseInt(providerYear));
+    } else {
+      setYear(parseInt(providerYear));
+    }
+  }
+
+  const handleProviderAddress = (event) => {
+    const providerAddress = event.target.value;
+
+    if (role === 'provider') {
+      setProviderAddress(providerAddress);
+    } else {
+      setAddress(providerAddress);
+    }
+  }
+
+  const handleProviderPhone = (event) => {
+    const providerPhone = event.target.value;
+
+    if (role === 'provider') {
+      setProviderPhone(providerPhone);
+    } else {
+      setPhone(providerPhone);
+    }
+  }
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -103,13 +179,13 @@ const Profile = () => {
           });
         }
       } else if (role === "provider") {
-        const profileData = JSON.parse(localStorage.getItem("profileData"));
-        const providerId = profileData.providerId;
+        //const profileData = JSON.parse(localStorage.getItem("profileData"));
+        //const providerId = profileData.provider_id;
         const providerData = {
-          gender,
-          day: parseInt(day),
-          month: parseInt(month),
-          year: parseInt(year),
+          gender: providerGender,
+          day: parseInt(providerDay),
+          month: parseInt(providerMonth),
+          year: parseInt(providerYear),
           morning,
           afternoon,
           evening,
@@ -118,12 +194,12 @@ const Profile = () => {
           house_sitter: houseSitter,
           pet_groomer: petGroomer,
           number_of_pets: numberOfPets,
-          description,
-          address,
-          phone,
-          paymentMethod,
+          description: providerDescription,
+          address: providerAddress,
+          phone: providerPhone,
+          paymentMethod: providerPaymentMethod,
         };
-        const response = await userActions().updateProvider(providerData, providerId);
+        const response = await userActions().updateProvider(providerData);
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
@@ -148,48 +224,54 @@ const Profile = () => {
   };
 
 
-  const fetchProfileData = async () => {
+  const fetchUserInfo = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userResponse = await userActions().getUserInfo();
-      const providerResponse = await userActions().getInfoProvider();
-
-      if (userResponse.ok && providerResponse.status === 200) {
-        const userData = await userResponse.json();
-        const providerData = providerResponse.data;
-
-        setRole(userData.role);
-        setGender(userData.gender);
-        setDay(userData.day);
-        setMonth(userData.month);
-        setYear(userData.year);
-        setDescription(userData.description);
-        setAddress(userData.address);
-        setPhone(userData.phone);
-        setPaymentMethod(userData.paymentMethod);
-
-        // Populate additional fields based on the role
-        if (userData.role === "provider") {
-          setMorning(providerData.morning);
-          setAfternoon(providerData.afternoon);
-          setEvening(providerData.evening);
-          setPetSitter(providerData.pet_sitter);
-          setDogWalker(providerData.dog_walker);
-          setHouseSitter(providerData.house_sitter);
-          setPetGroomer(providerData.pet_groomer);
-          setPets(providerData.number_of_pets);
-        }
-      } else {
-        console.log("Failed to fetch user info. Please try again.");
-      }
+      const info = await actions.getUserInfo();
+      setUserInfo(info);
+      setGender(info.gender)
+      setDay(info.day)
+      setMonth(info.month)
+      setYear(info.year)
+      setPhone(info.phone)
+      setAddress(info.address)
+      setDescription(info.description)
+      setPaymentMethod(info.payment_method)
     } catch (error) {
       console.error("Failed to fetch user info:", error);
     }
   };
 
+  const fetchInfoProvider = async () => {
+    try {
+      const info = await actions.getInfoProvider();
+      setInfoProvider(info);
+      setProviderGender(info.gender);
+      setProviderDay(info.day);
+      setProviderMonth(info.month);
+      setProviderYear(info.year);
+      setProviderPhone(info.phone);
+      setProviderAddress(info.address);
+      setProviderDescription(info.description);
+      setProviderPaymentMethod(info.payment_method);
+      setMorning(info.morning);
+      setAfternoon(info.afternoon);
+      setEvening(info.evening);
+      setPetGroomer(info.pet_groomer);
+      setDogWalker(info.dog_walker);
+      setHouseSitter(info.house_sitter);
+      setPetGroomer(info.pet_groomer);
+      setPets(info.number_of_pets);
+    } catch (error) {
+      console.error("Failed to fetch provider info:", error);
+    }
+  };
+
   useEffect(() => {
-    fetchProfileData();
-  }, []);
+
+    fetchUserInfo();
+    fetchInfoProvider();
+  }, [actions]);
+
 
 
   const handleSubmit = async (event) => {
@@ -334,7 +416,12 @@ const Profile = () => {
                         <label className="mb-0" htmlFor="gender">
                           <i className="fa-solid fa-person-half-dress" style={{ color: '#a659c8' }}></i> Gender:
                         </label>
-                        <select className="ml-2" id="gender" value={gender} onChange={handleGenderChange}>
+                        <select
+                          className="ml-2"
+                          id="gender"
+                          value={role === 'provider' ? providerGender : gender}
+                          onChange={handleGenderChange}
+                        >
                           <option value="">Gender</option>
                           <option value="Female">Female</option>
                           <option value="Male">Male</option>
@@ -345,19 +432,19 @@ const Profile = () => {
                         <label htmlFor="dob">
                           <i className="fa-solid fa-calendar" style={{ color: '#a659c8' }}></i> Date of Birth:
                         </label>
-                        <select id="day" value={day} onChange={(e) => setDay(parseInt(e.target.value))}>
+                        <select id="day" value={role === 'provider' ? providerDay : day} onChange={handleProviderDay}>
                           {[...Array(31).keys()].map((d, i) => (
                             <option value={i + 1} key={i}>{i + 1}</option>
                           ))}
                         </select>
 
-                        <select id="month" value={month} onChange={(e) => setMonth(parseInt(e.target.value))}>
+                        <select id="month" value={role === 'provider' ? providerMonth : month} onChange={handleProviderMonth}>
                           {[...Array(12).keys()].map((m, i) => (
                             <option value={i + 1} key={i}>{i + 1}</option>
                           ))}
                         </select>
 
-                        <select id="year" value={year} onChange={(e) => setYear(parseInt(e.target.value))}>
+                        <select id="year" value={role === 'provider' ? providerYear : year} onChange={handleProviderYear}>
                           {[...Array(101).keys()].map((y, i) => (
                             <option value={2023 - i} key={i}>{2023 - i}</option>
                           ))}
@@ -367,18 +454,18 @@ const Profile = () => {
                     <div className="row mt-3">
                       <div className="col-12 col-md-4">
                         <label htmlFor="address"><i className="fa-solid fa-map-pin" style={{ color: '#a659c8' }}></i> Address:</label>
-                        <input type="text" id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+                        <input type="text" id="address" value={role === 'provider' ? providerAddress : address} onChange={handleProviderAddress} />
                       </div>
                       <div className="col-12 col-md-4">
                         <label htmlFor="phone"><i className="fa-solid fa-mobile-screen-button" style={{ color: '#a659c8' }}></i> Phone:</label>
-                        <input type="text" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                        <input type="text" id="phone" value={role === 'provider' ? providerPhone : phone} onChange={handleProviderPhone} />
                       </div>
                       <div className="col-12 col-md-4">
                         <label htmlFor="paymentMethod">Payment Method:</label>
                         <div>
-                          <input type="radio" value="Visa" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-visa" style={{ color: '#a659c8' }}></i>
-                          <input type="radio" value="Mastercard" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-mastercard" style={{ color: '#a659c8' }}></i>
-                          <input type="radio" value="Paypal" name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-paypal" style={{ color: '#a659c8' }}></i>
+                          <input type="radio" value="Visa" checked={userInfo?.paymentMethod === 'Visa' || infoProvider?.paymentMethod === 'Visa'} name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-visa" style={{ color: '#a659c8' }}></i>
+                          <input type="radio" value="Mastercard" checked={userInfo?.paymentMethod === 'Mastercard' || infoProvider?.paymentMethod === 'Mastercard'} name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-cc-mastercard" style={{ color: '#a659c8' }}></i>
+                          <input type="radio" value="Paypal" checked={userInfo?.paymentMethod === 'Paypal' || infoProvider?.paymentMethod === 'Paypal'} name="payment" onChange={(e) => setPaymentMethod(e.target.value)} /> <i className="fa-brands fa-paypal" style={{ color: '#a659c8' }}></i>
                         </div>
                       </div>
                     </div>
@@ -387,7 +474,7 @@ const Profile = () => {
                         <label className="form-label justify-center" htmlFor="description">
                           <i className="fa-solid fa-pencil" style={{ color: '#a659c8' }}></i> Description:
                         </label>
-                        <textarea placeholder="Tell us about yourself" id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} style={{ width: "70%" }} />
+                        <textarea placeholder="Tell us about yourself" id="description" value={role === 'provider' ? providerDescription : description} onChange={handleDescriptionChange} rows={3} style={{ width: "70%" }} />
                       </div>
                     </div>
                   </div>
@@ -589,6 +676,7 @@ const Profile = () => {
       </div>
     </>
   );
+
 };
 
 export default Profile;

@@ -21,9 +21,10 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
+    actions.checkLoggedIn();
     setIsLoggedIn(store.isLoggedIn);
     setLoading(false);
-  }, [store.isLoggedIn]);
+  }, []);
 
   const handleModalClose = () => {
     setShowModal(false);

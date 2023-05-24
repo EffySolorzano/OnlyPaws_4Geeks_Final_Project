@@ -763,7 +763,8 @@ def handle_upload():
             my_image = Image(ruta=result["secure_url"], user=user)
         else:
             # Create a new Image record associated with the provider in the database
-            my_image = Image(ruta=result["secure_url"], provider=provider)
+            my_image = Image(ruta=result["secure_url"], user= None, provider = provider)
+            #my_image = Image(ruta=result["secure_url"], provider=provider)
 
         db.session.add(my_image)
         db.session.commit()
