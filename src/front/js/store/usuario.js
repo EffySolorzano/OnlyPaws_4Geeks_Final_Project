@@ -57,6 +57,12 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
+    checkLoggedIn: () => {
+      const token = localStorage.getItem("token");
+      const isLoggedIn = token !== null;
+      setStore({ isLoggedIn });
+    },
+
     logout: async () => {
       const store = getStore();
       const token = localStorage.getItem("token");
