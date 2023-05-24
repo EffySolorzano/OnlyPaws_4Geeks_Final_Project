@@ -27,21 +27,27 @@ export const userActions = (getStore, getActions, setStore) => {
           body: JSON.stringify({ email: email, password: password }),
         });
         const data = await response.json();
-        const user = data.user;
 
         console.log("Response Data:", data);
 
         if (response.ok) {
-          const token = data.access_token; // Modify this line to use the correct token property name (e.g., access_token)
-          localStorage.setItem("token", token); // Store the token in localStorage
+          const token = data.access_token;
+          const role = data.role; // Get the role from the response data
+          const id = data.role === "user" ? data.id : data.provider_id; // Get the ID based on the role
+          localStorage.setItem("token", token);
           console.log("Token stored in localStorage:", token);
-          setStore({ ...getStore(), isLoggedIn: true }); // Set the isLoggedIn state to true
-          localStorage.setItem("isLoggedIn", "true"); // Set the isLoggedIn indicator in localStorage
+          setStore({
+            ...getStore(),
+            isLoggedIn: true,
+            role: role, // Set the role based on the response data
+            id: id,
+          });
+          localStorage.setItem("isLoggedIn", "true");
         } else {
           console.log("Login failed");
-          localStorage.removeItem("token"); // Remove token from localStorage
-          setStore({ ...getStore(), isLoggedIn: false }); // Set the isLoggedIn state to false
-          localStorage.removeItem("isLoggedIn"); // Remove the isLoggedIn indicator from localStorage
+          localStorage.removeItem("token");
+          setStore({ ...getStore(), isLoggedIn: false, role: null, id: null });
+          localStorage.removeItem("isLoggedIn");
         }
 
         return response;
@@ -51,7 +57,6 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
-
     logout: async () => {
       const store = getStore();
       const token = localStorage.getItem("token");
@@ -73,6 +78,7 @@ export const userActions = (getStore, getActions, setStore) => {
         if (response.ok) {
           localStorage.setItem("token", "");
           sessionStorage.setItem("token", "");
+          localStorage.removeItem("profileData"); // Added this line
           setStore({ ...getStore(), isLoggedIn: false });
         } else {
           const responseData = await response.json();
@@ -331,9 +337,16 @@ export const userActions = (getStore, getActions, setStore) => {
         throw error;
       }
     },
-    getInfoUser: async () => {
+    getUserInfo: async () => {
       try {
+        const store = getStore();
         const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.log("No token found");
+          return;
+        }
+
         const response = await fetch("http://127.0.0.1:3001/api/info_user", {
           method: "GET",
           headers: {
@@ -341,21 +354,39 @@ export const userActions = (getStore, getActions, setStore) => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const data = await response.json();
-        console.log(data); // Log the response data
-        const infoUser = data; // Assuming the response contains the InfoUser data
-        setStore({ infoUser, error: null }); // Update the store with infoUser
-        return infoUser;
+
+        if (response.ok) {
+          console.log("User Info: ", data);
+
+          // Do something with the data, like updating the state
+          setStore({
+            ...getStore(),
+            userInfo: data,
+          });
+        } else {
+          console.log("Failed to fetch user info: ", data.error);
+        }
+
+        return response;
       } catch (error) {
         const message = error.message || "Something went wrong";
-        setStore({ infoUser: null, error: message }); // Update the store with infoUser as null
+        setStore({ user: null, error: message });
         throw error;
       }
     },
 
     getInfoProvider: async () => {
       try {
+        const store = getStore();
         const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.log("No token found");
+          return;
+        }
+
         const response = await fetch(
           "http://127.0.0.1:3001/api/info_provider",
           {
@@ -366,17 +397,19 @@ export const userActions = (getStore, getActions, setStore) => {
             },
           }
         );
+
+        if (!response.ok) {
+          console.log("Failed to fetch InfoProvider data");
+          throw new Error("Failed to fetch InfoProvider data");
+        }
+
         const data = await response.json();
-        console.log(data); // Log the response data
-        const infoProvider = data; // Assuming the response contains the InfoProvider data
-        setStore({ infoProvider, error: null }); // Update the store with infoProvider
-        return infoProvider;
+        return data; // Here you return the data so you can use it in your components
       } catch (error) {
-        const message = error.message || "Something went wrong";
-        setStore({ infoProvider: null, error: message }); // Update the store with infoProvider as null
-        throw error;
+        console.log("Error fetching InfoProvider data", error);
       }
     },
+
     updateUser: async (userData) => {
       const token = localStorage.getItem("token");
       const response = await fetch(`http://127.0.0.1:3001/api/info_user-edit`, {
@@ -469,6 +502,51 @@ export const userActions = (getStore, getActions, setStore) => {
       } catch (error) {
         console.error("Failed to fetch provider profile picture:", error);
         throw error;
+      }
+    },
+    deleteProvider: async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          "http://127.0.0.1:3001/api/info_provider",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          console.log("Provider deleted successfully");
+        } else {
+          const data = await response.json();
+          console.log("Failed to delete provider:", data.error);
+        }
+      } catch (error) {
+        console.error("Failed to delete provider:", error);
+      }
+    },
+    deleteUser: async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://127.0.0.1:3001/api/info_user", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          console.log("Provider deleted successfully");
+        } else {
+          const data = await response.json();
+          console.log("Failed to delete provider:", data.error);
+        }
+      } catch (error) {
+        console.error("Failed to delete provider:", error);
       }
     },
   };

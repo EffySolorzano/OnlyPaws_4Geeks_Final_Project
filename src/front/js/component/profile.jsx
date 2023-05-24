@@ -148,69 +148,49 @@ const Profile = () => {
   };
 
 
-  useEffect(() => {
-    const storedProfileData = localStorage.getItem("profileData");
-    if (storedProfileData) {
-      const profileData = JSON.parse(storedProfileData);
-      console.log(profileData);
-      setGender(profileData.gender);
-      setDay(profileData.day);
-      setMonth(profileData.month);
-      setYear(profileData.year);
-      setMorning(profileData.morning);
-      setAfternoon(profileData.afternoon);
-      setEvening(profileData.evening);
-      setPetSitter(profileData.petSitter);
-      setDogWalker(profileData.dogWalker);
-      setHouseSitter(profileData.houseSitter);
-      setPetGroomer(profileData.petGroomer);
-      setPets(profileData.numberOfPets);
-      setDescription(profileData.description);
-      setAddress(profileData.address);
-      setPhone(profileData.phone);
-      setPaymentMethod(profileData.paymentMethod);
-    } else {
-      fetchProfileData();
-    }
-  }, []);
-
   const fetchProfileData = async () => {
     try {
-      if (role === "user") {
-        const infoUser = await userActions().getInfoUser();
-        setGender(infoUser.gender);
-        setDay(infoUser.day);
-        setMonth(infoUser.month);
-        setYear(infoUser.year);
-        setDescription(infoUser.description);
-        setAddress(infoUser.address);
-        setPhone(infoUser.phone);
-        setPaymentMethod(infoUser.paymentMethod);
-        localStorage.setItem("profileData", JSON.stringify(infoUser));
-      } else if (role === "provider") {
-        const infoProvider = await userActions().getInfoProvider();
-        setGender(infoProvider.gender);
-        setDay(infoProvider.day);
-        setMonth(infoProvider.month);
-        setYear(infoProvider.year);
-        setMorning(infoProvider.morning);
-        setAfternoon(infoProvider.afternoon);
-        setEvening(infoProvider.evening);
-        setPetSitter(infoProvider.petSitter);
-        setDogWalker(infoProvider.dogWalker);
-        setHouseSitter(infoProvider.houseSitter);
-        setPetGroomer(infoProvider.petGroomer);
-        setPets(infoProvider.numberOfPets);
-        setDescription(infoProvider.description);
-        setAddress(infoProvider.address);
-        setPhone(infoProvider.phone);
-        setPaymentMethod(infoProvider.paymentMethod);
-        localStorage.setItem("profileData", JSON.stringify(infoProvider));
+      const token = localStorage.getItem("token");
+      const userResponse = await userActions().getUserInfo();
+      const providerResponse = await userActions().getInfoProvider();
+
+      if (userResponse.ok && providerResponse.status === 200) {
+        const userData = await userResponse.json();
+        const providerData = providerResponse.data;
+
+        setRole(userData.role);
+        setGender(userData.gender);
+        setDay(userData.day);
+        setMonth(userData.month);
+        setYear(userData.year);
+        setDescription(userData.description);
+        setAddress(userData.address);
+        setPhone(userData.phone);
+        setPaymentMethod(userData.paymentMethod);
+
+        // Populate additional fields based on the role
+        if (userData.role === "provider") {
+          setMorning(providerData.morning);
+          setAfternoon(providerData.afternoon);
+          setEvening(providerData.evening);
+          setPetSitter(providerData.pet_sitter);
+          setDogWalker(providerData.dog_walker);
+          setHouseSitter(providerData.house_sitter);
+          setPetGroomer(providerData.pet_groomer);
+          setPets(providerData.number_of_pets);
+        }
+      } else {
+        console.log("Failed to fetch user info. Please try again.");
       }
     } catch (error) {
-      console.error("Failed to fetch profile data:", error);
+      console.error("Failed to fetch user info:", error);
     }
   };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -271,6 +251,47 @@ const Profile = () => {
       navigate("/profile"); // redirect to updated profile component
     });
   };
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    if (role === "provider") {
+      try {
+        await userActions().deleteProvider();
+        Swal.fire({
+          icon: "success",
+          title: "Provider deleted successfully",
+        }).then(() => {
+          navigate("/"); // Redirect to the profile component
+        });
+      } catch (error) {
+        console.error("Failed to delete provider:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to delete provider",
+          text: error.message || "Something went wrong",
+        });
+      }
+    } else if (role === "user") {
+      try {
+        await userActions().deleteUser();
+        Swal.fire({
+          icon: "success",
+          title: "User deleted successfully",
+        }).then(() => {
+          navigate("/"); // Redirect to the profile component
+        });
+      } catch (error) {
+        console.error("Failed to delete user:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to delete user",
+          text: error.message || "Something went wrong",
+        });
+      }
+    }
+  };
+
+
 
 
   return (
@@ -516,7 +537,7 @@ const Profile = () => {
                   fontFamily: "Noto Serif Hebrew, serif",
                   fontSize: "20px",
                   width: "3%",
-                  marginLeft: "500px",
+                  marginLeft: "570px",
                 }}>
                 <i className="fa solid fa-pencil"></i>
               </button>
@@ -533,12 +554,28 @@ const Profile = () => {
                   fontFamily: "Noto Serif Hebrew, serif",
                   fontSize: "20px",
                   width: "10%",
-                  marginTop: "-105px",
+                  marginTop: "-104px",
                   textAlign: "center",
-                  marginLeft: "600px",
+                  marginLeft: "640px",
                 }}
               >
                 Save
+              </button>
+            </div>
+            <div>
+              <button className="btn btn-transparent" onClick={handleDelete} style={{
+                backgroundColor: "#ff7900",
+                color: "#ffffff",
+                borderRadius: "15px",
+                fontFamily: "Noto Serif Hebrew, serif",
+                fontSize: "20px",
+                width: "3%",
+                marginTop: "-187px",
+                textAlign: "center",
+                marginLeft: "820px",
+              }}
+              >
+                <i className="fa-solid fa-trash"></i>
               </button>
             </div>
           </>
