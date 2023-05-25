@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 import { userActions } from "../store/usuario.js";
 import { Context } from "../store/appContext";
 
+
+
 const Profile = () => {
   const { actions } = useContext(Context);
   const [userInfo, setUserInfo] = useState(null);
@@ -40,7 +42,21 @@ const Profile = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState(
     "https://via.placeholder.com/150"
   );
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+
+
+  ////////////CROP IMAGE /////////////
+
+  const handleUploaderClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  /////////////// EDIT FIELDS////////////////
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
@@ -116,6 +132,7 @@ const Profile = () => {
     }
   }
 
+  ////////////// PROFILE  PIC ////////////
   useEffect(() => {
     const fetchProfilePicture = async () => {
       try {
@@ -150,7 +167,7 @@ const Profile = () => {
     }
   }, []);
 
-
+  /////// UPDATE ///////////
 
   const handleUpdateProfile = async () => {
     try {
@@ -223,6 +240,7 @@ const Profile = () => {
     }
   };
 
+  ////////// FETCH AND POPULATE FIELDS////////////
 
   const fetchUserInfo = async () => {
     try {
@@ -240,6 +258,7 @@ const Profile = () => {
       console.error("Failed to fetch user info:", error);
     }
   };
+
 
   const fetchInfoProvider = async () => {
     try {
@@ -272,7 +291,7 @@ const Profile = () => {
     fetchInfoProvider();
   }, [actions]);
 
-  //////////////////////////////////////
+  ////////////////////////SAVE//////////////////////
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -334,7 +353,7 @@ const Profile = () => {
     });
   };
 
-  ////////////////////
+  ////////////////////CONFIRM AND DELETE////////////////////
 
   const confirmDelete = async (event) => {
     event.preventDefault();
@@ -422,7 +441,6 @@ const Profile = () => {
                       />
                     </figure>
                     <Uploader setProfilePictureUrl={setProfilePictureUrl} />
-
                   </div>
                 </div>
               </div>
