@@ -542,13 +542,40 @@ export const userActions = (getStore, getActions, setStore) => {
         });
 
         if (response.ok) {
-          console.log("Provider deleted successfully");
+          console.log("User deleted successfully");
         } else {
           const data = await response.json();
-          console.log("Failed to delete provider:", data.error);
+          console.log("Failed to delete user:", data.error);
         }
       } catch (error) {
-        console.error("Failed to delete provider:", error);
+        console.error("Failed to delete user:", error);
+      }
+    },
+    uploadProviderPicture: async (file) => {
+      const url = "http://127.0.0.1:3001/api/upload/provider";
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload provider profile picture");
+        }
+
+        const data = await response.json();
+        console.log("Success!!!!", data);
+        return data.ruta; // Return the profile picture URL for rendering
+      } catch (error) {
+        console.error("Failed to upload provider profile picture:", error);
+        throw error;
       }
     },
   };
