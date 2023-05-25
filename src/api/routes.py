@@ -176,8 +176,17 @@ def register_handle():
     
   
     # Create a welcome message for the email
-    welcome_message = f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, pet grooming, or simply want to connect with fellow pet parents, we've got you covered. Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to serving you and your pets! Best regards, The OnlyPaws Team"
-
+    welcome_message = (f"Welcome, {name}! Thank you for choosing OnlyPaws, your trusted partner in pet care services. "
+    "We are thrilled to have you on board. Whether you need pet sitting, house sitting, dog walking, "
+    "pet grooming, or simply want to connect with fellow pet parents, we've got you covered. "
+    "Our dedicated team of pet enthusiasts is committed to providing the best care and attention to your "
+    "beloved furry friends. Feel free to explore our app and discover a world of possibilities for your pets. "
+    "If you have any questions or need assistance, don't hesitate to reach out to us. We look forward to "
+    "serving you and your pets!\n\n"
+    
+    "Best regards,\n"
+    "The OnlyPaws Team"
+    )
     # Send the welcome email
     sendEmail(welcome_message, email, "Welcome to OnlyPaws")
     
