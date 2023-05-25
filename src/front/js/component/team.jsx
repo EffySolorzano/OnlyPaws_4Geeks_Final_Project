@@ -20,7 +20,8 @@ function Team() {
               <img src={Anthonycalvo_OP} className="card-img-top workforce" alt="Anthony" />
               <div class="card-body">
                 <h5 class="card-title text-center mt-4">Anthony Calvo</h5>
-                <p class="card-text text-center"><i>Backend & frontend</i></p>
+                <p className="card-text text-center"><i>Main focus: Frontend</i></p>
+                <p className="card-text text-center"><i>Backup: Backend</i></p>
               </div>
               <a href="https://github.com/Anthonycalvo1984" target="_blank">
                 <img src={Githublogito} alt="" className="btn btn-transparent" style={{
@@ -54,14 +55,15 @@ function Team() {
               <img src={Marcelosica_OP} class="card-img-top workforce" alt="Marcelo" />
               <div className="card-body">
                 <h5 className="card-title text-center mt-4">Marcelo Sica</h5>
-                <p className="card-text text-center"><i>Backend & Frontend</i></p>
+                <p className="card-text text-center"><i>Main focus: Backend</i></p>
+                <p className="card-text text-center"><i>Backup: Frontend</i></p>
               </div>
             </div>
             <a href="https://github.com/Marce-Sica" target="_blank">
               <img src={Githublogito} alt="" className="btn btn-transparent" style={{
                 height: "70px",
                 width: "80px",
-                marginTop: "130px",
+                marginTop: "170px",
                 marginLeft: "200px"
               }} />
             </a>
