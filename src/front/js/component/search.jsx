@@ -3,6 +3,7 @@ import TinderCard from "react-tinder-card";
 import Footer from "../pages/footer.jsx";
 import Providerss from "../../styles/providerss.css";
 import Swal from "sweetalert2";
+import Luna from "../../img/Luna.jpg";
 
 const Provider = () => {
   const [providers, setProviders] = useState([
@@ -104,14 +105,14 @@ const Provider = () => {
               >
                 <div className="carticas provider-cartas">
                   <img
-                    src={provider.imgUrl}
-                    alt={provider.name}
-                    className="img-fluid pic-card"
+                    src={Luna}
+                    alt="luna"
+                    className="img-fluid pic-card w-70"
                   />
                   <h2 className="texto">
-                    {provider.name} {/*{provider.service}*/}
+                    {provider.name}
                   </h2>
-                  {/*<p>{provider.description}</p>*/}
+                  <p>{provider.description}</p>
                   <div>
                     <button
                       className="btn btn-transparent booknow"
@@ -122,7 +123,7 @@ const Provider = () => {
                         fontFamily: "Noto Serif Hebrew, serif",
                         fontSize: "20px",
                         width: "30%",
-                        marginTop: "80px",
+                        marginTop: "-10px",
                         marginLeft: "160px",
                       }}
                       onClick={handleBookNowClick}
