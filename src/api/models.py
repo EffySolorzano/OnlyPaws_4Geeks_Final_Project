@@ -127,25 +127,25 @@ class InfoProvider(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
-            "day": self.day,
-            "month": self.month,
-            "year": self.year,
-            "gender": self.gender,
-            "morning": self.morning,
-            "afternoon": self.afternoon,
-            "evening": self.evening,
-            "pet_sitter": self.pet_sitter,
-            "house_sitter": self.house_sitter,
-            "dog_walker": self.dog_walker,
-            "pet_groomer": self.pet_groomer,
-            "number_of_pets": self.number_of_pets,
-            "description": self.description,
-            "address": self.address,
-            "phone": self.phone,
-            "payment_method": self.payment_method,
-            "provider_id ": self.provider_id,
-        }
+        "id": self.id,
+        "day": self.day,
+        "month": self.month,
+        "year": self.year,
+        "gender": self.gender,
+        "morning": self.morning,
+        "afternoon": self.afternoon,
+        "evening": self.evening,
+        "pet_sitter": self.pet_sitter,
+        "house_sitter": self.house_sitter,
+        "dog_walker": self.dog_walker,
+        "pet_groomer": self.pet_groomer,
+        "number_of_pets": self.number_of_pets,
+        "description": self.description,
+        "address": self.address,
+        "phone": self.phone,
+        "payment_method": self.payment_method,
+        "provider_id": self.provider_id,
+    }
 
 
 class Image(db.Model):

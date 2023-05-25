@@ -600,10 +600,8 @@ def delete_provider():
     if not provider:
         return jsonify({"error": "Provider not found"}), 404
 
-    # Check if the Provider has an associated InfoProvider
-    info_provider = InfoProvider.query.filter_by(provider_id=provider.id).first()
-
-    # Delete the InfoProvider if it exists
+    # Delete the associated InfoProvider if it exists
+    info_provider = provider.info_provider
     if info_provider:
         db.session.delete(info_provider)
 
@@ -612,6 +610,7 @@ def delete_provider():
     db.session.commit()
 
     return jsonify({"message": "Provider deleted successfully"}), 200
+
 
 
 
@@ -773,6 +772,9 @@ def handle_upload():
 
     except Exception as e:
         raise APIException(f"Failed to upload image: {str(e)}", status_code=500)
+
+
+
 
 #### GET IMG - USER ROLE
 @api.route('/profile_picture/users', methods=['GET'])

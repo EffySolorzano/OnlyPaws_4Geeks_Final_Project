@@ -272,16 +272,16 @@ const Profile = () => {
     fetchInfoProvider();
   }, [actions]);
 
-
+  //////////////////////////////////////
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (role === "provider") {
       const providerData = {
-        gender,
-        day: parseInt(day),
-        month: parseInt(month),
-        year: parseInt(year),
+        gender: providerGender,
+        day: parseInt(providerDay),
+        month: parseInt(providerMonth),
+        year: parseInt(providerYear),
         morning,
         afternoon,
         evening,
@@ -290,10 +290,10 @@ const Profile = () => {
         house_sitter: houseSitter,
         pet_groomer: petGroomer,
         number_of_pets: numberOfPets,
-        description,
-        address,
-        phone,
-        paymentMethod,
+        description: providerDescription,
+        address: providerAddress,
+        phone: providerPhone,
+        paymentMethod: providerPaymentMethod,
       };
       console.log(providerData);
       try {
@@ -334,8 +334,28 @@ const Profile = () => {
     });
   };
 
-  const handleDelete = async (event) => {
+  ////////////////////
+
+  const confirmDelete = async (event) => {
     event.preventDefault();
+
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ff7900',
+      cancelButtonColor: '#a659c8',
+      confirmButtonText: 'Yes, delete it!'
+    })
+
+    if (result.isConfirmed) {
+      handleDelete();
+    }
+  }
+
+  const handleDelete = async () => {
+    //event.preventDefault();
     if (role === "provider") {
       try {
         await userActions().deleteProvider();
@@ -650,7 +670,7 @@ const Profile = () => {
               </button>
             </div>
             <div>
-              <button className="btn btn-transparent" onClick={handleDelete} style={{
+              <button className="btn btn-transparent" onClick={confirmDelete} style={{
                 backgroundColor: "#ff7900",
                 color: "#ffffff",
                 borderRadius: "15px",
